@@ -8,6 +8,8 @@ import { createTimelineUI, TimelineUI } from './timeline';
 import { createInspectorPanel, InspectorPanel } from './inspector';
 import { ContinuityStats } from '../simulation/continuity';
 import { Settlement } from '../population/loader';
+import { SettlementSpatialIndex } from '../population/spatialIndex';
+import { fetchVisitorLocation, VisitorLocation } from '../population/visitorGeo';
 import { i18n, SUPPORTED_LOCALES, SupportedLocale } from '../i18n';
 
 export type ViewMode = 'visual' | 'astronomy' | 'prayer' | 'adhan';
@@ -23,7 +25,7 @@ export interface HudOverlay {
   dispose: () => void;
 }
 
-// Quick jump iconic and sacred Islamic cities
+// Sacred Islamic sanctuaries always available in header
 interface QuickCity {
   name: string;
   nameAr: string;
@@ -33,10 +35,13 @@ interface QuickCity {
   timezone: string;
 }
 
-const QUICK_CITIES: QuickCity[] = [
+const SACRED_CITIES: QuickCity[] = [
   { name: 'Makkah', nameAr: 'مكة المكرمة', lat: 21.4225, lon: 39.8262, countryCode: 'SA', timezone: 'Asia/Riyadh' },
   { name: 'Madinah', nameAr: 'المدينة المنورة', lat: 24.4672, lon: 39.6112, countryCode: 'SA', timezone: 'Asia/Riyadh' },
   { name: 'Al-Quds', nameAr: 'القدس', lat: 31.7767, lon: 35.2345, countryCode: 'PS', timezone: 'Asia/Jerusalem' },
+];
+
+const DEFAULT_NEARBY_FALLBACK: QuickCity[] = [
   { name: 'Cairo', nameAr: 'القاهرة', lat: 30.0444, lon: 31.2357, countryCode: 'EG', timezone: 'Africa/Cairo' },
   { name: 'Amman', nameAr: 'عَمّان', lat: 31.9539, lon: 35.9106, countryCode: 'JO', timezone: 'Asia/Amman' },
   { name: 'Istanbul', nameAr: 'إسطنبول', lat: 41.0082, lon: 28.9784, countryCode: 'TR', timezone: 'Europe/Istanbul' },
@@ -279,7 +284,8 @@ export function createHudOverlay(
 
   const showQuickSuggestions = (): void => {
     if (searchInput.value.trim()) return;
-    searchResults = QUICK_CITIES.map((q) => ({
+    const defaultList = [...SACRED_CITIES, ...DEFAULT_NEARBY_FALLBACK];
+    searchResults = defaultList.map((q) => ({
       name: q.name,
       nameAr: q.nameAr,
       latitude: q.lat,
@@ -315,29 +321,116 @@ export function createHudOverlay(
 
   topBar.appendChild(searchBox);
 
-  // Quick Jump Sacred Cities Strip
+  // Quick Jump Sacred Cities and Closest Visitor Cities Strip
   const quickStrip = document.createElement('div');
   quickStrip.className = 'quick-cities-strip';
 
-  for (const q of QUICK_CITIES) {
-    const btn = document.createElement('button');
-    btn.className = 'btn-quick-city';
-    btn.setAttribute('aria-label', `Jump to ${q.name}`);
-    btn.innerHTML = `<span>${q.name}</span><span class="quick-ar" dir="rtl">${q.nameAr.split(' ')[0]}</span>`;
-    btn.addEventListener('click', () => {
-      const settlement: Settlement = {
-        name: q.name,
-        nameAr: q.nameAr,
-        latitude: q.lat,
-        longitude: q.lon,
-        countryCode: q.countryCode,
-        population: 1500000,
-        timezone: q.timezone,
-      };
-      selectCity(settlement);
-    });
-    quickStrip.appendChild(btn);
+  let spatialIndex: SettlementSpatialIndex | null = null;
+  let visitorLocation: VisitorLocation | null = null;
+
+  interface DisplayQuickCity {
+    name: string;
+    nameAr?: string;
+    lat: number;
+    lon: number;
+    countryCode?: string;
+    timezone?: string;
+    isNearby?: boolean;
+    population?: number;
   }
+
+  const renderQuickStrip = (nearbyCities: DisplayQuickCity[]): void => {
+    quickStrip.innerHTML = '';
+
+    // 1. Render Sacred Sanctuaries
+    for (const q of SACRED_CITIES) {
+      const btn = document.createElement('button');
+      btn.className = 'btn-quick-city';
+      btn.setAttribute('aria-label', `Jump to ${q.name}`);
+      btn.innerHTML = `<span>${q.name}</span><span class="quick-ar" dir="rtl">${q.nameAr.split(' ')[0]}</span>`;
+      btn.addEventListener('click', () => {
+        selectCity({
+          name: q.name,
+          nameAr: q.nameAr,
+          latitude: q.lat,
+          longitude: q.lon,
+          countryCode: q.countryCode,
+          population: 1500000,
+          timezone: q.timezone,
+        });
+      });
+      quickStrip.appendChild(btn);
+    }
+
+    // 2. Render Closest Visitor Cities
+    if (nearbyCities.length > 0) {
+      const divider = document.createElement('span');
+      divider.className = 'quick-divider';
+      divider.setAttribute('aria-hidden', 'true');
+      quickStrip.appendChild(divider);
+
+      for (let i = 0; i < nearbyCities.length; i++) {
+        const c = nearbyCities[i];
+        const btn = document.createElement('button');
+        btn.className = 'btn-quick-city' + (c.isNearby ? ' is-nearby' : '');
+        btn.setAttribute('aria-label', `Jump to ${c.name}`);
+        const icon = (i === 0 && c.isNearby) ? '<span class="quick-nearby-icon" aria-hidden="true">📍</span>' : '';
+        const ar = c.nameAr ? `<span class="quick-ar" dir="rtl">${c.nameAr.split(' ')[0]}</span>` : '';
+        btn.innerHTML = `${icon}<span>${c.name}</span>${ar}`;
+        btn.addEventListener('click', () => {
+          selectCity({
+            name: c.name,
+            nameAr: c.nameAr || c.name,
+            latitude: c.lat,
+            longitude: c.lon,
+            countryCode: c.countryCode || '',
+            population: c.population || 100000,
+            timezone: c.timezone || 'UTC',
+          });
+        });
+        quickStrip.appendChild(btn);
+      }
+    }
+  };
+
+  const updateNearbyCities = (): void => {
+    if (!spatialIndex || !visitorLocation) return;
+
+    // Query nearest settlements and filter out any that duplicate sacred cities
+    const nearest = spatialIndex.findKNearest(visitorLocation.latitude, visitorLocation.longitude, 15);
+    const filtered = nearest
+      .filter((n) => !SACRED_CITIES.some((s) => Math.hypot(s.lat - n.settlement.latitude, s.lon - n.settlement.longitude) < 0.25))
+      .slice(0, 10);
+
+    const list: DisplayQuickCity[] = filtered.map((n) => ({
+      name: n.settlement.name,
+      nameAr: n.settlement.nameAr,
+      lat: n.settlement.latitude,
+      lon: n.settlement.longitude,
+      countryCode: n.settlement.countryCode,
+      timezone: n.settlement.timezone,
+      isNearby: true,
+      population: n.settlement.population,
+    }));
+
+    renderQuickStrip(list);
+  };
+
+  // Initial render with default regional fallback
+  renderQuickStrip(DEFAULT_NEARBY_FALLBACK.map((c) => ({ ...c, isNearby: false })));
+
+  // Query Cloudflare edge geolocation asynchronously
+  fetchVisitorLocation()
+    .then((loc) => {
+      if (loc) {
+        visitorLocation = loc;
+        updateNearbyCities();
+      }
+    })
+    .catch(() => {
+      // Non-blocking fallback
+    });
+
   topBar.appendChild(quickStrip);
 
   // Language Switcher Dropdown
@@ -697,6 +790,8 @@ export function createHudOverlay(
 
   const setSettlements = (settlements: Settlement[]): void => {
     allSettlements = settlements;
+    spatialIndex = new SettlementSpatialIndex(settlements);
+    updateNearbyCities();
   };
 
   const dispose = (): void => {

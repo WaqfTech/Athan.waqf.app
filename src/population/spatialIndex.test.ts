@@ -43,4 +43,17 @@ describe('Settlement spatial index', () => {
     expect(arMatch.length).toBe(1);
     expect(arMatch[0].name).toBe('Medina');
   });
+
+  it('finds K nearest settlements sorted by distance', () => {
+    // Coordinate in Middle East (Jordan/Red Sea)
+    const query = { lat: 25.0, lon: 36.0 };
+    const kNearest = index.findKNearest(query.lat, query.lon, 3);
+
+    expect(kNearest.length).toBe(3);
+    // Closest should be Medina, followed by Mecca or Cairo
+    expect(['Medina', 'Mecca', 'Cairo']).toContain(kNearest[0].settlement.name);
+    // Must be sorted in ascending order of distance
+    expect(kNearest[0].distanceDeg).toBeLessThanOrEqual(kNearest[1].distanceDeg);
+    expect(kNearest[1].distanceDeg).toBeLessThanOrEqual(kNearest[2].distanceDeg);
+  });
 });

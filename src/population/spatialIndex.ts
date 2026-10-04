@@ -79,6 +79,75 @@ export class SettlementSpatialIndex {
   }
 
   /**
+   * Find the K nearest settlements to a geographic coordinate.
+   */
+  public findKNearest(
+    latitude: number,
+    longitude: number,
+    k = 10,
+    initialRadiusDeg = 15,
+  ): Array<{ settlement: Settlement; distanceDeg: number }> {
+    if (this.settlements.length === 0) return [];
+    if (this.settlements.length <= k) {
+      return this.settlements
+        .map((s) => ({
+          settlement: s,
+          distanceDeg: angularDistanceDegrees(latitude, longitude, s.latitude, s.longitude),
+        }))
+        .sort((a, b) => a.distanceDeg - b.distanceDeg);
+    }
+
+    let maxDistanceDeg = initialRadiusDeg;
+    let candidatesList: Array<{ settlement: Settlement; distanceDeg: number }> = [];
+
+    while (maxDistanceDeg <= 180) {
+      const searchBinsRadius = Math.ceil(maxDistanceDeg / this.binSizeDeg);
+      const centerLatBin = Math.floor(latitude / this.binSizeDeg);
+      const centerLonBin = Math.floor(longitude / this.binSizeDeg);
+      const visited = new Set<string>();
+      candidatesList = [];
+
+      for (let dLat = -searchBinsRadius; dLat <= searchBinsRadius; dLat++) {
+        for (let dLon = -searchBinsRadius; dLon <= searchBinsRadius; dLon++) {
+          const latBin = centerLatBin + dLat;
+          let lonBin = centerLonBin + dLon;
+
+          const maxLonBins = 360 / this.binSizeDeg;
+          while (lonBin < -maxLonBins / 2) lonBin += maxLonBins;
+          while (lonBin >= maxLonBins / 2) lonBin -= maxLonBins;
+
+          const key = `${latBin}:${lonBin}`;
+          if (visited.has(key)) continue;
+          visited.add(key);
+
+          const candidates = this.grid.get(key);
+          if (!candidates) continue;
+
+          for (const candidate of candidates) {
+            const dist = angularDistanceDegrees(
+              latitude,
+              longitude,
+              candidate.latitude,
+              candidate.longitude,
+            );
+            if (dist <= maxDistanceDeg) {
+              candidatesList.push({ settlement: candidate, distanceDeg: dist });
+            }
+          }
+        }
+      }
+
+      if (candidatesList.length >= k || maxDistanceDeg >= 180) {
+        break;
+      }
+      maxDistanceDeg *= 2;
+    }
+
+    candidatesList.sort((a, b) => a.distanceDeg - b.distanceDeg);
+    return candidatesList.slice(0, k);
+  }
+
+  /**
    * Fast text search across English and Arabic names.
    */
   public searchByName(query: string, limit = 10): Settlement[] {
