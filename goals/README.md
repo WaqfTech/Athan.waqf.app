@@ -28,18 +28,15 @@ This index tracks all goal packages under `goals/`, their execution mode (Indepe
 
 ## Summary
 - **Total Goals**: 1
-- 🟢 **Implemented & Verified**: 0
-- 🔵 **In Progress (Claimed)**: 1
+- 🟢 **Implemented & Verified**: 1
 - 🟡 **Ready to Execute (Pending)**: 0 (0 independent ⚡, 0 unblocked 🔗)
 - 🎯 **By Tier**: 1 immediate (Tier 1), 0 roadmap (Tier 2), 0 nice-to-have (Tier 3), 0 wont-fix (Tier 4)
-- 📋 **Execution Tasks Progress**: 0/4 completed (0%)
+- 📋 **Execution Tasks Progress**: 5/5 completed (100%)
 
 ---
 
-## 🔵 In Progress (Claimed Goals)
+## 🟢 Implemented & Verified
 
-| Goal Package | Tier | Mode | Agent | Status & Note | Started |
-| :--- | :---: | :---: | :--- | :--- | :--- |
-| [`adhan-earth-observatory`](adhan-earth-observatory/goal.md) | `🎯 Immediate` | `⚡ Indep` | `@antigravity` | Starting Phase 1 scaffold and astronomical Earth foundation | 0s ago |
-
----
+| Goal Package | Mode | Shape | Task / Ref | Commit |
+| :--- | :---: | :--- | :--- | :--- |
+| [`adhan-earth-observatory`](adhan-earth-observatory/goal.md) | `⚡ Indep` | 🚢 SHIP | Git Commit | `779cc42` |
