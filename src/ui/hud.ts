@@ -74,6 +74,8 @@ export function createHudOverlay(
   root.innerHTML = '';
 
   let allSettlements: Settlement[] = [];
+  const bottomStack = document.createElement('div');
+  bottomStack.className = 'hud-bottom-stack';
 
   // 1. Top Navigation Bar
   const topBar = document.createElement('header');
@@ -327,8 +329,7 @@ export function createHudOverlay(
   let isZenMode = false;
   zenBtn.addEventListener('click', () => {
     isZenMode = !isZenMode;
-    controlsDock.style.display = isZenMode ? 'none' : 'flex';
-    timeline.element.style.display = isZenMode ? 'none' : 'flex';
+    bottomStack.style.display = isZenMode ? 'none' : 'flex';
     quickStrip.style.display = isZenMode ? 'none' : 'flex';
   });
   topBar.appendChild(zenBtn);
@@ -503,8 +504,6 @@ export function createHudOverlay(
   });
   controlsDock.appendChild(followBtn);
 
-  root.appendChild(controlsDock);
-
   // 3. Floating Astronomical Inspector Panel
   const inspector = createInspectorPanel();
   root.appendChild(inspector.element);
@@ -513,7 +512,11 @@ export function createHudOverlay(
   const timeline = createTimelineUI(clock, (date) => {
     globeScene.setTime(date);
   });
-  root.appendChild(timeline.element);
+
+  // Group controls dock and timeline ribbon into bottom stack
+  bottomStack.appendChild(controlsDock);
+  bottomStack.appendChild(timeline.element);
+  root.appendChild(bottomStack);
 
   const updateStats = (stats: ContinuityStats): void => {
     timeline.updateStats(stats);

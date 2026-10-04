@@ -407,7 +407,17 @@ html, body {
   outline: none;
 }
 
-/* 2. Floating Controls Dock */
+/* 2. Bottom Control Stack */
+.hud-bottom-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 100%;
+  pointer-events: none;
+}
+
+/* Floating Controls Dock */
 .hud-dock {
   display: flex;
   align-items: center;
