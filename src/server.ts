@@ -10,9 +10,13 @@ interface IncomingRequestCfProperties {
   city?: string;
   country?: string;
   region?: string;
+  regionCode?: string;
+  continent?: string;
   timezone?: string;
   latitude?: string | number;
   longitude?: string | number;
+  postalCode?: string;
+  metroCode?: string;
 }
 
 export default {
@@ -26,9 +30,13 @@ export default {
         city: cf?.city || null,
         country: cf?.country || null,
         region: cf?.region || null,
+        regionCode: cf?.regionCode || null,
+        continent: cf?.continent || null,
         timezone: cf?.timezone || null,
         latitude: cf?.latitude ? parseFloat(String(cf.latitude)) : null,
         longitude: cf?.longitude ? parseFloat(String(cf.longitude)) : null,
+        postalCode: cf?.postalCode || null,
+        metroCode: cf?.metroCode || null,
       };
 
       return new Response(JSON.stringify(data), {

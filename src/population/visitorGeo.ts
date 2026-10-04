@@ -6,7 +6,11 @@ export interface VisitorLocation {
   city?: string;
   country?: string;
   region?: string;
+  regionCode?: string;
+  continent?: string;
   timezone?: string;
+  postalCode?: string;
+  metroCode?: string;
   source: 'cloudflare-edge' | 'browser-gps' | 'fallback';
 }
 
@@ -29,7 +33,11 @@ export async function fetchVisitorLocation(): Promise<VisitorLocation | null> {
           city: data.city || undefined,
           country: data.country || undefined,
           region: data.region || undefined,
+          regionCode: data.regionCode || undefined,
+          continent: data.continent || undefined,
           timezone: data.timezone || undefined,
+          postalCode: data.postalCode || undefined,
+          metroCode: data.metroCode || undefined,
           source: 'cloudflare-edge',
         };
       }

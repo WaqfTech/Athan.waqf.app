@@ -167,7 +167,231 @@ export class SettlementSpatialIndex {
     return matches;
   }
 
+  /**
+   * Find an intelligent, diverse set of nearby cities balanced by country and geographic spread.
+   * Avoids overloading with same-country suburbs and satellite districts while preserving proximity.
+   */
+  public findIntelligentNearby(options: IntelligentNearbyOptions): IntelligentNearbyResult[] {
+    const {
+      latitude,
+      longitude,
+      visitorCountryCode,
+      visitorCity,
+      targetCount = 10,
+      maxHomeCountry = 2,
+      maxOtherCountry = 1,
+      minClusterDistanceKm = 40,
+      excludeCoordinates = [],
+    } = options;
+
+    if (this.settlements.length === 0) return [];
+
+    const KM_PER_DEGREE = 111.1949;
+
+    const isExcluded = (lat: number, lon: number): boolean => {
+      for (const ex of excludeCoordinates) {
+        const rad = ex.radiusKm ?? 30;
+        const dKm = angularDistanceDegrees(lat, lon, ex.lat, ex.lon) * KM_PER_DEGREE;
+        if (dKm < rad) return true;
+      }
+      return false;
+    };
+
+    // Calculate distances to all settlements and sort in ascending order
+    const allCandidates: IntelligentNearbyResult[] = this.settlements
+      .map((s) => {
+        const distDeg = angularDistanceDegrees(latitude, longitude, s.latitude, s.longitude);
+        return {
+          settlement: s,
+          distanceDeg: distDeg,
+          distanceKm: distDeg * KM_PER_DEGREE,
+        };
+      })
+      .sort((a, b) => a.distanceKm - b.distanceKm);
+
+    const selected: IntelligentNearbyResult[] = [];
+    const countryCounts = new Map<string, number>();
+
+    // 1. Primary visitor local anchor
+    let anchor: IntelligentNearbyResult | null = null;
+    if (visitorCity) {
+      const normalizedCity = visitorCity.trim().toLowerCase();
+      // Look within closest candidates for a name match
+      for (let i = 0; i < Math.min(35, allCandidates.length); i++) {
+        const item = allCandidates[i];
+        if (
+          (!visitorCountryCode || item.settlement.countryCode === visitorCountryCode) &&
+          (item.settlement.name.toLowerCase().includes(normalizedCity) ||
+            normalizedCity.includes(item.settlement.name.toLowerCase()))
+        ) {
+          anchor = item;
+          break;
+        }
+      }
+    }
+
+    if (!anchor) {
+      for (const item of allCandidates) {
+        if (!isExcluded(item.settlement.latitude, item.settlement.longitude)) {
+          anchor = item;
+          break;
+        }
+      }
+    }
+
+    if (anchor) {
+      selected.push(anchor);
+      countryCounts.set(anchor.settlement.countryCode, 1);
+    }
+
+    const isFarEnoughFromSelected = (lat: number, lon: number): boolean => {
+      for (const sel of selected) {
+        const dKm =
+          angularDistanceDegrees(lat, lon, sel.settlement.latitude, sel.settlement.longitude) *
+          KM_PER_DEGREE;
+        if (dKm < minClusterDistanceKm) return false;
+      }
+      return true;
+    };
+
+    // 2. Identify the most prominent city in each country within expanding radius
+    const countryBest = new Map<string, IntelligentNearbyResult>();
+    for (const item of allCandidates) {
+      const s = item.settlement;
+      if (isExcluded(s.latitude, s.longitude)) continue;
+      const cc = s.countryCode;
+      if (!countryBest.has(cc)) {
+        const maxDist = Math.max(item.distanceKm * 2.0, item.distanceKm + 250);
+        const peers = allCandidates.filter(
+          (x) =>
+            x.settlement.countryCode === cc &&
+            x.distanceKm <= maxDist &&
+            !isExcluded(x.settlement.latitude, x.settlement.longitude),
+        );
+        let best = item;
+        for (const p of peers) {
+          if (p.settlement.population > best.settlement.population * 2.0) {
+            best = p;
+          }
+        }
+        countryBest.set(cc, best);
+      }
+    }
+
+    // 3. For home country, add a secondary major city if available
+    if (visitorCountryCode && (countryCounts.get(visitorCountryCode) || 0) < maxHomeCountry) {
+      const homePeers = allCandidates.filter(
+        (x) =>
+          x.settlement.countryCode === visitorCountryCode &&
+          x.distanceKm >= minClusterDistanceKm &&
+          !isExcluded(x.settlement.latitude, x.settlement.longitude) &&
+          !selected.some((sel) => sel.settlement.name === x.settlement.name) &&
+          isFarEnoughFromSelected(x.settlement.latitude, x.settlement.longitude),
+      );
+
+      if (homePeers.length > 0) {
+        let bestHome = homePeers[0];
+        for (let i = 1; i < Math.min(5, homePeers.length); i++) {
+          if (homePeers[i].settlement.population > bestHome.settlement.population) {
+            bestHome = homePeers[i];
+          }
+        }
+        selected.push(bestHome);
+        countryCounts.set(visitorCountryCode, (countryCounts.get(visitorCountryCode) || 0) + 1);
+      }
+    }
+
+    // 4. Add closest prominent cities from other countries in ascending distance order
+    const otherCountryCandidates = Array.from(countryBest.entries())
+      .filter(([cc]) => cc !== visitorCountryCode)
+      .map(([, best]) => best)
+      .sort((a, b) => a.distanceKm - b.distanceKm);
+
+    for (const item of otherCountryCandidates) {
+      if (selected.length >= targetCount) break;
+      const s = item.settlement;
+      if (isExcluded(s.latitude, s.longitude)) continue;
+      if (
+        selected.some(
+          (sel) => sel.settlement.name === s.name && sel.settlement.countryCode === s.countryCode,
+        )
+      ) {
+        continue;
+      }
+      if (!isFarEnoughFromSelected(s.latitude, s.longitude)) continue;
+
+      const currentCount = countryCounts.get(s.countryCode) || 0;
+      if (currentCount >= maxOtherCountry) continue;
+
+      selected.push(item);
+      countryCounts.set(s.countryCode, currentCount + 1);
+    }
+
+    // 5. Relaxation pass: if still under targetCount (e.g. isolated region or island)
+    if (selected.length < targetCount) {
+      for (const item of allCandidates) {
+        if (selected.length >= targetCount) break;
+        const s = item.settlement;
+        if (isExcluded(s.latitude, s.longitude)) continue;
+        if (
+          selected.some(
+            (sel) => sel.settlement.name === s.name && sel.settlement.countryCode === s.countryCode,
+          )
+        ) {
+          continue;
+        }
+        if (!isFarEnoughFromSelected(s.latitude, s.longitude)) continue;
+
+        const currentCount = countryCounts.get(s.countryCode) || 0;
+        const limit = s.countryCode === visitorCountryCode ? 5 : 2;
+        if (currentCount >= limit) continue;
+
+        selected.push(item);
+        countryCounts.set(s.countryCode, currentCount + 1);
+      }
+    }
+
+    // 6. Final unconditional fallback fill if necessary (ensures targetCount is satisfied)
+    if (selected.length < targetCount) {
+      for (const item of allCandidates) {
+        if (selected.length >= targetCount) break;
+        if (isExcluded(item.settlement.latitude, item.settlement.longitude)) continue;
+        if (
+          selected.some(
+            (sel) =>
+              sel.settlement.name === item.settlement.name &&
+              sel.settlement.countryCode === item.settlement.countryCode,
+          )
+        ) {
+          continue;
+        }
+        if (!isFarEnoughFromSelected(item.settlement.latitude, item.settlement.longitude)) continue;
+        selected.push(item);
+      }
+    }
+
+    return selected.slice(0, targetCount);
+  }
+
   public getAll(): Settlement[] {
     return this.settlements;
   }
+}
+
+export interface IntelligentNearbyOptions {
+  latitude: number;
+  longitude: number;
+  visitorCountryCode?: string;
+  visitorCity?: string;
+  targetCount?: number;
+  maxHomeCountry?: number;
+  maxOtherCountry?: number;
+  minClusterDistanceKm?: number;
+  excludeCoordinates?: Array<{ lat: number; lon: number; radiusKm?: number }>;
+}
+
+export interface IntelligentNearbyResult {
+  settlement: Settlement;
+  distanceDeg: number;
+  distanceKm: number;
 }

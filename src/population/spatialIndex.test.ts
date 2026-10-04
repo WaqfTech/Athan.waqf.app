@@ -56,4 +56,55 @@ describe('Settlement spatial index', () => {
     expect(kNearest[0].distanceDeg).toBeLessThanOrEqual(kNearest[1].distanceDeg);
     expect(kNearest[1].distanceDeg).toBeLessThanOrEqual(kNearest[2].distanceDeg);
   });
+
+  it('intelligently balances nearby cities avoiding same-country suburb flooding', () => {
+    const regionalData: [string, string, number, number, string, number, string][] = [
+      ['Amman', 'عمّان', 31.96, 35.95, 'JO', 1275857, 'Asia/Amman'],
+      ['Al Jubayhah', 'الجبيهة', 32.01, 35.9, 'JO', 46834, 'Asia/Amman'], // suburb ~7km
+      ['Khuraybat as Suq', 'خريبة السوق', 31.88, 35.92, 'JO', 186158, 'Asia/Amman'], // suburb ~9km
+      ['Irbid', 'إربد', 32.56, 35.85, 'JO', 569068, 'Asia/Amman'], // ~67km distinct city
+      ['Daraa', 'درعا', 32.62, 36.1, 'SY', 97969, 'Asia/Damascus'], // ~75km Syria
+      ['Damascus', 'دمشق', 33.51, 36.29, 'SY', 1569394, 'Asia/Damascus'], // ~175km major Syria
+      ['Beirut', 'بيروت', 33.89, 35.5, 'LB', 1916100, 'Asia/Beirut'], // ~220km Lebanon
+      ['Cairo', 'القاهرة', 30.04, 31.24, 'EG', 9600000, 'Africa/Cairo'], // ~490km Egypt
+      ['Mecca', 'مكة المكرمة', 21.42, 39.83, 'SA', 2000000, 'Asia/Riyadh'], // sacred
+    ];
+
+    const regionalIndex = new SettlementSpatialIndex(parseSettlements(regionalData));
+
+    const result = regionalIndex.findIntelligentNearby({
+      latitude: 31.955,
+      longitude: 35.945,
+      visitorCountryCode: 'JO',
+      visitorCity: 'Amman',
+      targetCount: 5,
+      maxHomeCountry: 2,
+      maxOtherCountry: 1,
+      minClusterDistanceKm: 35,
+      excludeCoordinates: [{ lat: 21.42, lon: 39.83, radiusKm: 30 }], // exclude Mecca
+    });
+
+    const cityNames = result.map((r) => r.settlement.name);
+
+    // 1. Visitor anchor is Amman
+    expect(cityNames[0]).toBe('Amman');
+
+    // 2. Suburbs within 35km (Al Jubayhah, Khuraybat as Suq) must be eliminated
+    expect(cityNames).not.toContain('Al Jubayhah');
+    expect(cityNames).not.toContain('Khuraybat as Suq');
+
+    // 3. Second Jordanian city should be Irbid (>= 35km)
+    expect(cityNames).toContain('Irbid');
+
+    // 4. Max 2 from home country (JO)
+    const joCount = result.filter((r) => r.settlement.countryCode === 'JO').length;
+    expect(joCount).toBe(2);
+
+    // 5. Excluded sacred cities (Mecca) must not appear
+    expect(cityNames).not.toContain('Mecca');
+
+    // 6. Neighboring country representation
+    expect(cityNames).toContain('Beirut');
+    expect(cityNames).toContain('Cairo');
+  });
 });

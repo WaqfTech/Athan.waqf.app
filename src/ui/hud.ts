@@ -375,7 +375,7 @@ export function createHudOverlay(
         btn.className = 'btn-quick-city' + (c.isNearby ? ' is-nearby' : '');
         btn.setAttribute('aria-label', `Jump to ${c.name}`);
         const icon = (i === 0 && c.isNearby) ? '<span class="quick-nearby-icon" aria-hidden="true">📍</span>' : '';
-        const ar = c.nameAr ? `<span class="quick-ar" dir="rtl">${c.nameAr.split(' ')[0]}</span>` : '';
+        const ar = c.nameAr ? `<span class="quick-ar" dir="rtl">${c.nameAr}</span>` : '';
         btn.innerHTML = `${icon}<span>${c.name}</span>${ar}`;
         btn.addEventListener('click', () => {
           selectCity({
@@ -396,13 +396,25 @@ export function createHudOverlay(
   const updateNearbyCities = (): void => {
     if (!spatialIndex || !visitorLocation) return;
 
-    // Query nearest settlements and filter out any that duplicate sacred cities
-    const nearest = spatialIndex.findKNearest(visitorLocation.latitude, visitorLocation.longitude, 15);
-    const filtered = nearest
-      .filter((n) => !SACRED_CITIES.some((s) => Math.hypot(s.lat - n.settlement.latitude, s.lon - n.settlement.longitude) < 0.25))
-      .slice(0, 10);
+    // Intelligent nearby selection:
+    // - Pins visitor city first
+    // - Eliminates suburb crowding via 40km cluster separation
+    // - Caps home country to 2 distinct major cities
+    // - Diversifies surrounding countries across geographic distance
+    // - Excludes duplicates of the 3 sacred sanctuaries
+    const intelligentNearby = spatialIndex.findIntelligentNearby({
+      latitude: visitorLocation.latitude,
+      longitude: visitorLocation.longitude,
+      visitorCountryCode: visitorLocation.country,
+      visitorCity: visitorLocation.city,
+      targetCount: 10,
+      maxHomeCountry: 2,
+      maxOtherCountry: 1,
+      minClusterDistanceKm: 40,
+      excludeCoordinates: SACRED_CITIES.map((s) => ({ lat: s.lat, lon: s.lon, radiusKm: 30 })),
+    });
 
-    const list: DisplayQuickCity[] = filtered.map((n) => ({
+    const list: DisplayQuickCity[] = intelligentNearby.map((n) => ({
       name: n.settlement.name,
       nameAr: n.settlement.nameAr,
       lat: n.settlement.latitude,
