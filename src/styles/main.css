@@ -209,6 +209,7 @@ html, body {
   border-radius: 6px;
   cursor: crosshair;
   overflow: visible;
+  margin-block-start: 1.5rem;
 }
 
 .timeline-canvas {
