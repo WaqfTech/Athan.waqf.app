@@ -148,7 +148,7 @@ export function createHudOverlay(
 
   const clearBtn = document.createElement('button');
   clearBtn.className = 'city-search-clear';
-  clearBtn.setAttribute('aria-label', 'Clear search input');
+  clearBtn.setAttribute('aria-label', t.controls.clearSearch);
   clearBtn.textContent = '✕';
   clearBtn.style.display = 'none';
 
@@ -386,8 +386,6 @@ export function createHudOverlay(
   const appendPlaceRow = (c: DisplayQuickCity, sacred: boolean): void => {
     const row = document.createElement('button');
     row.className = `places-item${sacred ? ' is-sacred' : ''}${c.isNearby ? ' is-nearby' : ''}`;
-    row.setAttribute('aria-label', `Jump to ${c.name}`);
-
     const name = document.createElement('span');
     name.className = 'places-item-name';
     name.textContent = c.name;
@@ -764,24 +762,41 @@ export function createHudOverlay(
   ];
 
   const speedButtons: HTMLButtonElement[] = [];
+  speedSegment.setAttribute('role', 'group');
+  speedSegment.setAttribute('aria-label', t.controls.time);
 
   for (const s of speeds) {
     const btn = document.createElement('button');
     btn.className = `btn-dock-pill ${s.isLive ? 'active' : ''}`;
     btn.textContent = s.label;
+    btn.dataset.speedKey = s.isLive ? 'live' : String(s.speed);
+    btn.setAttribute('aria-pressed', s.isLive ? 'true' : 'false');
+    if (s.speed === 0) btn.setAttribute('aria-label', t.controls.pause);
     btn.addEventListener('click', () => {
-      speedButtons.forEach((b) => b.classList.remove('active'));
-      btn.classList.add('active');
       if (s.isLive) {
         clock.setLive(true);
       } else {
         clock.setSpeed(s.speed);
+        clock.setLive(false);
       }
     });
     speedSegment.appendChild(btn);
     speedButtons.push(btn);
   }
   controlsDock.appendChild(speedSegment);
+
+  // Keep the speed buttons truthful when time changes elsewhere (timeline scrub, Follow Adhan, URL time)
+  let lastSpeedKey = '';
+  const unsubscribeClock = clock.subscribe((_date, speed, isLive) => {
+    const key = isLive ? 'live' : String(speed);
+    if (key === lastSpeedKey) return;
+    lastSpeedKey = key;
+    for (const b of speedButtons) {
+      const on = b.dataset.speedKey === key;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  });
 
   // Map layer style segment
   const mapSegment = document.createElement('div');
@@ -795,9 +810,14 @@ export function createHudOverlay(
   satBtn.className = `btn-dock-pill ${globeScene.getMapStyle() === 'satellite' ? 'active' : ''}`;
   satBtn.textContent = t.controls.satellite;
 
+  mapBtn.setAttribute('aria-pressed', globeScene.getMapStyle() === 'roadmap' ? 'true' : 'false');
+  satBtn.setAttribute('aria-pressed', globeScene.getMapStyle() === 'satellite' ? 'true' : 'false');
+
   mapBtn.addEventListener('click', () => {
     mapBtn.classList.add('active');
     satBtn.classList.remove('active');
+    mapBtn.setAttribute('aria-pressed', 'true');
+    satBtn.setAttribute('aria-pressed', 'false');
     globeScene.setMapStyle('roadmap');
     if (callbacks.onStyleChange) callbacks.onStyleChange('roadmap');
   });
@@ -805,6 +825,8 @@ export function createHudOverlay(
   satBtn.addEventListener('click', () => {
     satBtn.classList.add('active');
     mapBtn.classList.remove('active');
+    satBtn.setAttribute('aria-pressed', 'true');
+    mapBtn.setAttribute('aria-pressed', 'false');
     globeScene.setMapStyle('satellite');
     if (callbacks.onStyleChange) callbacks.onStyleChange('satellite');
   });
@@ -1120,6 +1142,9 @@ export function createHudOverlay(
     if (speedLabel) speedLabel.textContent = t.controls.time;
     placesTriggerLabel.textContent = t.controls.places;
     layersTriggerLabel.textContent = t.controls.layers;
+    clearBtn.setAttribute('aria-label', t.controls.clearSearch);
+    speedSegment.setAttribute('aria-label', t.controls.time);
+    speedButtons.find((b) => b.dataset.speedKey === '0')?.setAttribute('aria-label', t.controls.pause);
     langTrigger.setAttribute('aria-label', t.controls.language);
     convTrigger.setAttribute('aria-label', t.controls.convention);
     shareBtn.setAttribute('aria-label', t.controls.share);
@@ -1185,6 +1210,7 @@ export function createHudOverlay(
 
   const dispose = (): void => {
     unsubscribeLocale();
+    unsubscribeClock();
     document.removeEventListener('keydown', onHotkey);
     document.removeEventListener('click', onShortcutsOutsideClick);
     window.clearTimeout(toastTimer);

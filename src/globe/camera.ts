@@ -35,7 +35,9 @@ export function createCameraRig(canvas: HTMLCanvasElement): CameraRig {
   controls.maxDistance = 40.0; // Deep space zoom
   controls.enablePan = false; // Keep planetary center locked
 
-  controls.autoRotateSpeed = 0.5;
+  // With a delta time, speed 1 is one turn per 30s. 0.3 is about one turn per 100s, independent of frame rate.
+  controls.autoRotateSpeed = 0.3;
+  let lastUpdateMs = performance.now();
 
   const IDLE_BEFORE_ROTATE_MS = 20000;
   const reducedMotion =
@@ -92,7 +94,10 @@ export function createCameraRig(canvas: HTMLCanvasElement): CameraRig {
         isInterpolating = false;
       }
     }
-    controls.update();
+    const now = performance.now();
+    const deltaSeconds = Math.min(0.1, (now - lastUpdateMs) / 1000);
+    lastUpdateMs = now;
+    controls.update(deltaSeconds);
   };
 
   const resize = (width: number, height: number): void => {

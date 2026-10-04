@@ -134,6 +134,7 @@ export function createGlobeScene(
   let animationFrameId: number | null = null;
   let isRunning = false;
   let clockStartTime = performance.now();
+  const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const setSettlements = (settlements: Settlement[]): void => {
     settlementsCache = settlements;
@@ -242,7 +243,8 @@ export function createGlobeScene(
 
     cameraRig.update();
 
-    const elapsed = (performance.now() - clockStartTime) / 1000;
+    // Reduced motion freezes the pulsing rings, beams and travelling dashes at their first frame
+    const elapsed = reducedMotionQuery.matches ? 0 : (performance.now() - clockStartTime) / 1000;
     if (settlementsCloud) {
       settlementsCloud.updateTime(elapsed);
     }

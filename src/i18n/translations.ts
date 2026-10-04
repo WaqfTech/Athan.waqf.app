@@ -29,6 +29,8 @@ export interface Translations {
     search: string;
     share: string;
     linkCopied: string;
+    pause: string;
+    clearSearch: string;
     language: string;
   };
   prayers: {
@@ -90,6 +92,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Search',
       share: 'Share view',
       linkCopied: 'Link copied',
+      pause: 'Pause',
+      clearSearch: 'Clear search',
       language: 'Language',
     },
     prayers: {
@@ -150,6 +154,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'بحث',
       share: 'مشاركة العرض',
       linkCopied: 'تم نسخ الرابط',
+      pause: 'إيقاف مؤقت',
+      clearSearch: 'مسح البحث',
       language: 'اللغة',
     },
     prayers: {
@@ -210,6 +216,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Ara',
       share: 'Görünümü paylaş',
       linkCopied: 'Bağlantı kopyalandı',
+      pause: 'Duraklat',
+      clearSearch: 'Aramayı temizle',
       language: 'Dil',
     },
     prayers: {
@@ -270,6 +278,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Cari',
       share: 'Bagikan tampilan',
       linkCopied: 'Tautan disalin',
+      pause: 'Jeda',
+      clearSearch: 'Hapus pencarian',
       language: 'Bahasa',
     },
     prayers: {
@@ -330,6 +340,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Cari',
       share: 'Kongsi paparan',
       linkCopied: 'Pautan disalin',
+      pause: 'Jeda',
+      clearSearch: 'Kosongkan carian',
       language: 'Bahasa',
     },
     prayers: {
@@ -390,6 +402,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'تلاش',
       share: 'منظر شیئر کریں',
       linkCopied: 'لنک کاپی ہو گیا',
+      pause: 'روکیں',
+      clearSearch: 'تلاش صاف کریں',
       language: 'زبان',
     },
     prayers: {
@@ -450,6 +464,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'جستجو',
       share: 'هم‌رسانی نما',
       linkCopied: 'پیوند کپی شد',
+      pause: 'مکث',
+      clearSearch: 'پاک‌کردن جستجو',
       language: 'زبان',
     },
     prayers: {
@@ -510,6 +526,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'অনুসন্ধান',
       share: 'দৃশ্য শেয়ার করুন',
       linkCopied: 'লিঙ্ক কপি হয়েছে',
+      pause: 'বিরতি',
+      clearSearch: 'অনুসন্ধান মুছুন',
       language: 'ভাষা',
     },
     prayers: {
@@ -570,6 +588,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Rechercher',
       share: 'Partager la vue',
       linkCopied: 'Lien copié',
+      pause: 'Pause',
+      clearSearch: 'Effacer la recherche',
       language: 'Langue',
     },
     prayers: {
@@ -630,6 +650,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Поиск',
       share: 'Поделиться видом',
       linkCopied: 'Ссылка скопирована',
+      pause: 'Пауза',
+      clearSearch: 'Очистить поиск',
       language: 'Язык',
     },
     prayers: {
