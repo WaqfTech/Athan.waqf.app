@@ -78,4 +78,4 @@ Prayer Contours:
 هذا العمل هو وَقْفٌ لله تعالى تحت شروط رُخصة وَقْف الرَّقْمِيَّة العامَّة - الإصدار الأول.
 المُستوى المُطَبَّق هو: وَقْفٌ خَيْرِيٌّ مُلْزِمٌ بالإِسْنَادِ (WaqfDPL-Khayri-Mulzim 1.0).
 
-See the [LICENSE](LICENSE) file for the full license text, or the [WaqfDPL repository](https://github.com/WaqfTech/waqf-license-draft) for details.
+See the [LICENSE.md](LICENSE.md) file for the full license text, or the [WaqfDPL repository](https://github.com/WaqfTech/waqf-license-draft) for details.

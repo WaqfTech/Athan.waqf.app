@@ -2,7 +2,7 @@
   "name": "athan-waqf-app",
   "private": true,
   "version": "0.1.0",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "SEE LICENSE IN LICENSE.md",
   "type": "module",
   "scripts": {
     "dev": "vite",
