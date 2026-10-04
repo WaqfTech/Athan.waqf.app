@@ -29,16 +29,17 @@ This index tracks all goal packages under `goals/`, their execution mode (Indepe
 ## Summary
 - **Total Goals**: 1
 - 🟢 **Implemented & Verified**: 0
-- 🟡 **Ready to Execute (Pending)**: 1 (1 independent ⚡, 0 unblocked 🔗)
+- 🔵 **In Progress (Claimed)**: 1
+- 🟡 **Ready to Execute (Pending)**: 0 (0 independent ⚡, 0 unblocked 🔗)
 - 🎯 **By Tier**: 1 immediate (Tier 1), 0 roadmap (Tier 2), 0 nice-to-have (Tier 3), 0 wont-fix (Tier 4)
 - 📋 **Execution Tasks Progress**: 0/4 completed (0%)
 
 ---
 
-## 🟡 Ready to Execute (Pending Goals)
+## 🔵 In Progress (Claimed Goals)
 
-| Goal Package | Tier | Mode & Sequence | Dependencies | Focus & Description | Launch Command |
+| Goal Package | Tier | Mode | Agent | Status & Note | Started |
 | :--- | :---: | :---: | :--- | :--- | :--- |
-| [`adhan-earth-observatory`](adhan-earth-observatory/goal.md) | `🎯 Immediate` | `🚢 SHIP ⚡ Independent` | - | Adhan Earth 3D Planetary Observatory — Interactive 3D planetary observatory for global adhan solar fronts, continuous t... | `/goal goals/adhan-earth-observatory/goal.md` |
+| [`adhan-earth-observatory`](adhan-earth-observatory/goal.md) | `🎯 Immediate` | `⚡ Indep` | `@antigravity` | Starting Phase 1 scaffold and astronomical Earth foundation | 0s ago |
 
 ---
