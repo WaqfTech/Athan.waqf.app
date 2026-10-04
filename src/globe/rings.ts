@@ -41,7 +41,7 @@ const ringFragmentShader = /* glsl */ `
     float alpha = clamp(ring1 + ring2 + ring3, 0.0, 1.0);
     if (alpha < 0.01) discard;
 
-    gl_FragColor = vec4(vColor * 1.6, alpha * 0.85);
+    gl_FragColor = vec4(vColor * 1.25, alpha * 0.85);
   }
 `;
 

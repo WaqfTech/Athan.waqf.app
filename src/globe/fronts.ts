@@ -12,7 +12,7 @@ export const PRAYER_COLORS: Record<PrayerFrontKey, number> = {
   fajr: 0x38bdf8, // Cyan / Dawn twilight
   sunrise: 0xfef08a, // Pale gold / Sunrise
   dhuhr: 0xfacc15, // Golden yellow / Solar noon
-  asr: 0xfb923c, // Warm amber-orange / Afternoon shadow
+  asr: 0xff5500, // Vivid blazing orange / Afternoon shadow
   maghrib: 0xf43f5e, // Crimson rose / Sunset
   isha: 0xa855f7, // Vivid violet-purple / Nightfall twilight
   terminator: 0xe2e8f0, // Crisp silver-white / Day-night solar boundary

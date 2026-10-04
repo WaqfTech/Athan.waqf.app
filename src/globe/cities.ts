@@ -52,7 +52,7 @@ const pointsFragmentShader = /* glsl */ `
 
     if (vState > 0.5) {
       // Vivid glowing halo for active adhan
-      vec3 core = vColor * 1.5;
+      vec3 core = vColor * 1.25;
       gl_FragColor = vec4(core, alpha * 0.95);
     } else {
       gl_FragColor = vec4(vColor, alpha * 0.65 * vBrightness);
@@ -80,8 +80,8 @@ const pillarFragmentShader = /* glsl */ `
   void main() {
     // Vertical beam gradient: bright base tapering to a luminous pinnacle
     float beam = pow(vUv.y, 0.65);
-    float pulse = 0.8 + 0.2 * sin(uTime * 4.0);
-    vec3 color = vColor * (1.3 + beam * 0.7) * pulse;
+    float pulse = 0.85 + 0.15 * sin(uTime * 4.0);
+    vec3 color = vColor * (1.1 + beam * 0.35) * pulse;
     float alpha = (0.35 + beam * 0.65) * 0.9;
     gl_FragColor = vec4(color, alpha);
   }
@@ -92,8 +92,8 @@ const beaconFragmentShader = /* glsl */ `
   varying vec3 vColor;
 
   void main() {
-    float pulse = 0.85 + 0.3 * sin(uTime * 6.0);
-    gl_FragColor = vec4(vColor * 2.2 * pulse, 0.95);
+    float pulse = 0.85 + 0.25 * sin(uTime * 6.0);
+    gl_FragColor = vec4(vColor * 1.35 * pulse, 0.95);
   }
 `;
 
