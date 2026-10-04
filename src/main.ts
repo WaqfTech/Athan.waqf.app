@@ -34,6 +34,7 @@ export function initializeApp(): AppInstance {
   const urlState = parseUrlState();
   const initialTime = urlState.time || new Date();
   const initialConvention = (urlState.convention as CalculationConventionName) || 'UmmAlQura';
+  const initialStyle = urlState.style || 'roadmap';
 
   const clock = new SimulationClock(initialTime);
 
@@ -42,6 +43,7 @@ export function initializeApp(): AppInstance {
   let isNarrativeActive = false;
 
   const globeScene = createGlobeScene(canvas, {
+    initialStyle,
     onSelectSettlement: (settlement) => {
       hud.inspector.inspectSettlement(settlement, clock.getTime());
       updateUrlState({
@@ -80,6 +82,9 @@ export function initializeApp(): AppInstance {
     onFollowAdhan: () => {
       isNarrativeActive = !isNarrativeActive;
       narrativeDirector.setActive(isNarrativeActive);
+    },
+    onStyleChange: (style) => {
+      updateUrlState({ style });
     },
   });
 

@@ -6,6 +6,7 @@ export interface PlanetaryUrlState {
   time?: Date;
   mode?: string;
   convention?: string;
+  style?: 'roadmap' | 'satellite';
 }
 
 export function parseUrlState(search = window.location.search): PlanetaryUrlState {
@@ -36,6 +37,11 @@ export function parseUrlState(search = window.location.search): PlanetaryUrlStat
   const conv = params.get('convention');
   if (conv) state.convention = conv;
 
+  const style = params.get('style');
+  if (style === 'satellite' || style === 'roadmap') {
+    state.style = style;
+  }
+
   return state;
 }
 
@@ -49,6 +55,7 @@ export function updateUrlState(state: PlanetaryUrlState): void {
   if (state.time !== undefined) params.set('t', state.time.toISOString());
   if (state.mode !== undefined) params.set('mode', state.mode);
   if (state.convention !== undefined) params.set('convention', state.convention);
+  if (state.style !== undefined) params.set('style', state.style);
 
   const newUrl = `${window.location.pathname}?${params.toString()}`;
   window.history.replaceState(null, '', newUrl);

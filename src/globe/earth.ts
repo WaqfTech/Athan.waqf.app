@@ -69,24 +69,38 @@ const fragmentShader = /* glsl */ `
   }
 `;
 
+export type MapStyle = 'roadmap' | 'satellite';
+
 export interface EarthComponents {
   group: THREE.Group;
   mesh: THREE.Mesh<THREE.SphereGeometry, THREE.ShaderMaterial>;
   cloudsMesh: THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>;
   updateSun: (date: Date) => SubsolarCoordinates;
+  setMapStyle: (style: MapStyle) => void;
+  getMapStyle: () => MapStyle;
   dispose: () => void;
 }
 
-export function createEarth(textureLoader = new THREE.TextureLoader()): EarthComponents {
+export function createEarth(
+  textureLoader = new THREE.TextureLoader(),
+  initialStyle: MapStyle = 'roadmap',
+): EarthComponents {
   const group = new THREE.Group();
   group.name = 'earth-system';
 
-  // Load textures
-  const dayTexture = textureLoader.load('./textures/earth-day.jpg');
-  dayTexture.colorSpace = THREE.SRGBColorSpace;
+  // Load Roadmap textures (Google Maps vector aesthetic)
+  const roadmapDayTexture = textureLoader.load('./textures/earth-roadmap-day.png');
+  roadmapDayTexture.colorSpace = THREE.SRGBColorSpace;
 
-  const nightTexture = textureLoader.load('./textures/earth-night.png');
-  nightTexture.colorSpace = THREE.SRGBColorSpace;
+  const roadmapNightTexture = textureLoader.load('./textures/earth-roadmap-night.png');
+  roadmapNightTexture.colorSpace = THREE.SRGBColorSpace;
+
+  // Load Satellite textures (NASA Blue Marble photographic)
+  const satelliteDayTexture = textureLoader.load('./textures/earth-day.jpg');
+  satelliteDayTexture.colorSpace = THREE.SRGBColorSpace;
+
+  const satelliteNightTexture = textureLoader.load('./textures/earth-night.png');
+  satelliteNightTexture.colorSpace = THREE.SRGBColorSpace;
 
   const cloudsTexture = textureLoader.load('./textures/earth-clouds.png');
 
@@ -97,12 +111,15 @@ export function createEarth(textureLoader = new THREE.TextureLoader()): EarthCom
   // Rotate the geometry so U=0.5 aligns with +Z (Prime Meridian) to match latLonToVector3
   geometry.rotateY(-Math.PI / 2);
 
+  let currentStyle: MapStyle = initialStyle;
+  const isRoadmap = initialStyle === 'roadmap';
+
   const uniforms = {
-    uDayTexture: { value: dayTexture },
-    uNightTexture: { value: nightTexture },
+    uDayTexture: { value: isRoadmap ? roadmapDayTexture : satelliteDayTexture },
+    uNightTexture: { value: isRoadmap ? roadmapNightTexture : satelliteNightTexture },
     uCloudsTexture: { value: cloudsTexture },
     uSunDirection: { value: new THREE.Vector3(0, 0, 1) },
-    uCloudsOpacity: { value: 0.6 },
+    uCloudsOpacity: { value: isRoadmap ? 0.0 : 0.6 },
   };
 
   const material = new THREE.ShaderMaterial({
@@ -127,7 +144,25 @@ export function createEarth(textureLoader = new THREE.TextureLoader()): EarthCom
   });
   const cloudsMesh = new THREE.Mesh(cloudsGeometry, cloudsMaterial);
   cloudsMesh.name = 'earth-clouds';
+  cloudsMesh.visible = !isRoadmap;
   group.add(cloudsMesh);
+
+  const setMapStyle = (style: MapStyle): void => {
+    currentStyle = style;
+    if (style === 'roadmap') {
+      material.uniforms.uDayTexture.value = roadmapDayTexture;
+      material.uniforms.uNightTexture.value = roadmapNightTexture;
+      material.uniforms.uCloudsOpacity.value = 0.0;
+      cloudsMesh.visible = false;
+    } else {
+      material.uniforms.uDayTexture.value = satelliteDayTexture;
+      material.uniforms.uNightTexture.value = satelliteNightTexture;
+      material.uniforms.uCloudsOpacity.value = 0.6;
+      cloudsMesh.visible = true;
+    }
+  };
+
+  const getMapStyle = (): MapStyle => currentStyle;
 
   const updateSun = (date: Date): SubsolarCoordinates => {
     const subsolar = getSubsolarPoint(date);
@@ -139,8 +174,10 @@ export function createEarth(textureLoader = new THREE.TextureLoader()): EarthCom
   const dispose = (): void => {
     geometry.dispose();
     material.dispose();
-    dayTexture.dispose();
-    nightTexture.dispose();
+    roadmapDayTexture.dispose();
+    roadmapNightTexture.dispose();
+    satelliteDayTexture.dispose();
+    satelliteNightTexture.dispose();
     cloudsTexture.dispose();
     cloudsGeometry.dispose();
     cloudsMaterial.dispose();
@@ -151,6 +188,8 @@ export function createEarth(textureLoader = new THREE.TextureLoader()): EarthCom
     mesh,
     cloudsMesh,
     updateSun,
+    setMapStyle,
+    getMapStyle,
     dispose,
   };
 }

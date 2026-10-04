@@ -26,6 +26,7 @@ export function createHudOverlay(
   callbacks: {
     onConventionChange?: (conv: CalculationConventionName) => void;
     onFollowAdhan?: () => void;
+    onStyleChange?: (style: 'roadmap' | 'satellite') => void;
   } = {},
 ): HudOverlay {
   const root = document.getElementById('hud-overlay') || document.createElement('div');
@@ -92,7 +93,7 @@ export function createHudOverlay(
   const layersRow = document.createElement('div');
   layersRow.className = 'control-btn-row';
 
-  const prayerKeys: PrayerFrontKey[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
+  const prayerKeys: PrayerFrontKey[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'terminator'];
   for (const k of prayerKeys) {
     const btn = document.createElement('button');
     btn.className = 'btn-ctrl active';
@@ -107,6 +108,41 @@ export function createHudOverlay(
     layersRow.appendChild(btn);
   }
   controlsBox.appendChild(layersRow);
+
+  // Map Layer Style (Google Maps Roadmap vs Satellite)
+  const styleTitle = document.createElement('div');
+  styleTitle.className = 'control-group-title';
+  styleTitle.textContent = 'Map Layer';
+  controlsBox.appendChild(styleTitle);
+
+  const styleRow = document.createElement('div');
+  styleRow.className = 'control-btn-row';
+
+  const mapBtn = document.createElement('button');
+  mapBtn.className = `btn-ctrl ${globeScene.getMapStyle() === 'roadmap' ? 'active' : ''}`;
+  mapBtn.textContent = 'Map';
+
+  const satBtn = document.createElement('button');
+  satBtn.className = `btn-ctrl ${globeScene.getMapStyle() === 'satellite' ? 'active' : ''}`;
+  satBtn.textContent = 'Satellite';
+
+  mapBtn.addEventListener('click', () => {
+    mapBtn.classList.add('active');
+    satBtn.classList.remove('active');
+    globeScene.setMapStyle('roadmap');
+    if (callbacks.onStyleChange) callbacks.onStyleChange('roadmap');
+  });
+
+  satBtn.addEventListener('click', () => {
+    satBtn.classList.add('active');
+    mapBtn.classList.remove('active');
+    globeScene.setMapStyle('satellite');
+    if (callbacks.onStyleChange) callbacks.onStyleChange('satellite');
+  });
+
+  styleRow.appendChild(mapBtn);
+  styleRow.appendChild(satBtn);
+  controlsBox.appendChild(styleRow);
 
   // Convention Selector & Narrative Mode
   const actionsRow = document.createElement('div');

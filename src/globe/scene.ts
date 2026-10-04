@@ -1,7 +1,7 @@
 // Main Three.js Scene manager for Adhan Earth 3D Observatory
 
 import * as THREE from 'three';
-import { createEarth, EarthComponents } from './earth';
+import { createEarth, EarthComponents, MapStyle } from './earth';
 import { createCameraRig, CameraRig } from './camera';
 import { createPrayerFrontsLayer, PrayerFrontsLayer } from './fronts';
 import { createAtmosphere, AtmosphereMesh } from './atmosphere';
@@ -13,6 +13,7 @@ import { Settlement } from '../population/loader';
 import { SettlementSpatialIndex } from '../population/spatialIndex';
 
 export interface GlobeSceneOptions {
+  initialStyle?: MapStyle;
   onSelectSettlement?: (settlement: Settlement) => void;
   onSelectCoordinates?: (lat: number, lon: number) => void;
 }
@@ -28,6 +29,8 @@ export interface GlobeScene {
   setTime: (date: Date) => SubsolarCoordinates;
   setConvention: (convention: CalculationParameters) => void;
   setMadhab: (madhab: Madhab) => void;
+  setMapStyle: (style: MapStyle) => void;
+  getMapStyle: () => MapStyle;
   setSettlements: (settlements: Settlement[]) => void;
   updateActiveEvents: (events: ActiveAdhanEvent[]) => void;
   start: () => void;
@@ -85,7 +88,7 @@ export function createGlobeScene(
   const cameraRig = createCameraRig(canvas);
 
   // Earth system
-  const earth = createEarth();
+  const earth = createEarth(undefined, options.initialStyle || 'roadmap');
   scene.add(earth.group);
 
   // Atmospheric glow shell
@@ -271,6 +274,8 @@ export function createGlobeScene(
     setTime,
     setConvention,
     setMadhab,
+    setMapStyle: earth.setMapStyle,
+    getMapStyle: earth.getMapStyle,
     setSettlements,
     updateActiveEvents,
     start,
