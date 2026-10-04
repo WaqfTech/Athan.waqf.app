@@ -35,7 +35,7 @@ export function initializeApp(): AppInstance {
   const urlState = parseUrlState();
   const initialTime = urlState.time || new Date();
   const initialConvention = (urlState.convention as CalculationConventionName) || 'UmmAlQura';
-  const initialStyle = urlState.style || 'roadmap';
+  const initialStyle = urlState.style || 'satellite';
 
   const clock = new SimulationClock(initialTime);
 

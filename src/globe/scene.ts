@@ -66,6 +66,19 @@ export function createGlobeScene(
   const stars = new THREE.Points(starsGeometry, starsMaterial);
   scene.add(stars);
 
+  // Panoramic starry deep space celestial sphere
+  const textureLoader = new THREE.TextureLoader();
+  const skyTexture = textureLoader.load('./textures/night-sky.png');
+  skyTexture.colorSpace = THREE.SRGBColorSpace;
+  const skyGeometry = new THREE.SphereGeometry(300, 32, 32);
+  const skyMaterial = new THREE.MeshBasicMaterial({
+    map: skyTexture,
+    side: THREE.BackSide,
+    depthWrite: false,
+  });
+  const skyMesh = new THREE.Mesh(skyGeometry, skyMaterial);
+  scene.add(skyMesh);
+
   // Directional sun light and ambient space light
   const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
   scene.add(sunLight);
@@ -87,8 +100,8 @@ export function createGlobeScene(
   // Camera rig
   const cameraRig = createCameraRig(canvas);
 
-  // Earth system
-  const earth = createEarth(undefined, options.initialStyle || 'roadmap');
+  // Earth system (defaults to high-contrast 4K satellite photographic map)
+  const earth = createEarth(undefined, options.initialStyle || 'satellite');
   scene.add(earth.group);
 
   // Atmospheric glow shell
@@ -130,6 +143,7 @@ export function createGlobeScene(
     const subsolar = earth.updateSun(date);
     const sunDir = earth.mesh.material.uniforms.uSunDirection.value;
     sunLight.position.copy(sunDir).multiplyScalar(50);
+    atmosphere.updateSun(sunDir);
     prayerFronts.update(subsolar, currentConvention, currentMadhab);
     return subsolar;
   };
@@ -255,6 +269,9 @@ export function createGlobeScene(
     document.removeEventListener('visibilitychange', handleVisibilityChange);
     starsGeometry.dispose();
     starsMaterial.dispose();
+    skyGeometry.dispose();
+    skyMaterial.dispose();
+    skyTexture.dispose();
     prayerFronts.dispose();
     atmosphere.dispose();
     if (settlementsCloud) settlementsCloud.dispose();
