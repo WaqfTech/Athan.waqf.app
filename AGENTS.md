@@ -29,3 +29,4 @@ Always read and strictly adhere to the universal agent operating rules located a
 - WebGL loop performance: Never pass canvas dimensions to renderer or shader updates inside requestAnimationFrame. Keep canvas resizing decoupled inside ResizeObserver callbacks to prevent GPU pipeline stalls.
 - Scripting preference: Any utility or data generation scripts must be written in Go (e.g. `scripts/build-cities.go`).
 - Zero CI sprawl: Never introduce `.github/workflows/` files. Verify all tests and builds locally.
+- Full cycle execution: Run the entire delivery loop autonomously without stopping or asking what comes next. Implement the solution, run typechecks and tests, commit with semantic prefix, push to feature branch, deploy with wrangler, and verify live in the browser. Report all completed steps without appending next-step prompts.
