@@ -629,6 +629,7 @@ export function createHudOverlay(
     },
     onClose: () => {
       root.classList.remove('has-inspector-open');
+      globeScene.qiblaArcs.clearInspectedCity();
     },
   });
   root.appendChild(inspector.element);

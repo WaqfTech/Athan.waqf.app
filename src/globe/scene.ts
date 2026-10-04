@@ -6,6 +6,8 @@ import { createCameraRig, CameraRig } from './camera';
 import { createPrayerFrontsLayer, PrayerFrontsLayer } from './fronts';
 import { createAtmosphere, AtmosphereMesh } from './atmosphere';
 import { createSettlementPointCloud, SettlementPointCloud, ActiveAdhanEvent } from './cities';
+import { createMinaretRingsLayer, MinaretRingsLayer } from './rings';
+import { createQiblaArcsLayer, QiblaArcsLayer } from './qibla';
 import { SubsolarCoordinates } from '../astronomy/solar';
 import { vector3ToLatLon } from '../astronomy/coordinates';
 import { CalculationParameters, Madhab, CALCULATION_CONVENTIONS } from '../prayer/conventions';
@@ -25,6 +27,8 @@ export interface GlobeScene {
   atmosphere: AtmosphereMesh;
   prayerFronts: PrayerFrontsLayer;
   settlementsCloud: SettlementPointCloud | null;
+  minaretRings: MinaretRingsLayer;
+  qiblaArcs: QiblaArcsLayer;
   renderer: THREE.WebGLRenderer;
   setTime: (date: Date) => SubsolarCoordinates;
   setConvention: (convention: CalculationParameters) => void;
@@ -112,8 +116,17 @@ export function createGlobeScene(
   const prayerFronts = createPrayerFrontsLayer();
   scene.add(prayerFronts.group);
 
+  // Minaret acoustic ripple rings layer
+  const minaretRings = createMinaretRingsLayer();
+  scene.add(minaretRings.group);
+
+  // 3D Qibla arcs layer to Mecca
+  const qiblaArcs = createQiblaArcsLayer();
+  scene.add(qiblaArcs.group);
+
   let settlementsCloud: SettlementPointCloud | null = null;
   let spatialIndex: SettlementSpatialIndex | null = null;
+  let settlementsCache: Settlement[] = [];
 
   let currentDate = new Date();
   let currentConvention = CALCULATION_CONVENTIONS.UmmAlQura;
@@ -123,6 +136,7 @@ export function createGlobeScene(
   let clockStartTime = performance.now();
 
   const setSettlements = (settlements: Settlement[]): void => {
+    settlementsCache = settlements;
     if (settlementsCloud) {
       scene.remove(settlementsCloud.group);
       settlementsCloud.dispose();
@@ -135,6 +149,10 @@ export function createGlobeScene(
   const updateActiveEvents = (events: ActiveAdhanEvent[]): void => {
     if (settlementsCloud) {
       settlementsCloud.updateActiveEvents(events);
+    }
+    if (settlementsCache.length > 0) {
+      minaretRings.updateActiveEvents(events, settlementsCache);
+      qiblaArcs.updateActiveEvents(events, settlementsCache);
     }
   };
 
@@ -191,12 +209,14 @@ export function createGlobeScene(
         const nearest = spatialIndex.findNearest(latitude, longitude, 3.5);
         if (nearest) {
           options.onSelectSettlement(nearest.settlement);
+          qiblaArcs.setInspectedCity(nearest.settlement.latitude, nearest.settlement.longitude);
           return;
         }
       }
 
       if (options.onSelectCoordinates) {
         options.onSelectCoordinates(latitude, longitude);
+        qiblaArcs.setInspectedCity(latitude, longitude);
       }
     }
   };
@@ -225,6 +245,8 @@ export function createGlobeScene(
     if (settlementsCloud) {
       settlementsCloud.updateTime(elapsed);
     }
+    minaretRings.updateTime(elapsed);
+    qiblaArcs.updateTime(elapsed);
 
     // Subtle cloud rotation
     earth.cloudsMesh.rotation.y += 0.0001;
@@ -273,6 +295,8 @@ export function createGlobeScene(
     skyMaterial.dispose();
     skyTexture.dispose();
     prayerFronts.dispose();
+    minaretRings.dispose();
+    qiblaArcs.dispose();
     atmosphere.dispose();
     if (settlementsCloud) settlementsCloud.dispose();
     earth.dispose();
@@ -287,6 +311,8 @@ export function createGlobeScene(
     atmosphere,
     prayerFronts,
     settlementsCloud,
+    minaretRings,
+    qiblaArcs,
     renderer,
     setTime,
     setConvention,

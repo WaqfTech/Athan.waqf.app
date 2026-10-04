@@ -87,6 +87,7 @@ export function initializeApp(): AppInstance {
     onSelectCity: (settlement) => {
       globeScene.cameraRig.focusCoordinates(settlement.latitude, settlement.longitude, 10, true);
       hud.inspector.inspectSettlement(settlement, clock.getTime());
+      globeScene.qiblaArcs.setInspectedCity(settlement.latitude, settlement.longitude);
       updateUrlState({
         lat: settlement.latitude,
         lon: settlement.longitude,
