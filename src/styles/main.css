@@ -133,7 +133,8 @@ html, body {
 .city-search-box,
 .quick-cities-strip,
 .btn-quick-city,
-.btn-icon-toggle {
+.btn-icon-toggle,
+.lang-menu-wrapper {
   pointer-events: auto;
 }
 
@@ -527,11 +528,13 @@ html, body {
 }
 
 /* Custom Convention Selector */
-.convention-menu-wrapper {
+.convention-menu-wrapper,
+.lang-menu-wrapper {
   position: relative;
 }
 
-.btn-convention-trigger {
+.btn-convention-trigger,
+.btn-lang-trigger {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
@@ -547,17 +550,20 @@ html, body {
 }
 
 .btn-convention-trigger:hover,
-.btn-convention-trigger:focus-visible {
+.btn-convention-trigger:focus-visible,
+.btn-lang-trigger:hover,
+.btn-lang-trigger:focus-visible {
   color: var(--color-text-primary);
   border-color: var(--color-glass-border-focus);
   outline: none;
 }
 
-.convention-dropdown-menu {
+.convention-dropdown-menu,
+.lang-dropdown-menu {
   position: absolute;
   inset-block-end: calc(100% + var(--space-xs));
   inset-inline-start: 0px;
-  min-width: 220px;
+  min-width: 200px;
   border-radius: var(--radius-md);
   padding-block: var(--space-xs);
   padding-inline: var(--space-xs);
@@ -567,11 +573,22 @@ html, body {
   z-index: var(--z-dropdown);
 }
 
-.convention-dropdown-menu.active {
+.lang-dropdown-menu {
+  inset-block-end: auto;
+  inset-block-start: calc(100% + var(--space-xs));
+  inset-inline-start: auto;
+  inset-inline-end: 0px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.convention-dropdown-menu.active,
+.lang-dropdown-menu.active {
   display: flex;
 }
 
-.convention-menu-item {
+.convention-menu-item,
+.lang-menu-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -589,13 +606,17 @@ html, body {
 
 .convention-menu-item:hover,
 .convention-menu-item:focus-visible,
-.convention-menu-item.active {
+.convention-menu-item.active,
+.lang-menu-item:hover,
+.lang-menu-item:focus-visible,
+.lang-menu-item.active {
   background: var(--color-accent-bg);
   color: var(--color-text-primary);
   outline: none;
 }
 
-.convention-menu-item.active {
+.convention-menu-item.active,
+.lang-menu-item.active {
   font-weight: 700;
   color: var(--color-accent);
 }
@@ -969,6 +990,9 @@ html, body {
   .btn-prayer-pill,
   .btn-quick-city,
   .btn-convention-trigger,
+  .btn-lang-trigger,
+  .convention-menu-item,
+  .lang-menu-item,
   .btn-follow-tour,
   .search-result-item,
   .inspector-prayer-row {

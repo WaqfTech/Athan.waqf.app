@@ -9,6 +9,7 @@ import { computeGlobalAdhanContinuity } from './simulation/continuity';
 import { createNarrativeDirector, NarrativeDirector } from './simulation/narrative';
 import { parseUrlState, updateUrlState } from './ui/urlState';
 import { CALCULATION_CONVENTIONS, CalculationConventionName } from './prayer/conventions';
+import { i18n } from './i18n';
 
 export interface AppInstance {
   initialized: boolean;
@@ -95,6 +96,10 @@ export function initializeApp(): AppInstance {
     onStyleChange: (style) => {
       updateUrlState({ style });
     },
+  });
+
+  i18n.onLocaleChange((locale) => {
+    updateUrlState({ lang: locale });
   });
 
   globeScene.setConvention(CALCULATION_CONVENTIONS[initialConvention]);

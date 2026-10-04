@@ -8,6 +8,7 @@ import { createTimelineUI, TimelineUI } from './timeline';
 import { createInspectorPanel, InspectorPanel } from './inspector';
 import { ContinuityStats } from '../simulation/continuity';
 import { Settlement } from '../population/loader';
+import { i18n, SUPPORTED_LOCALES, SupportedLocale } from '../i18n';
 
 export type ViewMode = 'visual' | 'astronomy' | 'prayer' | 'adhan';
 
@@ -77,6 +78,9 @@ export function createHudOverlay(
   const bottomStack = document.createElement('div');
   bottomStack.className = 'hud-bottom-stack';
 
+  let currentLocale = i18n.getLocale();
+  let t = i18n.getTranslations();
+
   // 1. Top Navigation Bar
   const topBar = document.createElement('header');
   topBar.className = 'hud-top-bar';
@@ -93,14 +97,16 @@ export function createHudOverlay(
       </svg>
     </div>
     <div class="brand-info">
-      <div class="brand-title">ADHAN EARTH</div>
-      <div class="brand-subtitle">Planetary Observatory</div>
+      <div class="brand-title">${t.brand.title}</div>
+      <div class="brand-subtitle">${t.brand.subtitle}</div>
     </div>
     <div class="live-clock-pill">
       <span class="live-beacon-dot" aria-hidden="true"></span>
       <span id="live-utc-ticker">00:00:00 UTC</span>
     </div>
   `;
+  const brandTitleEl = brand.querySelector('.brand-title') as HTMLElement;
+  const brandSubtitleEl = brand.querySelector('.brand-subtitle') as HTMLElement;
   topBar.appendChild(brand);
 
   // City Search Bar
@@ -123,8 +129,8 @@ export function createHudOverlay(
   const searchInput = document.createElement('input');
   searchInput.type = 'text';
   searchInput.className = 'city-search-input';
-  searchInput.placeholder = 'Search city (e.g. Amman, Makkah, Tokyo)...';
-  searchInput.setAttribute('aria-label', 'Search city for prayer times');
+  searchInput.placeholder = t.search.placeholder;
+  searchInput.setAttribute('aria-label', t.search.placeholder);
   searchInput.setAttribute('autocomplete', 'off');
   searchInput.setAttribute('spellcheck', 'false');
 
@@ -313,6 +319,91 @@ export function createHudOverlay(
   }
   topBar.appendChild(quickStrip);
 
+  // Language Switcher Dropdown
+  const langWrapper = document.createElement('div');
+  langWrapper.className = 'lang-menu-wrapper';
+
+  const langTrigger = document.createElement('button');
+  langTrigger.className = 'btn-lang-trigger';
+  langTrigger.setAttribute('aria-label', 'Select interface language');
+  langTrigger.setAttribute('aria-expanded', 'false');
+  langTrigger.setAttribute('aria-haspopup', 'listbox');
+
+  const langTriggerIcon = document.createElement('span');
+  langTriggerIcon.setAttribute('aria-hidden', 'true');
+  langTriggerIcon.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+  `;
+
+  const activeLangName = document.createElement('span');
+  activeLangName.id = 'active-lang-name';
+  activeLangName.textContent = SUPPORTED_LOCALES[currentLocale]?.nativeName || 'English';
+
+  const langChevron = document.createElement('span');
+  langChevron.setAttribute('aria-hidden', 'true');
+  langChevron.style.fontSize = '10px';
+  langChevron.style.opacity = '0.7';
+  langChevron.textContent = '▾';
+
+  langTrigger.appendChild(langTriggerIcon);
+  langTrigger.appendChild(activeLangName);
+  langTrigger.appendChild(langChevron);
+
+  const langMenu = document.createElement('div');
+  langMenu.className = 'lang-dropdown-menu hud-panel';
+  langMenu.setAttribute('role', 'listbox');
+
+  const localeKeys = Object.keys(SUPPORTED_LOCALES) as SupportedLocale[];
+  for (const loc of localeKeys) {
+    const meta = SUPPORTED_LOCALES[loc];
+    const item = document.createElement('button');
+    item.className = `lang-menu-item ${loc === currentLocale ? 'active' : ''}`;
+    item.setAttribute('role', 'option');
+    item.setAttribute('data-lang', loc);
+    item.setAttribute('aria-selected', loc === currentLocale ? 'true' : 'false');
+    item.innerHTML = `
+      <span>${meta.nativeName}</span>
+      <span style="font-size: 10px; opacity: 0.6; text-transform: uppercase;">${meta.code}</span>
+    `;
+
+    item.addEventListener('click', () => {
+      langMenu.querySelectorAll('.lang-menu-item').forEach((el) => {
+        el.classList.remove('active');
+        el.setAttribute('aria-selected', 'false');
+      });
+      item.classList.add('active');
+      item.setAttribute('aria-selected', 'true');
+      activeLangName.textContent = meta.nativeName;
+      langMenu.classList.remove('active');
+      langTrigger.setAttribute('aria-expanded', 'false');
+
+      i18n.setLocale(loc);
+    });
+
+    langMenu.appendChild(item);
+  }
+
+  langTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = langMenu.classList.toggle('active');
+    langTrigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!langWrapper.contains(e.target as Node)) {
+      langMenu.classList.remove('active');
+      langTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  langWrapper.appendChild(langTrigger);
+  langWrapper.appendChild(langMenu);
+  topBar.appendChild(langWrapper);
+
   // Zen View / Minimizer Button
   const zenBtn = document.createElement('button');
   zenBtn.className = 'btn-icon-toggle';
@@ -345,7 +436,7 @@ export function createHudOverlay(
   speedSegment.className = 'dock-segment';
   const speedLabel = document.createElement('span');
   speedLabel.className = 'dock-label';
-  speedLabel.textContent = 'Time';
+  speedLabel.textContent = t.controls.time;
   speedSegment.appendChild(speedLabel);
 
   const speeds: { label: string; speed: PlaybackSpeed; isLive?: boolean }[] = [
@@ -382,11 +473,11 @@ export function createHudOverlay(
 
   const mapBtn = document.createElement('button');
   mapBtn.className = `btn-dock-pill ${globeScene.getMapStyle() === 'roadmap' ? 'active' : ''}`;
-  mapBtn.textContent = 'Map';
+  mapBtn.textContent = t.controls.map;
 
   const satBtn = document.createElement('button');
   satBtn.className = `btn-dock-pill ${globeScene.getMapStyle() === 'satellite' ? 'active' : ''}`;
-  satBtn.textContent = 'Satellite';
+  satBtn.textContent = t.controls.satellite;
 
   mapBtn.addEventListener('click', () => {
     mapBtn.classList.add('active');
@@ -410,6 +501,7 @@ export function createHudOverlay(
   const prayerSegment = document.createElement('div');
   prayerSegment.className = 'dock-segment';
 
+  const prayerLabels: Map<PrayerFrontKey, HTMLSpanElement> = new Map();
   const prayerKeys: PrayerFrontKey[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'terminator'];
   for (const k of prayerKeys) {
     const hexColor = `#${PRAYER_COLORS[k].toString(16).padStart(6, '0')}`;
@@ -423,7 +515,8 @@ export function createHudOverlay(
     dot.className = 'prayer-indicator-dot';
 
     const label = document.createElement('span');
-    label.textContent = k === 'asr' ? 'ʿAsr' : k === 'isha' ? 'ʿIsha' : k.charAt(0).toUpperCase() + k.slice(1);
+    label.textContent = t.prayers[k] || k;
+    prayerLabels.set(k, label);
 
     btn.appendChild(dot);
     btn.appendChild(label);
@@ -492,10 +585,14 @@ export function createHudOverlay(
   // Follow Adhan Tour Button
   const followBtn = document.createElement('button');
   followBtn.className = 'btn-follow-tour';
-  followBtn.innerHTML = `
-    <span>Follow Adhān</span>
-    <span aria-hidden="true">➜</span>
-  `;
+  const followBtnSpan = document.createElement('span');
+  followBtnSpan.textContent = t.controls.followAdhan;
+  const followBtnArrow = document.createElement('span');
+  followBtnArrow.setAttribute('aria-hidden', 'true');
+  followBtnArrow.textContent = '➜';
+  followBtn.appendChild(followBtnSpan);
+  followBtn.appendChild(followBtnArrow);
+
   let isFollowing = false;
   followBtn.addEventListener('click', () => {
     isFollowing = !isFollowing;
@@ -517,6 +614,40 @@ export function createHudOverlay(
   bottomStack.appendChild(controlsDock);
   bottomStack.appendChild(timeline.element);
   root.appendChild(bottomStack);
+
+  const unsubscribeLocale = i18n.onLocaleChange((locale, newTrans) => {
+    currentLocale = locale;
+    t = newTrans;
+
+    if (brandTitleEl) brandTitleEl.textContent = t.brand.title;
+    if (brandSubtitleEl) brandSubtitleEl.textContent = t.brand.subtitle;
+
+    searchInput.placeholder = t.search.placeholder;
+    searchInput.setAttribute('aria-label', t.search.placeholder);
+
+    if (activeLangName) {
+      activeLangName.textContent = SUPPORTED_LOCALES[locale]?.nativeName || 'English';
+    }
+
+    if (speedLabel) speedLabel.textContent = t.controls.time;
+    if (mapBtn) mapBtn.textContent = t.controls.map;
+    if (satBtn) satBtn.textContent = t.controls.satellite;
+
+    for (const [k, lbl] of prayerLabels.entries()) {
+      lbl.textContent = t.prayers[k] || k;
+    }
+
+    if (followBtnSpan) {
+      followBtnSpan.textContent = t.controls.followAdhan;
+    }
+
+    langMenu.querySelectorAll('.lang-menu-item').forEach((item) => {
+      const code = item.getAttribute('data-lang');
+      const isCurrent = code === locale;
+      item.classList.toggle('active', isCurrent);
+      item.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+    });
+  });
 
   const updateStats = (stats: ContinuityStats): void => {
     timeline.updateStats(stats);
@@ -540,6 +671,7 @@ export function createHudOverlay(
   };
 
   const dispose = (): void => {
+    unsubscribeLocale();
     timeline.dispose();
     inspector.dispose();
     root.innerHTML = '';

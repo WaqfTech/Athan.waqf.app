@@ -2,6 +2,7 @@
 
 import { ContinuityStats } from '../simulation/continuity';
 import { SimulationClock } from '../simulation/clock';
+import { i18n } from '../i18n/manager';
 
 export interface TimelineUI {
   element: HTMLElement;
@@ -18,29 +19,31 @@ export function createTimelineUI(
   container.className = 'timeline-container hud-panel';
   container.setAttribute('aria-label', '24-hour global adhan timeline');
 
+  let trans = i18n.getTranslations();
+
   const header = document.createElement('div');
   header.className = 'timeline-header';
 
   const titleGroup = document.createElement('div');
   titleGroup.className = 'timeline-title-group';
   titleGroup.innerHTML = `
-    <span class="timeline-title">Continuous Planetary Adhān</span>
-    <span class="timeline-subtitle">24-Hour Solar Traversal</span>
+    <span class="timeline-title" id="timeline-title">${trans.timeline.title}</span>
+    <span class="timeline-subtitle" id="timeline-subtitle">${trans.timeline.subtitle}</span>
   `;
 
   const statsStrip = document.createElement('div');
   statsStrip.className = 'timeline-stats-strip';
   statsStrip.innerHTML = `
     <div class="stat-chip">
-      <span class="stat-chip-label">Coverage</span>
+      <span class="stat-chip-label" id="stat-cov-label">${trans.timeline.coverage}</span>
       <span class="stat-chip-val" id="stat-coverage">--</span>
     </div>
     <div class="stat-chip">
-      <span class="stat-chip-label">Longest Gap</span>
+      <span class="stat-chip-label" id="stat-gap-label">${trans.timeline.longestGap}</span>
       <span class="stat-chip-val" id="stat-gap">--</span>
     </div>
     <div class="stat-chip">
-      <span class="stat-chip-label">Peak Front</span>
+      <span class="stat-chip-label" id="stat-peak-label">${trans.timeline.peakFront}</span>
       <span class="stat-chip-val" id="stat-peak">--</span>
     </div>
   `;
@@ -154,13 +157,32 @@ export function createTimelineUI(
     if (covEl) covEl.textContent = `${stats.coveragePercent}%`;
 
     const gapEl = container.querySelector('#stat-gap');
-    if (gapEl) gapEl.textContent = stats.longestGapSeconds > 0 ? `${stats.longestGapSeconds}s` : '0s (Unbroken)';
+    if (gapEl) gapEl.textContent = stats.longestGapSeconds > 0 ? `${stats.longestGapSeconds}s` : trans.timeline.unbroken;
 
     const peakEl = container.querySelector('#stat-peak');
-    if (peakEl) peakEl.textContent = `${stats.peakConcurrentAdhans} cities`;
+    if (peakEl) peakEl.textContent = `${stats.peakConcurrentAdhans} ${trans.timeline.cities}`;
 
     renderCanvas();
   };
+
+  const unsubscribe = i18n.onLocaleChange((_locale, newTrans) => {
+    trans = newTrans;
+    const titleEl = container.querySelector('#timeline-title');
+    if (titleEl) titleEl.textContent = trans.timeline.title;
+    const subtitleEl = container.querySelector('#timeline-subtitle');
+    if (subtitleEl) subtitleEl.textContent = trans.timeline.subtitle;
+
+    const covLabel = container.querySelector('#stat-cov-label');
+    if (covLabel) covLabel.textContent = trans.timeline.coverage;
+    const gapLabel = container.querySelector('#stat-gap-label');
+    if (gapLabel) gapLabel.textContent = trans.timeline.longestGap;
+    const peakLabel = container.querySelector('#stat-peak-label');
+    if (peakLabel) peakLabel.textContent = trans.timeline.peakFront;
+
+    if (currentStats) {
+      updateStats(currentStats);
+    }
+  });
 
   const updatePlayhead = (date: Date): void => {
     const hours = date.getUTCHours();
@@ -249,6 +271,7 @@ export function createTimelineUI(
   resizeObserver.observe(trackWrapper);
 
   const dispose = (): void => {
+    unsubscribe();
     trackWrapper.removeEventListener('mousedown', onMouseDown);
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);

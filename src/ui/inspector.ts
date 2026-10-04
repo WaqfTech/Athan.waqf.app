@@ -3,6 +3,7 @@
 import { Settlement } from '../population/loader';
 import { calculatePrayerTimes, PrayerTimesSchedule } from '../prayer/calculator';
 import { CalculationConventionName, Madhab } from '../prayer/conventions';
+import { i18n } from '../i18n/manager';
 
 export interface InspectorPanel {
   element: HTMLElement;
@@ -57,10 +58,14 @@ export function createInspectorPanel(options: {
 
   let currentSettlement: Settlement | null = null;
   let currentCoords: { lat: number; lon: number } | null = null;
+  let lastRenderDate: Date = new Date();
   const convention = options.convention || 'UmmAlQura';
   const madhab = options.madhab || 'Shafi';
 
   const render = (date: Date): void => {
+    lastRenderDate = date;
+    const trans = i18n.getTranslations();
+
     let lat = 0;
     let lon = 0;
     let nameEn = 'Geographic Point';
@@ -96,6 +101,9 @@ export function createInspectorPanel(options: {
     // Progress bar estimation: 0% to 100%
     const countdownSec = (sched.countdownMs || 0) / 1000;
     const progressPercent = Math.max(5, Math.min(100, 100 - (countdownSec / (6 * 3600)) * 100));
+    const nextPrayerLabel = sched.nextPrayer !== 'none'
+      ? (trans.prayers[sched.nextPrayer as keyof typeof trans.prayers] || sched.nextPrayer)
+      : '--';
 
     container.innerHTML = `
       <div class="inspector-header">
@@ -104,23 +112,23 @@ export function createInspectorPanel(options: {
           ${nameAr ? `<div class="inspector-city-ar" dir="rtl" lang="ar">${nameAr}</div>` : ''}
           <div class="inspector-coords-badge">${latStr}, ${lonStr}</div>
         </div>
-        <button class="inspector-close-btn" aria-label="Close inspector">✕</button>
+        <button class="inspector-close-btn" aria-label="${trans.inspector.close}">✕</button>
       </div>
 
       <div class="inspector-telemetry-row">
         <div class="telemetry-cell">
-          <span class="telemetry-label">Local Time</span>
+          <span class="telemetry-label">${trans.inspector.localTime}</span>
           <span class="telemetry-value">${localTime}</span>
         </div>
         <div class="telemetry-cell">
-          <span class="telemetry-label">Qibla Bearing</span>
-          <span class="telemetry-value">${qiblaBearing}° from N</span>
+          <span class="telemetry-label">${trans.inspector.qiblaBearing}</span>
+          <span class="telemetry-value">${qiblaBearing}° ${trans.inspector.fromNorth}</span>
         </div>
       </div>
 
       <div class="inspector-next-capsule">
         <div class="next-capsule-header">
-          <span class="next-capsule-name">Next: ${sched.nextPrayer}</span>
+          <span class="next-capsule-name">${trans.inspector.next}: ${nextPrayerLabel}</span>
           <span class="next-capsule-timer">${formatCountdown(sched.countdownMs)}</span>
         </div>
         <div class="next-progress-bar">
@@ -132,42 +140,42 @@ export function createInspectorPanel(options: {
         <div class="inspector-prayer-row ${sched.currentPrayer === 'fajr' ? 'active' : ''}" style="--prayer-color: var(--color-fajr);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-fajr);"></span>
-            <span>Fajr</span>
+            <span>${trans.prayers.fajr}</span>
           </span>
           <span>${formatTime(sched.fajr, tz)}</span>
         </div>
         <div class="inspector-prayer-row" style="--prayer-color: var(--color-sunrise);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-sunrise);"></span>
-            <span>Sunrise</span>
+            <span>${trans.prayers.sunrise}</span>
           </span>
           <span>${formatTime(sched.sunrise, tz)}</span>
         </div>
         <div class="inspector-prayer-row ${sched.currentPrayer === 'dhuhr' ? 'active' : ''}" style="--prayer-color: var(--color-dhuhr);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-dhuhr);"></span>
-            <span>Dhuhr</span>
+            <span>${trans.prayers.dhuhr}</span>
           </span>
           <span>${formatTime(sched.dhuhr, tz)}</span>
         </div>
         <div class="inspector-prayer-row ${sched.currentPrayer === 'asr' ? 'active' : ''}" style="--prayer-color: var(--color-asr);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-asr);"></span>
-            <span>ʿAsr</span>
+            <span>${trans.prayers.asr}</span>
           </span>
           <span>${formatTime(sched.asr, tz)}</span>
         </div>
         <div class="inspector-prayer-row ${sched.currentPrayer === 'maghrib' ? 'active' : ''}" style="--prayer-color: var(--color-maghrib);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-maghrib);"></span>
-            <span>Maghrib</span>
+            <span>${trans.prayers.maghrib}</span>
           </span>
           <span>${formatTime(sched.maghrib, tz)}</span>
         </div>
         <div class="inspector-prayer-row ${sched.currentPrayer === 'isha' ? 'active' : ''}" style="--prayer-color: var(--color-isha);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-isha);"></span>
-            <span>ʿIsha</span>
+            <span>${trans.prayers.isha}</span>
           </span>
           <span>${formatTime(sched.isha, tz)}</span>
         </div>
@@ -182,6 +190,12 @@ export function createInspectorPanel(options: {
       });
     }
   };
+
+  const unsubscribe = i18n.onLocaleChange(() => {
+    if (container.style.display !== 'none') {
+      render(lastRenderDate);
+    }
+  });
 
   const inspectSettlement = (settlement: Settlement, currentDate: Date): void => {
     currentSettlement = settlement;
@@ -210,6 +224,7 @@ export function createInspectorPanel(options: {
   };
 
   const dispose = (): void => {
+    unsubscribe();
     container.remove();
   };
 
