@@ -423,7 +423,7 @@ export function createHudOverlay(
     dot.className = 'prayer-indicator-dot';
 
     const label = document.createElement('span');
-    label.textContent = k === 'asr' ? 'ʿAsr' : k === 'isha' ? 'ʿIshaʾ' : k.charAt(0).toUpperCase() + k.slice(1);
+    label.textContent = k === 'asr' ? 'ʿAsr' : k === 'isha' ? 'ʿIsha' : k.charAt(0).toUpperCase() + k.slice(1);
 
     btn.appendChild(dot);
     btn.appendChild(label);

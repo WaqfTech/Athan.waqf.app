@@ -633,14 +633,14 @@ html, body {
 /* 3. Astronomical City Inspector Card */
 .inspector-panel {
   position: absolute;
-  inset-block-start: 72px;
+  inset-block-start: 64px;
   inset-inline-start: var(--space-md);
-  width: 320px;
+  width: 290px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
-  padding-block: var(--space-md);
-  padding-inline: var(--space-md);
+  gap: var(--space-xs);
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-sm);
   z-index: var(--z-modal);
   animation: slideInInspector 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -660,9 +660,9 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
   border-block-end: 1px solid var(--color-glass-border);
-  padding-block-end: var(--space-sm);
+  padding-block-end: var(--space-xs);
 }
 
 .inspector-title-group {
@@ -672,14 +672,14 @@ html, body {
 }
 
 .inspector-city-name {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
   font-weight: 700;
   color: var(--color-text-primary);
   line-height: 1.2;
 }
 
 .inspector-city-ar {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   color: var(--color-accent);
   font-weight: 600;
 }
@@ -688,7 +688,7 @@ html, body {
   font-size: var(--font-size-xs);
   font-family: var(--font-mono);
   color: var(--color-text-muted);
-  margin-block-start: var(--space-xs);
+  margin-block-start: 0px;
 }
 
 .inspector-close-btn {
@@ -696,7 +696,7 @@ html, body {
   border: none;
   color: var(--color-text-muted);
   cursor: pointer;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   padding-block: var(--space-xs);
   padding-inline: var(--space-xs);
   border-radius: var(--radius-sm);
@@ -719,7 +719,7 @@ html, body {
   gap: var(--space-xs);
   background: rgba(6, 11, 25, 0.6);
   padding-block: var(--space-xs);
-  padding-inline: var(--space-sm);
+  padding-inline: var(--space-xs);
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-glass-border);
 }
@@ -739,7 +739,7 @@ html, body {
 }
 
 .telemetry-value {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
   font-family: var(--font-mono);
   font-weight: 600;
@@ -752,7 +752,7 @@ html, body {
   gap: var(--space-xs);
   background: rgba(56, 189, 248, 0.08);
   border: 1px solid var(--color-glass-border-focus);
-  padding-block: var(--space-sm);
+  padding-block: var(--space-xs);
   padding-inline: var(--space-sm);
   border-radius: var(--radius-md);
 }
@@ -806,7 +806,7 @@ html, body {
   font-size: var(--font-size-xs);
   font-family: var(--font-mono);
   padding-block: var(--space-xs);
-  padding-inline: var(--space-sm);
+  padding-inline: var(--space-xs);
   border-radius: var(--radius-sm);
   border-inline-start: 3px solid transparent;
   background: rgba(15, 23, 42, 0.4);

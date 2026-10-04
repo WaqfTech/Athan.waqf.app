@@ -167,7 +167,7 @@ export function createInspectorPanel(options: {
         <div class="inspector-prayer-row ${sched.currentPrayer === 'isha' ? 'active' : ''}" style="--prayer-color: var(--color-isha);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-isha);"></span>
-            <span>ʿIshaʾ</span>
+            <span>ʿIsha</span>
           </span>
           <span>${formatTime(sched.isha, tz)}</span>
         </div>
