@@ -27,11 +27,19 @@ This index tracks all goal packages under `goals/`, their execution mode (Indepe
 6. **Auto-Reconciliation**: Run `sila goals` to scan commits, mark 🟢 **Implemented**, and clear the claim lock.
 
 ## Summary
-- **Total Goals**: 5
+- **Total Goals**: 6
 - 🟢 **Implemented & Verified**: 5
-- 🟡 **Ready to Execute (Pending)**: 0 (0 independent ⚡, 0 unblocked 🔗)
-- 🎯 **By Tier**: 2 immediate (Tier 1), 3 roadmap (Tier 2), 0 nice-to-have (Tier 3), 0 wont-fix (Tier 4)
-- 📋 **Execution Tasks Progress**: 24/24 completed (100%)
+- 🟡 **Ready to Execute (Pending)**: 1 (1 independent ⚡, 0 unblocked 🔗)
+- 🎯 **By Tier**: 2 immediate (Tier 1), 4 roadmap (Tier 2), 0 nice-to-have (Tier 3), 0 wont-fix (Tier 4)
+- 📋 **Execution Tasks Progress**: 24/28 completed (85%)
+
+---
+
+## 🟡 Ready to Execute (Pending Goals)
+
+| Goal Package | Tier | Mode & Sequence | Dependencies | Focus & Description | Launch Command |
+| :--- | :---: | :---: | :--- | :--- | :--- |
+| [`visitor-edge-geolocation-cities`](visitor-edge-geolocation-cities/goal.md) | `🗺️ Roadmap` | `🚢 SHIP ⚡ Independent` | - | Visitor Edge Geolocation and 10 Closest Cities in Header — Use Cloudflare request.cf edge geolocation and spatial indexing to display the 1... | `/goal goals/visitor-edge-geolocation-cities/goal.md` |
 
 ---
 
