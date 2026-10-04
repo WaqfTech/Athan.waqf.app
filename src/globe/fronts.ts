@@ -9,13 +9,13 @@ import { EARTH_RADIUS } from './earth';
 export type PrayerFrontKey = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha' | 'terminator';
 
 export const PRAYER_COLORS: Record<PrayerFrontKey, number> = {
-  fajr: 0x38bdf8, // Cyan / Dawn
-  sunrise: 0xfef08a, // Pale yellow / Sunrise
-  dhuhr: 0xfacc15, // Golden yellow / Noon
-  asr: 0xfb923c, // Warm orange / Afternoon
+  fajr: 0x38bdf8, // Cyan / Dawn twilight
+  sunrise: 0xfef08a, // Pale gold / Sunrise
+  dhuhr: 0xfacc15, // Golden yellow / Solar noon
+  asr: 0xfb923c, // Warm amber-orange / Afternoon shadow
   maghrib: 0xf43f5e, // Crimson rose / Sunset
-  isha: 0x818cf8, // Indigo / Night twilight
-  terminator: 0x64748b, // Subtle slate / Day-night boundary
+  isha: 0xa855f7, // Vivid violet-purple / Nightfall twilight
+  terminator: 0xe2e8f0, // Crisp silver-white / Day-night solar boundary
 };
 
 export interface FrontLineObject {
@@ -67,7 +67,7 @@ export function createPrayerFrontsLayer(): PrayerFrontsLayer {
       color: PRAYER_COLORS[key],
       linewidth: 2,
       transparent: true,
-      opacity: key === 'terminator' ? 0.35 : 0.9,
+      opacity: key === 'terminator' ? 0.75 : 0.9,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     });

@@ -89,33 +89,33 @@ export function createInspectorPanel(options: {
       </div>
 
       <div class="inspector-prayer-list">
-        <div class="inspector-prayer-item ${sched.currentPrayer === 'fajr' ? 'active' : ''}">
-          <span>Fajr</span>
+        <div class="inspector-prayer-item ${sched.currentPrayer === 'fajr' ? 'active' : ''}" style="--prayer-color: #38bdf8;">
+          <span class="inspector-prayer-label"><span class="legend-color-dot" style="background-color: #38bdf8;"></span>Fajr</span>
           <span>${formatTime(sched.fajr, tz)}</span>
         </div>
-        <div class="inspector-prayer-item">
-          <span>Sunrise</span>
+        <div class="inspector-prayer-item" style="--prayer-color: #fef08a;">
+          <span class="inspector-prayer-label"><span class="legend-color-dot" style="background-color: #fef08a;"></span>Sunrise</span>
           <span>${formatTime(sched.sunrise, tz)}</span>
         </div>
-        <div class="inspector-prayer-item ${sched.currentPrayer === 'dhuhr' ? 'active' : ''}">
-          <span>Dhuhr</span>
+        <div class="inspector-prayer-item ${sched.currentPrayer === 'dhuhr' ? 'active' : ''}" style="--prayer-color: #facc15;">
+          <span class="inspector-prayer-label"><span class="legend-color-dot" style="background-color: #facc15;"></span>Dhuhr</span>
           <span>${formatTime(sched.dhuhr, tz)}</span>
         </div>
-        <div class="inspector-prayer-item ${sched.currentPrayer === 'asr' ? 'active' : ''}">
-          <span>ʿAsr</span>
+        <div class="inspector-prayer-item ${sched.currentPrayer === 'asr' ? 'active' : ''}" style="--prayer-color: #fb923c;">
+          <span class="inspector-prayer-label"><span class="legend-color-dot" style="background-color: #fb923c;"></span>ʿAsr</span>
           <span>${formatTime(sched.asr, tz)}</span>
         </div>
-        <div class="inspector-prayer-item ${sched.currentPrayer === 'maghrib' ? 'active' : ''}">
-          <span>Maghrib</span>
+        <div class="inspector-prayer-item ${sched.currentPrayer === 'maghrib' ? 'active' : ''}" style="--prayer-color: #f43f5e;">
+          <span class="inspector-prayer-label"><span class="legend-color-dot" style="background-color: #f43f5e;"></span>Maghrib</span>
           <span>${formatTime(sched.maghrib, tz)}</span>
         </div>
-        <div class="inspector-prayer-item ${sched.currentPrayer === 'isha' ? 'active' : ''}">
-          <span>ʿIshaʾ</span>
+        <div class="inspector-prayer-item ${sched.currentPrayer === 'isha' ? 'active' : ''}" style="--prayer-color: #a855f7;">
+          <span class="inspector-prayer-label"><span class="legend-color-dot" style="background-color: #a855f7;"></span>ʿIshaʾ</span>
           <span>${formatTime(sched.isha, tz)}</span>
         </div>
       </div>
 
-      <div style="font-size: 0.72rem; color: var(--color-accent); font-family: var(--font-mono); border-block-start: 1px solid rgba(255,255,255,0.1); padding-block-start: 0.35rem;">
+      <div class="inspector-next-bar" style="font-size: 0.72rem; color: var(--color-accent); font-family: var(--font-mono); border-block-start: 1px solid rgba(255,255,255,0.1); padding-block-start: 0.35rem;">
         Next: ${sched.nextPrayer.toUpperCase()} in ${formatCountdown(sched.countdownMs)}
       </div>
     `;

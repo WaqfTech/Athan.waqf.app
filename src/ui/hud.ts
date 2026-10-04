@@ -84,21 +84,35 @@ export function createHudOverlay(
   }
   controlsBox.appendChild(speedRow);
 
-  // Prayer Front Layer Toggles
+  // Prayer Front Layer Legend & Toggles
   const layersTitle = document.createElement('div');
   layersTitle.className = 'control-group-title';
   layersTitle.textContent = 'Prayer Fronts';
   controlsBox.appendChild(layersTitle);
 
   const layersRow = document.createElement('div');
-  layersRow.className = 'control-btn-row';
+  layersRow.className = 'control-btn-row prayer-legend-row';
 
   const prayerKeys: PrayerFrontKey[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'terminator'];
   for (const k of prayerKeys) {
+    const hexColor = `#${PRAYER_COLORS[k].toString(16).padStart(6, '0')}`;
     const btn = document.createElement('button');
-    btn.className = 'btn-ctrl active';
-    btn.style.borderColor = `#${PRAYER_COLORS[k].toString(16).padStart(6, '0')}`;
-    btn.textContent = k.charAt(0).toUpperCase() + k.slice(1);
+    btn.className = 'btn-ctrl btn-prayer-legend active';
+    btn.setAttribute('data-prayer', k);
+    btn.setAttribute('aria-label', `Toggle ${k} prayer front`);
+    btn.style.setProperty('--legend-color', hexColor);
+
+    const dot = document.createElement('span');
+    dot.className = 'legend-color-dot';
+    dot.style.backgroundColor = hexColor;
+
+    const label = document.createElement('span');
+    label.className = 'legend-label-text';
+    label.textContent = k === 'asr' ? 'ʿAsr' : k === 'isha' ? 'ʿIshaʾ' : k.charAt(0).toUpperCase() + k.slice(1);
+
+    btn.appendChild(dot);
+    btn.appendChild(label);
+
     let visible = true;
     btn.addEventListener('click', () => {
       visible = !visible;
