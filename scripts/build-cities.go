@@ -120,6 +120,23 @@ var canonicalOverrides = map[string]string{
 	"Nablus":            "نابلس",
 	"Bethlehem":         "بيت لحم",
 	"Jenin":             "جنين",
+	"Tulkarm":           "طولكرم",
+	"Ţūlkarm":           "طولكرم",
+	"Battir":            "بتير",
+	"Qalqīlyah":         "قلقيلية",
+	"Qalqilya":          "قلقيلية",
+	"Rafaḩ":             "رفح",
+	"Rafah":             "رفح",
+	"Khān Yūnis":        "خان يونس",
+	"Khan Yunis":        "خان يونس",
+	"Jabālyā":           "جباليا",
+	"Jabalia":           "جباليا",
+	"Dayr al Balaḩ":     "دير البلح",
+	"Deir al-Balah":     "دير البلح",
+	"Bayt Lāhyā":        "بيت لاهيا",
+	"Beit Lahia":        "بيت لاهيا",
+	"Yaţţā":             "يطا",
+	"Yatta":             "يطا",
 	"Damascus":          "دمشق",
 	"Aleppo":            "حلب",
 	"Homs":              "حمص",
@@ -294,6 +311,198 @@ var canonicalOverrides = map[string]string{
 	"Reykjavik":     "ريكيافيك",
 }
 
+type PalestinianOverride struct {
+	NameEn string
+	NameAr string
+}
+
+var palestineOverrides = map[string]PalestinianOverride{
+	// Core historic cities
+	"Jerusalem":               {NameEn: "Al-Quds", NameAr: "القدس"},
+	"West Jerusalem":          {NameEn: "Al-Quds (West)", NameAr: "القدس الغربية"},
+	"East Jerusalem":          {NameEn: "Al-Quds (East)", NameAr: "القدس الشرقية"},
+	"Tel Aviv":                {NameEn: "Yafa (Tel Aviv)", NameAr: "يافا (تل الربيع)"},
+	"Jaffa":                   {NameEn: "Yafa", NameAr: "يافا"},
+	"Haifa":                   {NameEn: "Haifa", NameAr: "حيفا"},
+	"Acre":                    {NameEn: "Akka", NameAr: "عكّا"},
+	"Nazareth":                {NameEn: "An-Nasirah", NameAr: "الناصرة"},
+	"Beersheba":               {NameEn: "Bi'r as-Sabi'", NameAr: "بئر السبع"},
+	"Ashdod":                  {NameEn: "Isdud", NameAr: "إسدود"},
+	"Ashkelon":                {NameEn: "Asqalan", NameAr: "عسقلان"},
+	"Petaẖ Tiqva":             {NameEn: "Mulabbis", NameAr: "ملبّس"},
+	"Petah Tiqva":             {NameEn: "Mulabbis", NameAr: "ملبّس"},
+	"Petah Tikva":             {NameEn: "Mulabbis", NameAr: "ملبّس"},
+	"Rishon LeTsiyyon":        {NameEn: "Ayun Qara", NameAr: "عيون قارة"},
+	"Netanya":                 {NameEn: "Umm Khalid", NameAr: "أم خالد"},
+	"Bnei Brak":               {NameEn: "Ibn Ibraq", NameAr: "ابن إبراق"},
+	"H̱olon":                   {NameEn: "Yazur", NameAr: "يازور"},
+	"Holon":                   {NameEn: "Yazur", NameAr: "يازور"},
+	"Ramat Gan":               {NameEn: "Jarisha", NameAr: "جريشة"},
+	"Reẖovot":                 {NameEn: "Zarnuqa", NameAr: "زرنوقة"},
+	"Rehovot":                 {NameEn: "Zarnuqa", NameAr: "زرنوقة"},
+	"Bat Yam":                 {NameEn: "Yafa al-Janubiyya", NameAr: "يافا الجنوبية"},
+	"Bet Shemesh":             {NameEn: "Bayt Shams", NameAr: "بيت شمس"},
+	"Kfar Saba":               {NameEn: "Kafr Saba", NameAr: "كفر سابا"},
+	"Herzliya":                {NameEn: "Al-Haram Sayyidna Ali", NameAr: "الحرم سيدنا علي"},
+	"Hadera":                  {NameEn: "Al-Khudayra", NameAr: "الخضيرة"},
+	"Modi‘in Makkabbim Re‘ut": {NameEn: "Al-Midya", NameAr: "المدية"},
+	"Modiin Makkabbim Reut":   {NameEn: "Al-Midya", NameAr: "المدية"},
+	"Modiin Ilit":             {NameEn: "Ni'lin", NameAr: "نعلين"},
+	"Lod":                     {NameEn: "Al-Lidd", NameAr: "اللد"},
+	"Ramla":                   {NameEn: "Ar-Ramlah", NameAr: "الرملة"},
+	"Ra'anana":                {NameEn: "Tabsur", NameAr: "تبصر"},
+	"Raanana":                 {NameEn: "Tabsur", NameAr: "تبصر"},
+	"Rosh Ha‘Ayin":            {NameEn: "Ras al-Ayn", NameAr: "رأس العين"},
+	"Rosh HaAyin":             {NameEn: "Ras al-Ayn", NameAr: "رأس العين"},
+	"Hod HaSharon":            {NameEn: "Biyar Adas", NameAr: "بيار عدس"},
+	"Hod Hasharon":            {NameEn: "Biyar Adas", NameAr: "بيار عدس"},
+	"Kiryat Gat":              {NameEn: "Iraq al-Manshiyya", NameAr: "عراق المنشية"},
+	"Givatayim":               {NameEn: "Salama", NameAr: "سلمة"},
+	"Qiryat Ata":              {NameEn: "Kafr Etta", NameAr: "كفر عتا"},
+	"Nahariyya":               {NameEn: "Al-Zeeb", NameAr: "الزيب"},
+	"Nahariya":                {NameEn: "Al-Zeeb", NameAr: "الزيب"},
+	"Umm el Faḥm":             {NameEn: "Umm al-Fahm", NameAr: "أم الفحم"},
+	"Umm al-Fahm":             {NameEn: "Umm al-Fahm", NameAr: "أم الفحم"},
+	"Eilat":                   {NameEn: "Umm ar-Rashrash", NameAr: "أم الرشراش"},
+	"Ness Ziona":              {NameEn: "Wadi Hunayn", NameAr: "وادي حنين"},
+	"El‘ad":                   {NameEn: "Al-Muzayri'a", NameAr: "المزيرعة"},
+	"Elad":                    {NameEn: "Al-Muzayri'a", NameAr: "المزيرعة"},
+	"Yavné":                   {NameEn: "Yibna", NameAr: "يبنى"},
+	"Yavne":                   {NameEn: "Yibna", NameAr: "يبنى"},
+	"Ramat HaSharon":          {NameEn: "Ijlil", NameAr: "إجليل"},
+	"Ramat Hasharon":          {NameEn: "Ijlil", NameAr: "إجليل"},
+	"Karmi’el":                {NameEn: "Majd al-Krum", NameAr: "مجد الكروم"},
+	"Karmiel":                 {NameEn: "Majd al-Krum", NameAr: "مجد الكروم"},
+	"Afula":                   {NameEn: "Al-Affula", NameAr: "العفولة"},
+	"Pardés H̱anna Karkur":     {NameEn: "Karkur", NameAr: "كركور"},
+	"Pardes Hanna Karkur":     {NameEn: "Karkur", NameAr: "كركور"},
+	"Tiberias":                {NameEn: "Tabariyya", NameAr: "طبريا"},
+	"Eṭ Ṭaiyiba":              {NameEn: "At-Tayyiba", NameAr: "الطيّبة"},
+	"Et Taiyiba":              {NameEn: "At-Tayyiba", NameAr: "الطيّبة"},
+	"Qiryat Bialik":           {NameEn: "Yajur", NameAr: "ياجور"},
+	"Netivot":                 {NameEn: "Azzam", NameAr: "عزام"},
+	"Naẕerat ‘Illit":          {NameEn: "Jabal as-Sikh", NameAr: "جبل السيخ"},
+	"Nazerat Illit":           {NameEn: "Jabal as-Sikh", NameAr: "جبل السيخ"},
+	"Qiryat Motsqin":          {NameEn: "Al-Ghawarneh", NameAr: "الغوارنة"},
+	"Qiryat Motzkin":          {NameEn: "Al-Ghawarneh", NameAr: "الغوارنة"},
+	"Shefar‘am":               {NameEn: "Shafa 'Amr", NameAr: "شفا عمرو"},
+	"Shefaram":                {NameEn: "Shafa 'Amr", NameAr: "شفا عمرو"},
+
+	// Secondary settlements and surrounding villages
+	"Kiryat Ono":        {NameEn: "Kafr Ana", NameAr: "كفر عانة"},
+	"Qiryat Yam":        {NameEn: "Balad ash-Sheikh", NameAr: "بلد الشيخ"},
+	"Or Yehuda":         {NameEn: "Saqiya", NameAr: "ساقية"},
+	"Dimona":            {NameEn: "Dimona", NameAr: "ديمونة"},
+	"Safed":             {NameEn: "Safad", NameAr: "صفد"},
+	"Ofaqim":            {NameEn: "Ofakim", NameAr: "أوفاكيم"},
+	"Ofakim":            {NameEn: "Ofakim", NameAr: "أوفاكيم"},
+	"Sakhnīn":           {NameEn: "Sakhnin", NameAr: "سخنين"},
+	"Sakhnin":           {NameEn: "Sakhnin", NameAr: "سخنين"},
+	"Gedera":            {NameEn: "Qatra", NameAr: "قطرة"},
+	"Bāqa el Gharbīya":  {NameEn: "Baqa al-Gharbiyya", NameAr: "باقة الغربية"},
+	"Baqa al-Gharbiya":  {NameEn: "Baqa al-Gharbiyya", NameAr: "باقة الغربية"},
+	"Yehud-Monosson":    {NameEn: "Al-Yahudiyya", NameAr: "اليهودية"},
+	"Yehud":             {NameEn: "Al-Yahudiyya", NameAr: "اليهودية"},
+	"Giv'at Shmuel":     {NameEn: "Ibn Ibraq", NameAr: "ابن إبراق"},
+	"Givat Shmuel":      {NameEn: "Ibn Ibraq", NameAr: "ابن إبراق"},
+	"Arad":              {NameEn: "Arad", NameAr: "عراد"},
+	"Tirat Karmel":      {NameEn: "Al-Tira", NameAr: "طيرة الكرمل"},
+	"Be’er Ya‘aqov":     {NameEn: "Qubab", NameAr: "القباب"},
+	"Beer Yaakov":       {NameEn: "Qubab", NameAr: "القباب"},
+	"Sderot":            {NameEn: "Najd", NameAr: "نجد"},
+	"Eṭ Ṭīra":           {NameEn: "Al-Tira", NameAr: "الطيرة"},
+	"Et Tira":           {NameEn: "Al-Tira", NameAr: "الطيرة"},
+	"Tamra":             {NameEn: "Tamra", NameAr: "طمرة"},
+	"Migdal Ha‘Emeq":    {NameEn: "Al-Mujaydil", NameAr: "المجيدل"},
+	"Migdal HaEmek":     {NameEn: "Al-Mujaydil", NameAr: "المجيدل"},
+	"Qiryat Mal’akhi":   {NameEn: "Qastina", NameAr: "قسطينة"},
+	"Kiryat Malakhi":    {NameEn: "Qastina", NameAr: "قسطينة"},
+	"Ganei Tikva":       {NameEn: "Al-Abbasiyya", NameAr: "العباسية"},
+	"Qiryat HaYovel":    {NameEn: "Bayt Mazmil", NameAr: "بيت مزميل"},
+	"Daliyat al Karmel": {NameEn: "Daliyat al-Karmel", NameAr: "دالية الكرمل"},
+	"‘Ara-‘Ar‘ara":      {NameEn: "Ara and Ar'ara", NameAr: "عرعرة"},
+	"Kfar Yona":         {NameEn: "Bayt Lid", NameAr: "بيت ليد"},
+	"Nesher":            {NameEn: "Balad ash-Sheikh", NameAr: "بلد الشيخ"},
+	"Mevasseret Tsiyyon": {NameEn: "Qalunya", NameAr: "قالونيا"},
+	"Gan Yavne":         {NameEn: "Barqa", NameAr: "برقة"},
+	"Kafr Qāsim":        {NameEn: "Kafr Qasim", NameAr: "كفر قاسم"},
+	"Kafr Qasim":        {NameEn: "Kafr Qasim", NameAr: "كفر قاسم"},
+	"Yoqne‘am ‘Illit":   {NameEn: "Qira", NameAr: "قيرة"},
+	"Zikhron Ya‘aqov":   {NameEn: "Zammarin", NameAr: "زمرين"},
+	"Maghār":            {NameEn: "Al-Maghar", NameAr: "المغار"},
+	"Maghar":            {NameEn: "Al-Maghar", NameAr: "المغار"},
+	"Kafr Kannā":        {NameEn: "Kafr Kanna", NameAr: "كفر كَنّا"},
+	"Kafr Kanna":        {NameEn: "Kafr Kanna", NameAr: "كفر كَنّا"},
+	"Qiryat Shmona":     {NameEn: "Al-Khalisa", NameAr: "الخالصة"},
+	"Kadima Zoran":      {NameEn: "Qaqun", NameAr: "قاقون"},
+	"maalot Tarshīhā":   {NameEn: "Tarshiha", NameAr: "ترشيحا"},
+	"H̱ura":              {NameEn: "Hura", NameAr: "حورة"},
+	"Judeida Makr":      {NameEn: "Al-Judayda and Al-Makr", NameAr: "الجديدة والمكر"},
+	"Kuseifa":           {NameEn: "Kusayfa", NameAr: "كسيفة"},
+	"Shoham":            {NameEn: "Dayr Tarif", NameAr: "دير طريف"},
+	"Ariel":             {NameEn: "Salfit", NameAr: "سلفيت"},
+	"Tel Sheva‘":        {NameEn: "Tall as-Sabi'", NameAr: "تل السبع"},
+	"Kafr Mandā":        {NameEn: "Kafr Manda", NameAr: "كفر مندا"},
+	"Rahat":             {NameEn: "Rahat", NameAr: "رهط"},
+	"Kafr Qari‘":        {NameEn: "Kafr Qari'", NameAr: "كفر قرع"},
+	"Or Akiva":          {NameEn: "Qaysariyya", NameAr: "قيسارية"},
+	"Yāfā":              {NameEn: "Yafa an-Nasirah", NameAr: "يافا الناصرة"},
+	"Qiryat Tiv‘on":     {NameEn: "Tab'un", NameAr: "طبعون"},
+	"‘Ar‘ara BaNegev":   {NameEn: "Ar'arat an-Naqab", NameAr: "عرعرة النقب"},
+	"Yirkā":             {NameEn: "Yirka", NameAr: "يركا"},
+	"Qalansuwa":         {NameEn: "Qalansuwa", NameAr: "قلنسوة"},
+
+	// Slug lookups
+	"jerusalem":              {NameEn: "Al-Quds", NameAr: "القدس"},
+	"tel-aviv":               {NameEn: "Yafa (Tel Aviv)", NameAr: "يافا (تل الربيع)"},
+	"haifa":                  {NameEn: "Haifa", NameAr: "حيفا"},
+	"acre":                   {NameEn: "Akka", NameAr: "عكّا"},
+	"petah-tiqva":            {NameEn: "Mulabbis", NameAr: "ملبّس"},
+	"rishon-letsiyyon":       {NameEn: "Ayun Qara", NameAr: "عيون قارة"},
+	"netanya":                {NameEn: "Umm Khalid", NameAr: "أم خالد"},
+	"ashdod":                 {NameEn: "Isdud", NameAr: "إسدود"},
+	"bnei-brak":              {NameEn: "Ibn Ibraq", NameAr: "ابن إبراق"},
+	"holon":                  {NameEn: "Yazur", NameAr: "يازور"},
+	"beersheba":              {NameEn: "Bi'r as-Sabi'", NameAr: "بئر السبع"},
+	"ramat-gan":              {NameEn: "Jarisha", NameAr: "جريشة"},
+	"rehovot":                {NameEn: "Zarnuqa", NameAr: "زرنوقة"},
+	"ashkelon":               {NameEn: "Asqalan", NameAr: "عسقلان"},
+	"bat-yam":                {NameEn: "Yafa al-Janubiyya", NameAr: "يافا الجنوبية"},
+	"bet-shemesh":            {NameEn: "Bayt Shams", NameAr: "بيت شمس"},
+	"kfar-saba":              {NameEn: "Kafr Saba", NameAr: "كفر سابا"},
+	"jaffa":                  {NameEn: "Yafa", NameAr: "يافا"},
+	"herzliya":               {NameEn: "Al-Haram Sayyidna Ali", NameAr: "الحرم سيدنا علي"},
+	"hadera":                 {NameEn: "Al-Khudayra", NameAr: "الخضيرة"},
+	"modiin-makkabbim-reut":  {NameEn: "Al-Midya", NameAr: "المدية"},
+	"nazareth-il":            {NameEn: "An-Nasirah", NameAr: "الناصرة"},
+	"lod":                    {NameEn: "Al-Lidd", NameAr: "اللد"},
+	"modiin-ilit":            {NameEn: "Ni'lin", NameAr: "نعلين"},
+	"ramla":                  {NameEn: "Ar-Ramlah", NameAr: "الرملة"},
+	"raanana":                {NameEn: "Tabsur", NameAr: "تبصر"},
+	"rosh-haayin":            {NameEn: "Ras al-Ayn", NameAr: "رأس العين"},
+	"hod-hasharon":           {NameEn: "Biyar Adas", NameAr: "بيار عدس"},
+	"kiryat-gat":             {NameEn: "Iraq al-Manshiyya", NameAr: "عراق المنشية"},
+	"givatayim":              {NameEn: "Salama", NameAr: "سلمة"},
+	"qiryat-ata":             {NameEn: "Kafr Etta", NameAr: "كفر عتا"},
+	"nahariyya":              {NameEn: "Al-Zeeb", NameAr: "الزيب"},
+	"umm-el-fahm":            {NameEn: "Umm al-Fahm", NameAr: "أم الفحم"},
+	"eilat":                  {NameEn: "Umm ar-Rashrash", NameAr: "أم الرشراش"},
+	"ness-ziona":             {NameEn: "Wadi Hunayn", NameAr: "وادي حنين"},
+	"elad":                   {NameEn: "Al-Muzayri'a", NameAr: "المزيرعة"},
+	"yavne":                  {NameEn: "Yibna", NameAr: "يبنى"},
+	"ramat-hasharon":         {NameEn: "Ijlil", NameAr: "إجليل"},
+	"karmiel":                {NameEn: "Majd al-Krum", NameAr: "مجد الكروم"},
+	"afula":                  {NameEn: "Al-Affula", NameAr: "العفولة"},
+	"pardes-hanna-karkur":    {NameEn: "Karkur", NameAr: "كركور"},
+	"tiberias":               {NameEn: "Tabariyya", NameAr: "طبريا"},
+	"et-taiyiba":             {NameEn: "At-Tayyiba", NameAr: "الطيّبة"},
+	"qiryat-bialik":          {NameEn: "Yajur", NameAr: "ياجور"},
+	"netivot":                {NameEn: "Azzam", NameAr: "عزام"},
+	"nazerat-illit":          {NameEn: "Jabal as-Sikh", NameAr: "جبل السيخ"},
+	"qiryatmotsqin":          {NameEn: "Al-Ghawarneh", NameAr: "الغوارنة"},
+	"shefaram":               {NameEn: "Shafa 'Amr", NameAr: "شفا عمرو"},
+}
+
 func loadGeonamesAlternates() map[string][]string {
 	res := make(map[string][]string)
 
@@ -405,27 +614,47 @@ func main() {
 			continue
 		}
 
-		// 1. Check canonical override first
-		if cc == "US" && nameEn == "Mecca" {
-			nameAr = "مكة"
-		} else if canon, ok := canonicalOverrides[nameEn]; ok {
-			nameAr = canon
-		} else if isPureArabic(nameAr) {
-			// Already clean Arabic
-			nameAr = cleanArabic(nameAr)
-		} else if alts, ok := geonamesMap[nameEn+"|"+cc]; ok && len(alts) > 0 {
-			// Find best Arabic alternate from raw GeoNames
-			best := alts[0]
-			for _, alt := range alts {
-				if strings.HasPrefix(alt, "ال") {
-					best = alt
-					break
-				}
+		// Re-map Israeli settlements to historical Palestinian names under PS country code
+		isPalestine := false
+		if cc == "IL" || cc == "PS" {
+			if override, ok := palestineOverrides[nameEn]; ok {
+				nameEn = override.NameEn
+				nameAr = override.NameAr
+				cc = "PS"
+				isPalestine = true
+			} else if override, ok := palestineOverrides[slug]; ok {
+				nameEn = override.NameEn
+				nameAr = override.NameAr
+				cc = "PS"
+				isPalestine = true
+			} else if cc == "IL" {
+				cc = "PS"
 			}
-			nameAr = best
-		} else {
-			// Fallback safely to English name instead of non-Arabic/corrupted transliteration
-			nameAr = nameEn
+		}
+
+		if !isPalestine {
+			// 1. Check canonical override first
+			if cc == "US" && nameEn == "Mecca" {
+				nameAr = "مكة"
+			} else if canon, ok := canonicalOverrides[nameEn]; ok {
+				nameAr = canon
+			} else if isPureArabic(nameAr) {
+				// Already clean Arabic
+				nameAr = cleanArabic(nameAr)
+			} else if alts, ok := geonamesMap[nameEn+"|"+cc]; ok && len(alts) > 0 {
+				// Find best Arabic alternate from raw GeoNames
+				best := alts[0]
+				for _, alt := range alts {
+					if strings.HasPrefix(alt, "ال") {
+						best = alt
+						break
+					}
+				}
+				nameAr = best
+			} else {
+				// Fallback safely to English name instead of non-Arabic/corrupted transliteration
+				nameAr = nameEn
+			}
 		}
 
 		comp := CompactCity{
