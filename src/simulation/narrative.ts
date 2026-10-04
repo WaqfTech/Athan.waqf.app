@@ -45,7 +45,7 @@ export function createNarrativeDirector(cameraRig: CameraRig): NarrativeDirector
       currentTargetIndex = bestEvent.settlementIndex;
       targetLat = s.latitude;
       targetLon = s.longitude;
-      cameraRig.focusCoordinates(targetLat, targetLon, 12);
+      cameraRig.focusCoordinates(targetLat, targetLon, 12, true);
     }
   };
 

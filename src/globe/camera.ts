@@ -8,7 +8,7 @@ export interface CameraRig {
   controls: OrbitControls;
   update: () => void;
   resize: (width: number, height: number) => void;
-  focusCoordinates: (lat: number, lon: number, distance?: number) => void;
+  focusCoordinates: (lat: number, lon: number, distance?: number, smooth?: boolean) => void;
   dispose: () => void;
 }
 
@@ -31,7 +31,20 @@ export function createCameraRig(canvas: HTMLCanvasElement): CameraRig {
   controls.maxDistance = 40.0; // Deep space zoom
   controls.enablePan = false; // Keep planetary center locked
 
+  let targetPosition: THREE.Vector3 | null = null;
+  let isInterpolating = false;
+
   const update = (): void => {
+    if (isInterpolating && targetPosition) {
+      camera.position.lerp(targetPosition, 0.06);
+      const targetDist = targetPosition.length();
+      camera.position.setLength(targetDist);
+      if (camera.position.distanceTo(targetPosition) < 0.05) {
+        camera.position.copy(targetPosition);
+        targetPosition = null;
+        isInterpolating = false;
+      }
+    }
     controls.update();
   };
 
@@ -40,7 +53,7 @@ export function createCameraRig(canvas: HTMLCanvasElement): CameraRig {
     camera.updateProjectionMatrix();
   };
 
-  const focusCoordinates = (lat: number, lon: number, distance = 12): void => {
+  const focusCoordinates = (lat: number, lon: number, distance = 12, smooth = false): void => {
     const phi = (lat * Math.PI) / 180;
     const lambda = (lon * Math.PI) / 180;
 
@@ -49,7 +62,14 @@ export function createCameraRig(canvas: HTMLCanvasElement): CameraRig {
     const y = distance * Math.sin(phi);
     const z = distance * cosPhi * Math.cos(lambda);
 
-    camera.position.set(x, y, z);
+    if (smooth) {
+      targetPosition = new THREE.Vector3(x, y, z);
+      isInterpolating = true;
+    } else {
+      targetPosition = null;
+      isInterpolating = false;
+      camera.position.set(x, y, z);
+    }
     controls.target.set(0, 0, 0);
     controls.update();
   };

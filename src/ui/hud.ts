@@ -150,6 +150,9 @@ export function createHudOverlay(
   actionsRow.style.marginBlockStart = '0.25rem';
 
   const convSelect = document.createElement('select');
+  convSelect.id = 'calc-convention-select';
+  convSelect.name = 'convention';
+  convSelect.setAttribute('aria-label', 'Prayer calculation convention');
   convSelect.className = 'btn-ctrl';
   convSelect.style.cursor = 'pointer';
   for (const c of Object.keys(CALCULATION_CONVENTIONS)) {

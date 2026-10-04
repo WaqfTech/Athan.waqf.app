@@ -133,8 +133,10 @@ var canonicalOverrides = map[string]string{
 
 	// Gulf & Arabian Peninsula
 	"Riyadh":                "الرياض",
+	"Makkah":                "مكة المكرمة",
 	"Mecca":                 "مكة المكرمة",
 	"Medina":                "المدينة المنورة",
+	"Madinah":               "المدينة المنورة",
 	"Jeddah":                "جدة",
 	"Dammam":                "الدمام",
 	"Khobar":                "الخبر",
@@ -404,7 +406,9 @@ func main() {
 		}
 
 		// 1. Check canonical override first
-		if canon, ok := canonicalOverrides[nameEn]; ok {
+		if cc == "US" && nameEn == "Mecca" {
+			nameAr = "مكة"
+		} else if canon, ok := canonicalOverrides[nameEn]; ok {
 			nameAr = canon
 		} else if isPureArabic(nameAr) {
 			// Already clean Arabic
