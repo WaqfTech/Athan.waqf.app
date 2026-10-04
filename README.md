@@ -72,3 +72,10 @@ Prayer Contours:
 - Dhuhr: Meridian arc passing through the subsolar longitude from pole to pole.
 - Asr: Non-circular curve derived from the fiqh shadow length formula (noon shadow plus 1x or 2x object height) evaluated per latitude slice.
 - Maghrib and Sunrise: -0.833 degree solar altitude circle accounting for atmospheric refraction and solar radius.
+
+## License
+
+هذا العمل هو وَقْفٌ لله تعالى تحت شروط رُخصة وَقْف الرَّقْمِيَّة العامَّة - الإصدار الأول.
+المُستوى المُطَبَّق هو: وَقْفٌ خَيْرِيٌّ مُلْزِمٌ بالإِسْنَادِ (WaqfDPL-Khayri-Mulzim 1.0).
+
+See the [LICENSE](LICENSE) file for the full license text, or the [WaqfDPL repository](https://github.com/WaqfTech/waqf-license-draft) for details.
