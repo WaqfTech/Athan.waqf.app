@@ -96,6 +96,8 @@ export function createInspectorPanel(options: {
 
     const localTime = formatTime(date, tz);
     const qiblaBearing = Math.round(calculateQibla(lat, lon));
+    const atKaaba = Math.abs(lat - 21.4225) < 0.02 && Math.abs(lon - 39.8262) < 0.02;
+    const qiblaText = atKaaba ? trans.inspector.atKaaba : `${qiblaBearing}° ${trans.inspector.fromNorth}`;
     const latStr = lat >= 0 ? `${lat.toFixed(2)}°N` : `${(-lat).toFixed(2)}°S`;
     const lonStr = lon >= 0 ? `${lon.toFixed(2)}°E` : `${(-lon).toFixed(2)}°W`;
 
@@ -123,7 +125,7 @@ export function createInspectorPanel(options: {
         </div>
         <div class="telemetry-cell">
           <span class="telemetry-label">${trans.inspector.qiblaBearing}</span>
-          <span class="telemetry-value">${qiblaBearing}° ${trans.inspector.fromNorth}</span>
+          <span class="telemetry-value">${qiblaText}</span>
         </div>
       </div>
 

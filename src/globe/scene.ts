@@ -231,6 +231,7 @@ export function createGlobeScene(
       if (width > 0 && height > 0) {
         renderer.setSize(width, height, false);
         cameraRig.resize(width, height);
+        prayerFronts.setResolution(width, height);
       }
     }
   });

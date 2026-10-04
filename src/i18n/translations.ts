@@ -18,6 +18,8 @@ export interface Translations {
     followAdhan: string;
     convention: string;
     zenMode: string;
+    fullscreen: string;
+    places: string;
     language: string;
   };
   prayers: {
@@ -35,6 +37,7 @@ export interface Translations {
     fromNorth: string;
     next: string;
     close: string;
+    atKaaba: string;
   };
   timeline: {
     title: string;
@@ -64,6 +67,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: 'Follow Adhān',
       convention: 'Prayer calculation convention',
       zenMode: 'Toggle clean planetary view',
+      fullscreen: 'Full screen',
+      places: 'Places',
       language: 'Language',
     },
     prayers: {
@@ -81,6 +86,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'from N',
       next: 'Next',
       close: 'Close inspector',
+      atKaaba: 'At the Kaaba',
     },
     timeline: {
       title: 'Continuous Planetary Adhān',
@@ -109,6 +115,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: 'تتبع الأذان',
       convention: 'طريقة حساب المواقيت',
       zenMode: 'عرض الكوكب النقي',
+      fullscreen: 'ملء الشاشة',
+      places: 'أماكن',
       language: 'اللغة',
     },
     prayers: {
@@ -126,6 +134,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'من الشمال',
       next: 'الصلاة القادمة',
       close: 'إغلاق التفاصيل',
+      atKaaba: 'عند الكعبة',
     },
     timeline: {
       title: 'استمرارية الأذان على مدار الساعة',
@@ -154,6 +163,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: 'Ezanı Takip Et',
       convention: 'Vakit hesaplama yöntemi',
       zenMode: 'Sade küre görünümü',
+      fullscreen: 'Tam ekran',
+      places: 'Yerler',
       language: 'Dil',
     },
     prayers: {
@@ -171,6 +182,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'Kuzeyden',
       next: 'Sıradaki Vakit',
       close: 'Bilgi panelini kapat',
+      atKaaba: 'Kâbe’de',
     },
     timeline: {
       title: 'Dünya Çapında Kesintisiz Ezan',
@@ -199,6 +211,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: 'Ikuti Adzan',
       convention: 'Metode hisab waktu shalat',
       zenMode: 'Tampilan bumi murni',
+      fullscreen: 'Layar penuh',
+      places: 'Tempat',
       language: 'Bahasa',
     },
     prayers: {
@@ -216,6 +230,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'dari Utara',
       next: 'Shalat Berikutnya',
       close: 'Tutup panel info',
+      atKaaba: 'Di Kakbah',
     },
     timeline: {
       title: 'Kontinuitas Adzan Global',
@@ -244,6 +259,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: 'Ikuti Azan',
       convention: 'Kaedah hisab solat',
       zenMode: 'Paparan bumi penuh',
+      fullscreen: 'Skrin penuh',
+      places: 'Tempat',
       language: 'Bahasa',
     },
     prayers: {
@@ -261,6 +278,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'dari Utara',
       next: 'Solat Seterusnya',
       close: 'Tutup maklumat',
+      atKaaba: 'Di Kaabah',
     },
     timeline: {
       title: 'Kesinambungan Azan Sedunia',
@@ -289,6 +307,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: 'اذان کے ہمراہ',
       convention: 'اوقاتِ نماز کا طریقہ کار',
       zenMode: 'خالص سیاروی منظر',
+      fullscreen: 'مکمل اسکرین',
+      places: 'مقامات',
       language: 'زبان',
     },
     prayers: {
@@ -306,6 +326,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'شمال سے',
       next: 'اگلی نماز',
       close: 'بند کریں',
+      atKaaba: 'کعبہ پر',
     },
     timeline: {
       title: 'دنیا بھر میں مسلسل اذان',
@@ -334,6 +355,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: 'همگام با اذان',
       convention: 'روش محاسبه اوقات شرعی',
       zenMode: 'نمای خالص کره زمین',
+      fullscreen: 'تمام صفحه',
+      places: 'مکان‌ها',
       language: 'زبان',
     },
     prayers: {
@@ -351,6 +374,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'از شمال',
       next: 'نماز بعدی',
       close: 'بستن پنل',
+      atKaaba: 'در کعبه',
     },
     timeline: {
       title: 'تداوم سراسری اذان در جهان',
@@ -379,6 +403,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: 'আজান অনুসরণ করুন',
       convention: 'নামাজের সময় গণনার পদ্ধতি',
       zenMode: 'পরিচ্ছন্ন গ্রহ দৃশ্য',
+      fullscreen: 'পূর্ণ পর্দা',
+      places: 'স্থান',
       language: 'ভাষা',
     },
     prayers: {
@@ -396,6 +422,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'উত্তর থেকে',
       next: 'পরবর্তী নামাজ',
       close: 'প্যানেল বন্ধ করুন',
+      atKaaba: 'কাবায়',
     },
     timeline: {
       title: 'বিশ্বব্যাপী অবিরাম আজান',
@@ -424,6 +451,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: "Suivre l'Adhān",
       convention: 'Convention de calcul des prières',
       zenMode: 'Vue planétaire épurée',
+      fullscreen: 'Plein écran',
+      places: 'Lieux',
       language: 'Langue',
     },
     prayers: {
@@ -441,6 +470,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'du Nord',
       next: 'Prochaine prière',
       close: "Fermer l'inspecteur",
+      atKaaba: 'À la Kaaba',
     },
     timeline: {
       title: "Continuité Planétaire de l'Adhān",
@@ -469,6 +499,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       followAdhan: 'Следовать за азаном',
       convention: 'Метод расчета намаза',
       zenMode: 'Чистый вид планеты',
+      fullscreen: 'Во весь экран',
+      places: 'Места',
       language: 'Язык',
     },
     prayers: {
@@ -486,6 +518,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       fromNorth: 'от севера',
       next: 'Следующий намаз',
       close: 'Закрыть инспектор',
+      atKaaba: 'У Каабы',
     },
     timeline: {
       title: 'Непрерывный Планетарный Азан',

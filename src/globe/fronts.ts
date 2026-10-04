@@ -1,6 +1,9 @@
 // Three.js 3D prayer front visualization layer with color-coded glowing lines
 
 import * as THREE from 'three';
+import { Line2 } from 'three/examples/jsm/lines/Line2.js';
+import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
 import { SubsolarCoordinates } from '../astronomy/solar';
 import { generateGlobalPrayerFronts } from '../prayer/contours';
 import { CalculationParameters, Madhab, CALCULATION_CONVENTIONS } from '../prayer/conventions';
@@ -10,24 +13,27 @@ export type PrayerFrontKey = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 
 
 export const PRAYER_COLORS: Record<PrayerFrontKey, number> = {
   fajr: 0x38bdf8, // Cyan / Dawn twilight
-  sunrise: 0xfef08a, // Pale gold / Sunrise
+  sunrise: 0x34d399, // Emerald / Sunrise (distinct from Dhuhr yellow)
   dhuhr: 0xfacc15, // Golden yellow / Solar noon
   asr: 0xff5500, // Vivid blazing orange / Afternoon shadow
-  maghrib: 0xf43f5e, // Crimson rose / Sunset
+  maghrib: 0xec4899, // Hot pink / Sunset (distinct from Asr orange)
   isha: 0xa855f7, // Vivid violet-purple / Nightfall twilight
   terminator: 0xe2e8f0, // Crisp silver-white / Day-night solar boundary
 };
 
 export interface FrontLineObject {
-  line: THREE.Line;
-  geometry: THREE.BufferGeometry;
-  material: THREE.LineBasicMaterial;
+  core: Line2;
+  glow: Line2;
+  geometry: LineGeometry;
+  coreMaterial: LineMaterial;
+  glowMaterial: LineMaterial;
 }
 
 export interface PrayerFrontsLayer {
   group: THREE.Group;
   setVisibility: (key: PrayerFrontKey, visible: boolean) => void;
   setAllVisibility: (visible: boolean) => void;
+  setResolution: (width: number, height: number) => void;
   update: (
     subsolar: SubsolarCoordinates,
     convention?: CalculationParameters,
@@ -35,6 +41,9 @@ export interface PrayerFrontsLayer {
   ) => void;
   dispose: () => void;
 }
+
+const CORE_WIDTH_PX = 2.5;
+const GLOW_WIDTH_PX = 8;
 
 export function createPrayerFrontsLayer(): PrayerFrontsLayer {
   const group = new THREE.Group();
@@ -53,43 +62,67 @@ export function createPrayerFrontsLayer(): PrayerFrontsLayer {
   ];
 
   const linesMap = new Map<PrayerFrontKey, FrontLineObject>();
+  const resolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
 
-  // Allocate reusable buffer geometries for each front
+  // Each front is a crisp opaque core line (exact palette colour, no tone mapping)
+  // plus a wide faint additive halo that gives the glow without washing the colour out.
   for (const key of frontKeys) {
-    const geometry = new THREE.BufferGeometry();
-    // Pre-allocate buffer for up to 256 vertices
-    const maxPoints = 256;
-    const positions = new Float32Array(maxPoints * 3);
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setDrawRange(0, 0);
+    const geometry = new LineGeometry();
 
-    const material = new THREE.LineBasicMaterial({
+    const coreMaterial = new LineMaterial({
       color: PRAYER_COLORS[key],
-      linewidth: 2,
-      transparent: true,
-      opacity: key === 'terminator' ? 0.75 : 0.9,
-      blending: THREE.AdditiveBlending,
+      linewidth: CORE_WIDTH_PX,
+      transparent: false,
       depthWrite: false,
+      toneMapped: false,
+      resolution,
     });
 
-    const line = new THREE.Line(geometry, material);
-    line.name = `front-${key}`;
-    group.add(line);
+    const glowMaterial = new LineMaterial({
+      color: PRAYER_COLORS[key],
+      linewidth: GLOW_WIDTH_PX,
+      transparent: true,
+      opacity: 0.22,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      toneMapped: false,
+      resolution,
+    });
 
-    linesMap.set(key, { line, geometry, material });
+    const glow = new Line2(geometry, glowMaterial);
+    glow.name = `front-glow-${key}`;
+    glow.visible = false;
+    const core = new Line2(geometry, coreMaterial);
+    core.name = `front-${key}`;
+    core.visible = false;
+    group.add(glow);
+    group.add(core);
+
+    linesMap.set(key, { core, glow, geometry, coreMaterial, glowMaterial });
   }
 
-  const setVisibility = (key: PrayerFrontKey, visible: boolean): void => {
+  const userVisible = new Map<PrayerFrontKey, boolean>(frontKeys.map((k) => [k, true]));
+  const hasGeometry = new Map<PrayerFrontKey, boolean>(frontKeys.map((k) => [k, false]));
+
+  const applyVisibility = (key: PrayerFrontKey): void => {
     const obj = linesMap.get(key);
-    if (obj) {
-      obj.line.visible = visible;
-    }
+    if (!obj) return;
+    const show = Boolean(userVisible.get(key)) && Boolean(hasGeometry.get(key));
+    obj.core.visible = show;
+    obj.glow.visible = show;
+  };
+
+  const setVisibility = (key: PrayerFrontKey, visible: boolean): void => {
+    userVisible.set(key, visible);
+    applyVisibility(key);
   };
 
   const setAllVisibility = (visible: boolean): void => {
-    for (const [, obj] of linesMap) {
-      obj.line.visible = visible;
-    }
+    for (const key of frontKeys) setVisibility(key, visible);
+  };
+
+  const setResolution = (width: number, height: number): void => {
+    resolution.set(width, height);
   };
 
   const update = (
@@ -104,24 +137,20 @@ export function createPrayerFrontsLayer(): PrayerFrontsLayer {
       if (!obj) continue;
 
       const contour = fronts[key];
-      const positionAttr = obj.geometry.attributes.position as THREE.BufferAttribute;
-      const array = positionAttr.array as Float32Array;
-
-      // Copy calculated contour points into geometry attribute
-      const count = Math.min(contour.pointCount, array.length / 3);
-      for (let i = 0; i < count * 3; i++) {
-        array[i] = contour.positions[i];
+      const count = contour.pointCount;
+      if (count >= 2) {
+        obj.geometry.setPositions(contour.positions.subarray(0, count * 3));
       }
-
-      positionAttr.needsUpdate = true;
-      obj.geometry.setDrawRange(0, count);
+      hasGeometry.set(key, count >= 2);
+      applyVisibility(key);
     }
   };
 
   const dispose = (): void => {
     for (const [, obj] of linesMap) {
       obj.geometry.dispose();
-      obj.material.dispose();
+      obj.coreMaterial.dispose();
+      obj.glowMaterial.dispose();
     }
   };
 
@@ -129,6 +158,7 @@ export function createPrayerFrontsLayer(): PrayerFrontsLayer {
     group,
     setVisibility,
     setAllVisibility,
+    setResolution,
     update,
     dispose,
   };

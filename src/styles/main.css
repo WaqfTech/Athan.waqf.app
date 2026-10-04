@@ -28,10 +28,10 @@
 
   /* Prayer Front Colors */
   --color-fajr: #38bdf8;
-  --color-sunrise: #fef08a;
+  --color-sunrise: #34d399;
   --color-dhuhr: #facc15;
   --color-asr: #ff5500;
-  --color-maghrib: #f43f5e;
+  --color-maghrib: #ec4899;
   --color-isha: #a855f7;
   --color-terminator: #e2e8f0;
 
@@ -1046,9 +1046,6 @@ html, body {
     padding-inline: var(--space-sm);
   }
 
-  .quick-cities-strip {
-    display: none;
-  }
 
   .city-search-box {
     order: 3;
@@ -1149,17 +1146,6 @@ html, body {
     width: 290px;
   }
 
-  .quick-cities-strip {
-    display: flex;
-    overflow-x: auto;
-    max-width: calc(100vw - 480px);
-    scrollbar-width: none;
-  }
-
-  .quick-cities-strip::-webkit-scrollbar {
-    display: none;
-  }
-
   .city-search-box {
     max-width: 240px;
   }
@@ -1185,4 +1171,119 @@ html, body {
     inset-block: -4px;
     inset-inline: -4px;
   }
+}
+
+/* Places popover (replaces the old row of city pills) */
+.places-wrapper {
+  position: relative;
+}
+
+.btn-places-trigger {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-glass-surface);
+  border: 1px solid var(--color-glass-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.btn-places-trigger:hover,
+.btn-places-trigger:focus-visible,
+.btn-places-trigger[aria-expanded='true'] {
+  color: var(--color-text-primary);
+  border-color: var(--color-glass-border-focus);
+  outline: none;
+}
+
+.places-dropdown {
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-xs));
+  inset-inline-start: 0px;
+  min-width: 240px;
+  max-height: 60vh;
+  overflow-y: auto;
+  border-radius: var(--radius-md);
+  padding: var(--space-xs);
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  z-index: var(--z-dropdown);
+}
+
+.places-dropdown.active {
+  display: flex;
+}
+
+.places-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: start;
+}
+
+.places-item:hover,
+.places-item:focus-visible {
+  background: var(--color-accent-bg);
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.places-item.is-sacred .places-item-name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.places-item-ar {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.places-divider {
+  height: 1px;
+  background: var(--color-glass-border);
+  margin-block: var(--space-xs);
+  flex-shrink: 0;
+}
+
+/* Focus mode: hide every HUD element except the restore button */
+#hud-overlay.is-focus-mode > *:not(.focus-restore) {
+  display: none !important;
+}
+
+.focus-restore {
+  display: none;
+  pointer-events: auto;
+  position: absolute;
+  inset-block-end: var(--space-md);
+  inset-inline-end: var(--space-md);
+  background: var(--color-glass-surface);
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+#hud-overlay.is-focus-mode > .focus-restore {
+  display: flex !important;
+}
+
+.focus-restore.is-idle {
+  opacity: 0;
+}
+
+.focus-restore:focus-visible {
+  opacity: 1;
 }

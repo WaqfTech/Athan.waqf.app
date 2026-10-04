@@ -79,6 +79,11 @@ export function createHudOverlay(
   root.id = 'hud-overlay';
   root.innerHTML = '';
 
+  // Single source of truth for prayer colours: the 3D palette drives the CSS variables
+  for (const [key, value] of Object.entries(PRAYER_COLORS)) {
+    document.documentElement.style.setProperty(`--color-${key}`, `#${value.toString(16).padStart(6, '0')}`);
+  }
+
   let allSettlements: Settlement[] = [];
   const bottomStack = document.createElement('div');
   bottomStack.className = 'hud-bottom-stack';
@@ -213,7 +218,7 @@ export function createHudOverlay(
     if (callbacks.onSelectCity) {
       callbacks.onSelectCity(city);
     } else {
-      globeScene.cameraRig.focusCoordinates(city.latitude, city.longitude, 10, true);
+      globeScene.cameraRig.focusCoordinates(city.latitude, city.longitude, 14, true);
       inspector.inspectSettlement(city, clock.getTime());
     }
   };
@@ -321,9 +326,46 @@ export function createHudOverlay(
 
   topBar.appendChild(searchBox);
 
-  // Quick Jump Sacred Cities and Closest Visitor Cities Strip
+  // Places: one trigger opening a popover with the three sanctuaries, then cities near the visitor
   const quickStrip = document.createElement('div');
-  quickStrip.className = 'quick-cities-strip';
+  quickStrip.className = 'quick-cities-strip places-wrapper';
+
+  const placesTrigger = document.createElement('button');
+  placesTrigger.className = 'btn-places-trigger';
+  placesTrigger.setAttribute('aria-haspopup', 'true');
+  placesTrigger.setAttribute('aria-expanded', 'false');
+  const placesTriggerLabel = document.createElement('span');
+  placesTriggerLabel.textContent = t.controls.places;
+  placesTrigger.innerHTML = `
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/>
+      <circle cx="12" cy="10" r="2.5"/>
+    </svg>
+  `;
+  placesTrigger.appendChild(placesTriggerLabel);
+  const placesChevron = document.createElement('span');
+  placesChevron.setAttribute('aria-hidden', 'true');
+  placesChevron.style.fontSize = '10px';
+  placesChevron.style.opacity = '0.7';
+  placesChevron.textContent = '▾';
+  placesTrigger.appendChild(placesChevron);
+
+  const placesMenu = document.createElement('div');
+  placesMenu.className = 'places-dropdown hud-panel';
+
+  placesTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = placesMenu.classList.toggle('active');
+    placesTrigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  document.addEventListener('click', (e) => {
+    if (!quickStrip.contains(e.target as Node)) {
+      placesMenu.classList.remove('active');
+      placesTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+  quickStrip.appendChild(placesTrigger);
+  quickStrip.appendChild(placesMenu);
 
   let spatialIndex: SettlementSpatialIndex | null = null;
   let visitorLocation: VisitorLocation | null = null;
@@ -339,56 +381,56 @@ export function createHudOverlay(
     population?: number;
   }
 
-  const renderQuickStrip = (nearbyCities: DisplayQuickCity[]): void => {
-    quickStrip.innerHTML = '';
+  const appendPlaceRow = (c: DisplayQuickCity, sacred: boolean): void => {
+    const row = document.createElement('button');
+    row.className = `places-item${sacred ? ' is-sacred' : ''}${c.isNearby ? ' is-nearby' : ''}`;
+    row.setAttribute('aria-label', `Jump to ${c.name}`);
 
-    // 1. Render Sacred Sanctuaries
-    for (const q of SACRED_CITIES) {
-      const btn = document.createElement('button');
-      btn.className = 'btn-quick-city';
-      btn.setAttribute('aria-label', `Jump to ${q.name}`);
-      btn.innerHTML = `<span>${q.name}</span><span class="quick-ar" dir="rtl">${q.nameAr.split(' ')[0]}</span>`;
-      btn.addEventListener('click', () => {
-        selectCity({
-          name: q.name,
-          nameAr: q.nameAr,
-          latitude: q.lat,
-          longitude: q.lon,
-          countryCode: q.countryCode,
-          population: 1500000,
-          timezone: q.timezone,
-        });
-      });
-      quickStrip.appendChild(btn);
+    const name = document.createElement('span');
+    name.className = 'places-item-name';
+    name.textContent = c.name;
+    row.appendChild(name);
+
+    if (c.nameAr) {
+      const ar = document.createElement('span');
+      ar.className = 'places-item-ar';
+      ar.setAttribute('dir', 'rtl');
+      ar.setAttribute('lang', 'ar');
+      ar.textContent = c.nameAr;
+      row.appendChild(ar);
     }
 
-    // 2. Render Closest Visitor Cities
+    row.addEventListener('click', () => {
+      placesMenu.classList.remove('active');
+      placesTrigger.setAttribute('aria-expanded', 'false');
+      selectCity({
+        name: c.name,
+        nameAr: c.nameAr || c.name,
+        latitude: c.lat,
+        longitude: c.lon,
+        countryCode: c.countryCode || '',
+        population: c.population || 100000,
+        timezone: c.timezone || 'UTC',
+      });
+    });
+    placesMenu.appendChild(row);
+  };
+
+  const renderQuickStrip = (nearbyCities: DisplayQuickCity[]): void => {
+    placesMenu.innerHTML = '';
+
+    for (const q of SACRED_CITIES) {
+      appendPlaceRow({ ...q, population: 1500000 }, true);
+    }
+
     if (nearbyCities.length > 0) {
       const divider = document.createElement('span');
-      divider.className = 'quick-divider';
+      divider.className = 'places-divider';
       divider.setAttribute('aria-hidden', 'true');
-      quickStrip.appendChild(divider);
+      placesMenu.appendChild(divider);
 
-      for (let i = 0; i < nearbyCities.length; i++) {
-        const c = nearbyCities[i];
-        const btn = document.createElement('button');
-        btn.className = 'btn-quick-city' + (c.isNearby ? ' is-nearby' : '');
-        btn.setAttribute('aria-label', `Jump to ${c.name}`);
-        const icon = (i === 0 && c.isNearby) ? '<span class="quick-nearby-icon" aria-hidden="true">📍</span>' : '';
-        const ar = c.nameAr ? `<span class="quick-ar" dir="rtl">${c.nameAr}</span>` : '';
-        btn.innerHTML = `${icon}<span>${c.name}</span>${ar}`;
-        btn.addEventListener('click', () => {
-          selectCity({
-            name: c.name,
-            nameAr: c.nameAr || c.name,
-            latitude: c.lat,
-            longitude: c.lon,
-            countryCode: c.countryCode || '',
-            population: c.population || 100000,
-            timezone: c.timezone || 'UTC',
-          });
-        });
-        quickStrip.appendChild(btn);
+      for (const c of nearbyCities) {
+        appendPlaceRow(c, false);
       }
     }
   };
@@ -530,28 +572,115 @@ export function createHudOverlay(
   langWrapper.appendChild(langMenu);
   topBar.appendChild(langWrapper);
 
-  // Zen View / Minimizer Button
-  const zenBtn = document.createElement('button');
-  zenBtn.className = 'btn-icon-toggle';
-  zenBtn.setAttribute('aria-label', 'Toggle HUD minimal mode');
-  zenBtn.title = 'Toggle clean planetary view';
-  zenBtn.innerHTML = `
+  // Native full screen button (hidden where the Fullscreen API is unavailable, e.g. iPhone Safari)
+  const fsEnterIcon = `
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <polyline points="4 14 10 14 10 20"/>
-      <polyline points="20 10 14 10 14 4"/>
-      <line x1="14" y1="10" x2="21" y2="3"/>
-      <line x1="3" y1="21" x2="10" y2="14"/>
+      <polyline points="4 9 4 4 9 4"/>
+      <polyline points="20 9 20 4 15 4"/>
+      <polyline points="4 15 4 20 9 20"/>
+      <polyline points="20 15 20 20 15 20"/>
     </svg>
   `;
-  let isZenMode = false;
-  zenBtn.addEventListener('click', () => {
-    isZenMode = !isZenMode;
-    bottomStack.style.display = isZenMode ? 'none' : 'flex';
-    quickStrip.style.display = isZenMode ? 'none' : 'flex';
-  });
-  topBar.appendChild(zenBtn);
+  const fsExitIcon = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="9 4 9 9 4 9"/>
+      <polyline points="15 4 15 9 20 9"/>
+      <polyline points="9 20 9 15 4 15"/>
+      <polyline points="15 20 15 15 20 15"/>
+    </svg>
+  `;
+  const fsBtn = document.createElement('button');
+  fsBtn.className = 'btn-icon-toggle';
+  fsBtn.setAttribute('aria-label', t.controls.fullscreen);
+  fsBtn.title = `${t.controls.fullscreen} (F)`;
+  fsBtn.innerHTML = fsEnterIcon;
+
+  const toggleFullscreen = (): void => {
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+    } else {
+      void document.documentElement.requestFullscreen().catch(() => {
+        // Browser refused (no user gesture or policy); nothing to recover.
+      });
+    }
+  };
+  const onFullscreenChange = (): void => {
+    const on = Boolean(document.fullscreenElement);
+    fsBtn.innerHTML = on ? fsExitIcon : fsEnterIcon;
+    fsBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  };
+  if (document.fullscreenEnabled) {
+    fsBtn.addEventListener('click', toggleFullscreen);
+    document.addEventListener('fullscreenchange', onFullscreenChange);
+    topBar.appendChild(fsBtn);
+  }
+
+  // Focus mode: hides every HUD element, leaving only a small restore button that fades when idle
+  const focusBtn = document.createElement('button');
+  focusBtn.className = 'btn-icon-toggle';
+  focusBtn.setAttribute('aria-label', t.controls.zenMode);
+  focusBtn.title = `${t.controls.zenMode} (H)`;
+  focusBtn.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <line x1="3" y1="21" x2="21" y2="3"/>
+    </svg>
+  `;
+  topBar.appendChild(focusBtn);
+
+  const restoreBtn = document.createElement('button');
+  restoreBtn.className = 'btn-icon-toggle focus-restore';
+  restoreBtn.setAttribute('aria-label', t.controls.zenMode);
+  restoreBtn.title = `${t.controls.zenMode} (H)`;
+  restoreBtn.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+  `;
+
+  let isFocusMode = false;
+  let restoreFadeTimer: number | undefined;
+  const wakeRestoreBtn = (): void => {
+    restoreBtn.classList.remove('is-idle');
+    window.clearTimeout(restoreFadeTimer);
+    restoreFadeTimer = window.setTimeout(() => restoreBtn.classList.add('is-idle'), 3000);
+  };
+  const setFocusMode = (on: boolean): void => {
+    isFocusMode = on;
+    root.classList.toggle('is-focus-mode', on);
+    if (on) {
+      searchDropdown.classList.remove('active');
+      placesMenu.classList.remove('active');
+      wakeRestoreBtn();
+    } else {
+      window.clearTimeout(restoreFadeTimer);
+    }
+  };
+  focusBtn.addEventListener('click', () => setFocusMode(true));
+  restoreBtn.addEventListener('click', () => setFocusMode(false));
+  const onPointerActivity = (): void => {
+    if (isFocusMode) wakeRestoreBtn();
+  };
+  document.addEventListener('pointermove', onPointerActivity);
+
+  const onHotkey = (e: KeyboardEvent): void => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const target = e.target as HTMLElement | null;
+    if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return;
+    const key = e.key.toLowerCase();
+    if (key === 'h') {
+      setFocusMode(!isFocusMode);
+    } else if (key === 'f' && document.fullscreenEnabled) {
+      toggleFullscreen();
+    } else if (key === 'escape' && isFocusMode) {
+      setFocusMode(false);
+    }
+  };
+  document.addEventListener('keydown', onHotkey);
 
   root.appendChild(topBar);
+  root.appendChild(restoreBtn);
 
   // 2. Floating Controls Dock
   const controlsDock = document.createElement('div');
@@ -628,7 +757,7 @@ export function createHudOverlay(
   prayerSegment.className = 'dock-segment';
 
   const prayerLabels: Map<PrayerFrontKey, HTMLSpanElement> = new Map();
-  const prayerKeys: PrayerFrontKey[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'terminator'];
+  const prayerKeys: PrayerFrontKey[] = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha', 'terminator'];
   for (const k of prayerKeys) {
     const hexColor = `#${PRAYER_COLORS[k].toString(16).padStart(6, '0')}`;
     const btn = document.createElement('button');
@@ -764,6 +893,13 @@ export function createHudOverlay(
     }
 
     if (speedLabel) speedLabel.textContent = t.controls.time;
+    placesTriggerLabel.textContent = t.controls.places;
+    fsBtn.setAttribute('aria-label', t.controls.fullscreen);
+    fsBtn.title = `${t.controls.fullscreen} (F)`;
+    focusBtn.setAttribute('aria-label', t.controls.zenMode);
+    focusBtn.title = `${t.controls.zenMode} (H)`;
+    restoreBtn.setAttribute('aria-label', t.controls.zenMode);
+    restoreBtn.title = `${t.controls.zenMode} (H)`;
     if (mapBtn) mapBtn.textContent = t.controls.map;
     if (satBtn) satBtn.textContent = t.controls.satellite;
 
@@ -808,6 +944,10 @@ export function createHudOverlay(
 
   const dispose = (): void => {
     unsubscribeLocale();
+    document.removeEventListener('keydown', onHotkey);
+    document.removeEventListener('pointermove', onPointerActivity);
+    document.removeEventListener('fullscreenchange', onFullscreenChange);
+    window.clearTimeout(restoreFadeTimer);
     timeline.dispose();
     inspector.dispose();
     root.innerHTML = '';
