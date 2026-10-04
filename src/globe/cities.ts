@@ -61,7 +61,6 @@ const pointsFragmentShader = /* glsl */ `
 `;
 
 const pillarVertexShader = /* glsl */ `
-  attribute vec3 instanceColor;
   varying vec2 vUv;
   varying vec3 vColor;
 

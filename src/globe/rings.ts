@@ -8,7 +8,6 @@ import { PRAYER_COLORS } from './fronts';
 import { ActiveAdhanEvent } from './cities';
 
 const ringVertexShader = /* glsl */ `
-  attribute vec3 instanceColor;
   varying vec2 vUv;
   varying vec3 vColor;
 
