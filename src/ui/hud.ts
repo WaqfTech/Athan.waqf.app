@@ -38,7 +38,7 @@ interface QuickCity {
 const SACRED_CITIES: QuickCity[] = [
   { name: 'Makkah', nameAr: 'مكة المكرمة', lat: 21.4225, lon: 39.8262, countryCode: 'SA', timezone: 'Asia/Riyadh' },
   { name: 'Madinah', nameAr: 'المدينة المنورة', lat: 24.4672, lon: 39.6112, countryCode: 'SA', timezone: 'Asia/Riyadh' },
-  { name: 'Al-Quds', nameAr: 'القدس', lat: 31.7767, lon: 35.2345, countryCode: 'PS', timezone: 'Asia/Jerusalem' },
+  { name: 'Al-Quds', nameAr: 'القدس', lat: 31.7767, lon: 35.2345, countryCode: 'PS', timezone: 'Asia/Hebron' },
 ];
 
 const DEFAULT_NEARBY_FALLBACK: QuickCity[] = [

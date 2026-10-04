@@ -17,10 +17,12 @@ describe('Settlement loader and Palestinian mapping', () => {
     expect(parsed[0].name).toBe('Al-Quds');
     expect(parsed[0].nameAr).toBe('القدس');
     expect(parsed[0].countryCode).toBe('PS');
+    expect(parsed[0].timezone).toBe('Asia/Hebron');
 
-    expect(parsed[1].name).toBe('Yafa (Tel Aviv)');
-    expect(parsed[1].nameAr).toBe('يافا (تل الربيع)');
+    expect(parsed[1].name).toBe('Yafa');
+    expect(parsed[1].nameAr).toBe('يافا');
     expect(parsed[1].countryCode).toBe('PS');
+    expect(parsed[1].timezone).toBe('Asia/Hebron');
 
     expect(parsed[2].name).toBe('Mulabbis');
     expect(parsed[2].nameAr).toBe('ملبّس');

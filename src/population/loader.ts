@@ -23,9 +23,9 @@ interface PalestineOverride {
 const PALESTINE_OVERRIDES: Record<string, PalestineOverride> = {
   // Core historic cities
   Jerusalem: { nameEn: 'Al-Quds', nameAr: 'القدس' },
-  'West Jerusalem': { nameEn: 'Al-Quds (West)', nameAr: 'القدس الغربية' },
-  'East Jerusalem': { nameEn: 'Al-Quds (East)', nameAr: 'القدس الشرقية' },
-  'Tel Aviv': { nameEn: 'Yafa (Tel Aviv)', nameAr: 'يافا (تل الربيع)' },
+  'West Jerusalem': { nameEn: 'Al-Quds', nameAr: 'القدس' },
+  'East Jerusalem': { nameEn: 'Al-Quds', nameAr: 'القدس' },
+  'Tel Aviv': { nameEn: 'Yafa', nameAr: 'يافا' },
   Jaffa: { nameEn: 'Yafa', nameAr: 'يافا' },
   Haifa: { nameEn: 'Haifa', nameAr: 'حيفا' },
   Acre: { nameEn: 'Akka', nameAr: 'عكّا' },
@@ -179,6 +179,7 @@ export function parseSettlements(data: CompactSettlementRow[]): Settlement[] {
     let name = row[0];
     let nameAr = row[1];
     let countryCode = row[4];
+    let timezone = row[6];
 
     if (countryCode === 'IL' || countryCode === 'PS') {
       const override = PALESTINE_OVERRIDES[name] || (nameAr ? PALESTINE_OVERRIDES[nameAr] : undefined);
@@ -189,6 +190,9 @@ export function parseSettlements(data: CompactSettlementRow[]): Settlement[] {
       } else if (countryCode === 'IL') {
         countryCode = 'PS';
       }
+      if (timezone === 'Asia/Jerusalem') {
+        timezone = 'Asia/Hebron';
+      }
     }
 
     return {
@@ -198,7 +202,7 @@ export function parseSettlements(data: CompactSettlementRow[]): Settlement[] {
       longitude: row[3],
       countryCode,
       population: row[5],
-      timezone: row[6],
+      timezone,
     };
   });
 }

@@ -319,9 +319,9 @@ type PalestinianOverride struct {
 var palestineOverrides = map[string]PalestinianOverride{
 	// Core historic cities
 	"Jerusalem":               {NameEn: "Al-Quds", NameAr: "القدس"},
-	"West Jerusalem":          {NameEn: "Al-Quds (West)", NameAr: "القدس الغربية"},
-	"East Jerusalem":          {NameEn: "Al-Quds (East)", NameAr: "القدس الشرقية"},
-	"Tel Aviv":                {NameEn: "Yafa (Tel Aviv)", NameAr: "يافا (تل الربيع)"},
+	"West Jerusalem":          {NameEn: "Al-Quds", NameAr: "القدس"},
+	"East Jerusalem":          {NameEn: "Al-Quds", NameAr: "القدس"},
+	"Tel Aviv":                {NameEn: "Yafa", NameAr: "يافا"},
 	"Jaffa":                   {NameEn: "Yafa", NameAr: "يافا"},
 	"Haifa":                   {NameEn: "Haifa", NameAr: "حيفا"},
 	"Acre":                    {NameEn: "Akka", NameAr: "عكّا"},
@@ -454,7 +454,9 @@ var palestineOverrides = map[string]PalestinianOverride{
 
 	// Slug lookups
 	"jerusalem":              {NameEn: "Al-Quds", NameAr: "القدس"},
-	"tel-aviv":               {NameEn: "Yafa (Tel Aviv)", NameAr: "يافا (تل الربيع)"},
+	"west-jerusalem":         {NameEn: "Al-Quds", NameAr: "القدس"},
+	"east-jerusalem":         {NameEn: "Al-Quds", NameAr: "القدس"},
+	"tel-aviv":               {NameEn: "Yafa", NameAr: "يافا"},
 	"haifa":                  {NameEn: "Haifa", NameAr: "حيفا"},
 	"acre":                   {NameEn: "Akka", NameAr: "عكّا"},
 	"petah-tiqva":            {NameEn: "Mulabbis", NameAr: "ملبّس"},
@@ -629,6 +631,9 @@ func main() {
 				isPalestine = true
 			} else if cc == "IL" {
 				cc = "PS"
+			}
+			if tz == "Asia/Jerusalem" {
+				tz = "Asia/Hebron"
 			}
 		}
 
