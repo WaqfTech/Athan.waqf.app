@@ -78,9 +78,10 @@ export function createTimelineUI(
   const labelRow = document.createElement('div');
   labelRow.className = 'timeline-label-row';
   const hours = ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00', '24:00'];
+  const minorHours = new Set(['03:00', '09:00', '15:00', '21:00']);
   for (const h of hours) {
     const lbl = document.createElement('span');
-    lbl.className = 'timeline-hour-label';
+    lbl.className = `timeline-hour-label ${minorHours.has(h) ? 'hour-minor' : ''}`;
     lbl.textContent = h;
     labelRow.appendChild(lbl);
   }

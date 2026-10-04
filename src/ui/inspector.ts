@@ -50,6 +50,7 @@ function calculateQibla(lat: number, lon: number): number {
 export function createInspectorPanel(options: {
   convention?: CalculationConventionName;
   madhab?: Madhab;
+  onOpen?: () => void;
   onClose?: () => void;
 } = {}): InspectorPanel {
   const container = document.createElement('aside');
@@ -186,7 +187,6 @@ export function createInspectorPanel(options: {
     if (closeBtn) {
       closeBtn.addEventListener('click', () => {
         hide();
-        if (options.onClose) options.onClose();
       });
     }
   };
@@ -201,6 +201,7 @@ export function createInspectorPanel(options: {
     currentSettlement = settlement;
     currentCoords = null;
     container.style.display = 'flex';
+    if (options.onOpen) options.onOpen();
     render(currentDate);
   };
 
@@ -208,6 +209,7 @@ export function createInspectorPanel(options: {
     currentCoords = { lat, lon };
     currentSettlement = null;
     container.style.display = 'flex';
+    if (options.onOpen) options.onOpen();
     render(currentDate);
   };
 
@@ -221,6 +223,7 @@ export function createInspectorPanel(options: {
     container.style.display = 'none';
     currentSettlement = null;
     currentCoords = null;
+    if (options.onClose) options.onClose();
   };
 
   const dispose = (): void => {

@@ -277,6 +277,27 @@ export function createHudOverlay(
     }
   });
 
+  const showQuickSuggestions = (): void => {
+    if (searchInput.value.trim()) return;
+    searchResults = QUICK_CITIES.map((q) => ({
+      name: q.name,
+      nameAr: q.nameAr,
+      latitude: q.lat,
+      longitude: q.lon,
+      countryCode: q.countryCode,
+      population: 1500000,
+      timezone: q.timezone,
+    }));
+    highlightedIndex = -1;
+    renderSearchResults();
+  };
+
+  searchInput.addEventListener('focus', () => {
+    if (!searchInput.value.trim()) {
+      showQuickSuggestions();
+    }
+  });
+
   clearBtn.addEventListener('click', () => {
     searchInput.value = '';
     clearBtn.style.display = 'none';
@@ -602,7 +623,14 @@ export function createHudOverlay(
   controlsDock.appendChild(followBtn);
 
   // 3. Floating Astronomical Inspector Panel
-  const inspector = createInspectorPanel();
+  const inspector = createInspectorPanel({
+    onOpen: () => {
+      root.classList.add('has-inspector-open');
+    },
+    onClose: () => {
+      root.classList.remove('has-inspector-open');
+    },
+  });
   root.appendChild(inspector.element);
 
   // 4. Bottom 24-Hour Continuity Ribbon
