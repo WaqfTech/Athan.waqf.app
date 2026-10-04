@@ -1,10 +1,32 @@
 :root {
+  /* Surface and Background Tokens */
   --color-space: #030712;
-  --color-surface: rgba(15, 23, 42, 0.88);
-  --color-surface-border: rgba(56, 189, 248, 0.25);
+  --color-obsidian-950: #060b14;
+  --color-obsidian-900: #0a1120;
+  --color-obsidian-800: #0f172a;
+  --color-glass-surface: rgba(8, 14, 28, 0.75);
+  --color-glass-surface-hover: rgba(15, 23, 42, 0.85);
+  --color-glass-surface-active: rgba(30, 41, 59, 0.9);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+  --color-glass-border-hover: rgba(255, 255, 255, 0.18);
+  --color-glass-border-focus: rgba(56, 189, 248, 0.4);
+
+  /* Typography & State Tokens */
   --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
   --color-text-muted: #94a3b8;
+  --color-text-dim: #64748b;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-emerald: #10b981;
+  --color-danger: #ef4444;
+
+  /* Accent & Atmosphere Tokens */
   --color-accent: #38bdf8;
+  --color-accent-glow: rgba(56, 189, 248, 0.25);
+  --color-accent-bg: rgba(56, 189, 248, 0.12);
+
+  /* Prayer Front Colors */
   --color-fajr: #38bdf8;
   --color-sunrise: #fef08a;
   --color-dhuhr: #facc15;
@@ -12,14 +34,48 @@
   --color-maghrib: #f43f5e;
   --color-isha: #a855f7;
   --color-terminator: #e2e8f0;
+
+  /* Typography Ramp (Strict 4-Step Hierarchy: 18px, 15px, 13px, 11px) */
+  --font-size-xs: 11px;
+  --font-size-sm: 13px;
+  --font-size-base: 15px;
+  --font-size-lg: 18px;
+
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Radius Tokens Scale (allowed: 0, 2, 6, 10, 14, 20, 9999px) */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Spacing Scale (allowed: 0, 4, 8, 16, 24, 32, 48, 64, 96px) */
+  --space-none: 0px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Semantic Z-Index Scale (allowed: 0, 1, 10, 20, 30, 40, 50, 60) */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 20;
+  --z-sticky: 30;
+  --z-modal-backdrop: 40;
+  --z-modal: 50;
+  --z-toast: 60;
 }
 
 *, *::before, *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  margin: var(--space-none);
+  padding: var(--space-none);
 }
 
 html, body {
@@ -41,244 +97,807 @@ html, body {
 
 #globe-canvas {
   position: absolute;
-  inset: 0;
+  inset-block-start: 0px;
+  inset-block-end: 0px;
+  inset-inline-start: 0px;
+  inset-inline-end: 0px;
   width: 100%;
   height: 100%;
   display: block;
   outline: none;
 }
 
+#globe-canvas:focus-visible {
+  outline: 2px solid var(--color-glass-border-focus);
+}
+
+/* Master HUD Overlay Container */
 #hud-overlay {
   position: absolute;
-  inset: 0;
+  inset-block-start: 0px;
+  inset-block-end: 0px;
+  inset-inline-start: 0px;
+  inset-inline-end: 0px;
   pointer-events: none;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-block: 1rem;
-  padding-inline: 1rem;
-  gap: 1rem;
+  padding-block: var(--space-md);
+  padding-inline: var(--space-md);
+  gap: var(--space-sm);
 }
 
+/* Glassmorphic Panel Core */
 .hud-panel {
   pointer-events: auto;
-  background: var(--color-surface);
-  backdrop-filter: blur(16px);
-  border: 1px solid var(--color-surface-border);
-  border-radius: 8px;
-  padding-block: 0.75rem;
-  padding-inline: 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  background: var(--color-glass-surface);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Header & Top Bar */
+/* 1. Top Navigation Bar */
 .hud-top-bar {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+  gap: var(--space-md);
+  width: 100%;
 }
 
-.brand-badge {
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-full);
+}
+
+.brand-emblem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-accent);
+}
+
+.brand-emblem svg {
+  width: 20px;
+  height: 20px;
+}
+
+.brand-info {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0px;
 }
 
 .brand-title {
-  font-size: 1.15rem;
+  font-size: var(--font-size-base);
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   color: var(--color-text-primary);
+  line-height: 1.1;
 }
 
 .brand-subtitle {
-  font-size: 0.75rem;
+  font-size: var(--font-size-xs);
   color: var(--color-accent);
   font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  line-height: 1;
 }
 
-/* Controls Box */
-.hud-controls-box {
+.live-clock-pill {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-glass-border);
+}
+
+.live-beacon-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-emerald);
+  box-shadow: 0 0 6px var(--color-emerald);
+}
+
+/* Center City Search Bar */
+.city-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 360px;
+}
+
+.city-search-input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon-badge {
+  position: absolute;
+  inset-inline-start: var(--space-md);
+  pointer-events: none;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.city-search-input {
+  width: 100%;
+  background: var(--color-obsidian-900);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-full);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  padding-block: var(--space-sm);
+  padding-inline-start: 36px;
+  padding-inline-end: 32px;
+  outline: none;
+}
+
+.city-search-input:focus-visible {
+  border-color: var(--color-glass-border-focus);
+  box-shadow: 0 0 12px var(--color-accent-glow);
+}
+
+.city-search-clear {
+  position: absolute;
+  inset-inline-end: var(--space-sm);
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+
+.city-search-clear:hover,
+.city-search-clear:focus-visible {
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+/* Search Dropdown Flyout */
+.city-search-dropdown {
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-xs));
+  inset-inline-start: 0px;
+  inset-inline-end: 0px;
+  max-height: 280px;
+  overflow-y: auto;
+  border-radius: var(--radius-md);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+  display: none;
+  flex-direction: column;
+  gap: var(--space-xs);
+  z-index: var(--z-dropdown);
+}
+
+.city-search-dropdown.active {
+  display: flex;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: start;
+}
+
+.search-result-item:hover,
+.search-result-item:focus-visible,
+.search-result-item.highlighted {
+  background: var(--color-accent-bg);
+  outline: none;
+}
+
+.search-item-info {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  min-width: 220px;
+  gap: 0px;
 }
 
-.control-group-title {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-text-muted);
-  border-block-end: 1px solid rgba(255, 255, 255, 0.1);
-  padding-block-end: 0.25rem;
-}
-
-.control-btn-row {
-  display: flex;
-  gap: 0.35rem;
-  flex-wrap: wrap;
-}
-
-.btn-ctrl {
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: var(--color-text-primary);
-  border-radius: 4px;
-  padding-block: 0.35rem;
-  padding-inline: 0.6rem;
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.btn-ctrl:hover {
-  background: rgba(56, 189, 248, 0.25);
-  border-color: var(--color-accent);
-}
-
-.btn-ctrl.active:not(.btn-prayer-legend) {
-  background: var(--color-accent);
-  color: #030712;
+.search-item-name {
+  font-size: var(--font-size-sm);
   font-weight: 600;
+  color: var(--color-text-primary);
 }
 
-/* Distinctive Prayer Name Legend */
-.prayer-legend-row {
+.search-item-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+
+.search-item-ar {
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  font-family: var(--font-sans);
+}
+
+/* Quick Jump Sacred Cities Pills */
+.quick-cities-strip {
   display: flex;
-  gap: 0.35rem;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
 }
 
-.btn-prayer-legend {
+.btn-quick-city {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--color-glass-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-full);
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background: rgba(15, 23, 42, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  gap: var(--space-xs);
+}
+
+.btn-quick-city:hover,
+.btn-quick-city:focus-visible {
+  background: var(--color-accent-bg);
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.btn-quick-city .quick-ar {
+  color: var(--color-accent);
+  opacity: 0.85;
+}
+
+/* Zen View / Minimizer Button */
+.btn-icon-toggle {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--color-glass-border);
   color: var(--color-text-muted);
-  border-radius: 4px;
-  padding-block: 0.35rem;
-  padding-inline: 0.55rem;
-  font-size: 0.72rem;
-  font-family: var(--font-mono);
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
-}
-
-.legend-color-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
-}
-
-.btn-prayer-legend.active {
-  background: rgba(15, 23, 42, 0.92);
-  border-color: var(--legend-color);
-  color: #f8fafc;
-  font-weight: 600;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4), inset 0 0 10px color-mix(in srgb, var(--legend-color) 20%, transparent);
-}
-
-.btn-prayer-legend.active .legend-color-dot {
-  transform: scale(1.2);
-  box-shadow: 0 0 8px var(--legend-color);
-}
-
-.btn-prayer-legend:not(.active) {
-  opacity: 0.4;
-  border-color: rgba(255, 255, 255, 0.08);
-  text-decoration: line-through;
-  text-decoration-color: rgba(255, 255, 255, 0.4);
-}
-
-.btn-prayer-legend:not(.active) .legend-color-dot {
-  filter: grayscale(85%);
-  box-shadow: none;
-}
-
-.btn-prayer-legend:hover {
-  border-color: var(--legend-color);
-  color: #f8fafc;
-}
-
-.layer-toggle {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.75rem;
-  cursor: pointer;
+  justify-content: center;
+}
+
+.btn-icon-toggle:hover,
+.btn-icon-toggle:focus-visible {
   color: var(--color-text-primary);
+  border-color: var(--color-glass-border-focus);
+  outline: none;
 }
 
-.layer-indicator {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
+/* 2. Floating Controls Dock */
+.hud-dock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-md);
+  margin-inline: auto;
+  border-radius: var(--radius-xl);
 }
 
-/* Timeline Ribbon */
+.dock-segment {
+  display: flex;
+  align-items: center;
+  background: rgba(6, 11, 25, 0.65);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-full);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+  gap: var(--space-xs);
+}
+
+.dock-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-inline-start: var(--space-sm);
+  padding-inline-end: var(--space-xs);
+}
+
+.btn-dock-pill {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.btn-dock-pill:hover,
+.btn-dock-pill:focus-visible {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+.btn-dock-pill.active {
+  background: var(--color-accent);
+  color: var(--color-obsidian-950);
+  font-weight: 700;
+  box-shadow: 0 0 10px var(--color-accent-glow);
+}
+
+/* Distinctive Prayer Front Toggles */
+.btn-prayer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.prayer-indicator-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--prayer-color);
+  box-shadow: 0 0 6px var(--prayer-color);
+}
+
+.btn-prayer-pill.active {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: var(--prayer-color);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.btn-prayer-pill:not(.active) {
+  opacity: 0.35;
+  text-decoration: line-through;
+  text-decoration-color: var(--color-text-dim);
+}
+
+.btn-prayer-pill:not(.active) .prayer-indicator-dot {
+  box-shadow: none;
+  filter: grayscale(90%);
+}
+
+.btn-prayer-pill:hover,
+.btn-prayer-pill:focus-visible {
+  color: var(--color-text-primary);
+  border-color: var(--prayer-color);
+  outline: none;
+}
+
+/* Custom Convention Selector */
+.convention-menu-wrapper {
+  position: relative;
+}
+
+.btn-convention-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--color-glass-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.btn-convention-trigger:hover,
+.btn-convention-trigger:focus-visible {
+  color: var(--color-text-primary);
+  border-color: var(--color-glass-border-focus);
+  outline: none;
+}
+
+.convention-dropdown-menu {
+  position: absolute;
+  inset-block-end: calc(100% + var(--space-xs));
+  inset-inline-start: 0px;
+  min-width: 220px;
+  border-radius: var(--radius-md);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+  display: none;
+  flex-direction: column;
+  gap: var(--space-xs);
+  z-index: var(--z-dropdown);
+}
+
+.convention-dropdown-menu.active {
+  display: flex;
+}
+
+.convention-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  color: var(--color-text-secondary);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: start;
+}
+
+.convention-menu-item:hover,
+.convention-menu-item:focus-visible,
+.convention-menu-item.active {
+  background: var(--color-accent-bg);
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.convention-menu-item.active {
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+/* Follow Adhan Cinematic Button */
+.btn-follow-tour {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--color-accent-bg);
+  border: 1px solid var(--color-accent);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--color-accent-glow);
+}
+
+.btn-follow-tour.active {
+  background: var(--color-accent);
+  color: var(--color-obsidian-950);
+  font-weight: 700;
+}
+
+.btn-follow-tour:hover,
+.btn-follow-tour:focus-visible {
+  box-shadow: 0 0 16px var(--color-accent-glow);
+  outline: none;
+}
+
+/* 3. Astronomical City Inspector Card */
+.inspector-panel {
+  position: absolute;
+  inset-block-start: 72px;
+  inset-inline-start: var(--space-md);
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-block: var(--space-md);
+  padding-inline: var(--space-md);
+  z-index: var(--z-modal);
+  animation: slideInInspector 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInInspector {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+.inspector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  border-block-end: 1px solid var(--color-glass-border);
+  padding-block-end: var(--space-sm);
+}
+
+.inspector-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.inspector-city-name {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.inspector-city-ar {
+  font-size: var(--font-size-base);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.inspector-coords-badge {
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-xs);
+}
+
+.inspector-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inspector-close-btn:hover,
+.inspector-close-btn:focus-visible {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+/* Solar & Qibla Telemetry Strip */
+.inspector-telemetry-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+  background: rgba(6, 11, 25, 0.6);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-glass-border);
+}
+
+.telemetry-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.telemetry-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.telemetry-value {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+/* Next Prayer Progress Capsule */
+.inspector-next-capsule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid var(--color-glass-border-focus);
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-md);
+}
+
+.next-capsule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+}
+
+.next-capsule-name {
+  color: var(--color-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.next-capsule-timer {
+  color: var(--color-text-primary);
+  font-weight: 700;
+}
+
+/* Linear countdown bar */
+.next-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.next-progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: var(--radius-full);
+}
+
+/* Schedule Table */
+.inspector-schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.inspector-prayer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-sm);
+  border-inline-start: 3px solid transparent;
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.prayer-name-tag {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.prayer-name-tag .prayer-indicator-dot {
+  width: 6px;
+  height: 6px;
+}
+
+.inspector-prayer-row.active {
+  background: rgba(15, 23, 42, 0.95);
+  border-inline-start-color: var(--prayer-color);
+  color: var(--color-text-primary);
+  font-weight: 700;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+
+/* 4. 24-Hour Continuity Ribbon */
 .timeline-container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1024px;
   margin-inline: auto;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-sm);
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-lg);
 }
 
 .timeline-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.8rem;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--space-sm);
+}
+
+.timeline-title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
 }
 
 .timeline-title {
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-text-primary);
 }
 
-.timeline-stats {
-  display: flex;
-  gap: 1rem;
+.timeline-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-dim);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
 }
 
-.stat-label {
-  color: var(--color-text-muted);
+.timeline-stats-strip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  flex-wrap: wrap;
 }
 
-.stat-val {
+.stat-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: rgba(6, 11, 25, 0.6);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-glass-border);
+}
+
+.stat-chip-label {
+  color: var(--color-text-dim);
+}
+
+.stat-chip-val {
   color: var(--color-accent);
-  font-weight: 600;
+  font-weight: 700;
 }
 
+/* Precision Scrubber Track */
 .timeline-track-wrapper {
   position: relative;
   width: 100%;
   height: 48px;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
+  background: rgba(6, 11, 25, 0.7);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-sm);
   cursor: crosshair;
   overflow: visible;
-  margin-block-start: 1.5rem;
+  margin-block-start: var(--space-md);
 }
 
 .timeline-canvas {
   width: 100%;
-  height: 36px;
+  height: 32px;
   display: block;
 }
 
@@ -287,8 +906,8 @@ html, body {
   inset-block-start: -4px;
   inset-block-end: 12px;
   width: 2px;
-  background: #ffffff;
-  box-shadow: 0 0 8px #ffffff;
+  background: var(--color-white);
+  box-shadow: 0 0 8px var(--color-white);
   pointer-events: none;
   transform: translateX(-50%);
 }
@@ -299,182 +918,91 @@ html, body {
   inset-inline-start: 50%;
   transform: translateX(-50%);
   background: var(--color-accent);
-  color: #030712;
-  font-size: 0.65rem;
+  color: var(--color-obsidian-950);
+  font-size: var(--font-size-xs);
   font-family: var(--font-mono);
   font-weight: 700;
-  padding-block: 0.1rem;
-  padding-inline: 0.35rem;
-  border-radius: 3px;
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-xs);
+  border-radius: var(--radius-xs);
   white-space: nowrap;
 }
 
 .timeline-label-row {
   position: absolute;
   inset-block-end: 2px;
-  inset-inline-start: 0;
-  inset-inline-end: 0;
+  inset-inline-start: 0px;
+  inset-inline-end: 0px;
   display: flex;
   justify-content: space-between;
-  padding-inline: 0.25rem;
+  padding-inline: var(--space-xs);
   pointer-events: none;
 }
 
 .timeline-hour-label {
-  font-size: 0.6rem;
+  font-size: var(--font-size-xs);
   font-family: var(--font-mono);
-  color: var(--color-text-muted);
+  color: var(--color-text-dim);
 }
 
-/* Inspector Floating Modal */
-.inspector-panel {
-  position: absolute;
-  inset-block-start: 6rem;
-  inset-inline-start: 1rem;
-  width: 280px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  z-index: 50;
+/* Reduced Motion Compliance */
+@media (prefers-reduced-motion: no-preference) {
+  .btn-dock-pill,
+  .btn-prayer-pill,
+  .btn-quick-city,
+  .btn-convention-trigger,
+  .btn-follow-tour,
+  .search-result-item,
+  .inspector-prayer-row {
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  }
 }
 
-.inspector-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.inspector-city-name {
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-
-.inspector-city-ar {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
-}
-
-.inspector-coords {
-  font-size: 0.7rem;
-  font-family: var(--font-mono);
-  color: var(--color-text-muted);
-}
-
-.inspector-prayer-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  margin-block: 0.4rem;
-}
-
-.inspector-prayer-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.75rem;
-  font-family: var(--font-mono);
-  padding-block: 0.25rem;
-  padding-inline: 0.5rem;
-  border-radius: 4px;
-  border-inline-start: 3px solid transparent;
-  transition: all 0.15s ease;
-}
-
-.inspector-prayer-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-.inspector-prayer-item .legend-color-dot {
-  width: 7px;
-  height: 7px;
-  box-shadow: 0 0 4px var(--prayer-color);
-}
-
-.inspector-prayer-item.active {
-  background: color-mix(in srgb, var(--prayer-color) 16%, rgba(15, 23, 42, 0.85));
-  border-inline-start-color: var(--prayer-color);
-  color: #ffffff;
-  font-weight: 700;
-  box-shadow: 0 0 10px color-mix(in srgb, var(--prayer-color) 25%, transparent);
-}
-
-.inspector-close-btn {
-  background: none;
-  border: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  font-size: 1.1rem;
-}
-
-/* Responsive Mobile Layout */
+/* Mobile Responsive Adaptations */
 @media (max-width: 768px) {
   #hud-overlay {
-    padding-block: 0.5rem;
-    padding-inline: 0.5rem;
-    gap: 0.5rem;
+    padding-block: var(--space-sm);
+    padding-inline: var(--space-sm);
+    gap: var(--space-sm);
   }
 
   .hud-top-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
-    max-height: 48vh;
-    overflow-y: auto;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
   }
 
-  .brand-badge {
-    padding-block: 0.4rem;
-    padding-inline: 0.6rem;
+  .brand-section {
+    padding-block: var(--space-xs);
+    padding-inline: var(--space-sm);
   }
 
-  .brand-title {
-    font-size: 0.95rem;
+  .quick-cities-strip {
+    display: none;
   }
 
-  .brand-subtitle {
-    font-size: 0.65rem;
-  }
-
-  .hud-controls-box {
-    min-width: unset;
+  .city-search-box {
+    order: 3;
+    max-width: 100%;
     width: 100%;
-    padding-block: 0.5rem;
-    padding-inline: 0.6rem;
-    gap: 0.4rem;
   }
 
-  .control-btn-row {
-    gap: 0.25rem;
-  }
-
-  .btn-ctrl {
-    padding-block: 0.25rem;
-    padding-inline: 0.45rem;
-    font-size: 0.7rem;
+  .hud-dock {
+    gap: var(--space-xs);
+    padding-block: var(--space-xs);
+    padding-inline: var(--space-sm);
   }
 
   .inspector-panel {
     inset-block-start: auto;
-    inset-block-end: 6rem;
-    inset-inline-start: 0.5rem;
-    inset-inline-end: 0.5rem;
+    inset-block-end: 96px;
+    inset-inline-start: var(--space-sm);
+    inset-inline-end: var(--space-sm);
     width: auto;
-    max-width: 360px;
+    max-width: 380px;
     margin-inline: auto;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75);
   }
 
-  .timeline-header {
-    font-size: 0.7rem;
-    gap: 0.25rem;
-  }
-
-  .timeline-stats {
-    gap: 0.5rem;
-    font-size: 0.65rem;
-    flex-wrap: wrap;
+  .timeline-stats-strip {
+    gap: var(--space-xs);
   }
 }
-

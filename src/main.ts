@@ -83,6 +83,15 @@ export function initializeApp(): AppInstance {
       isNarrativeActive = !isNarrativeActive;
       narrativeDirector.setActive(isNarrativeActive);
     },
+    onSelectCity: (settlement) => {
+      globeScene.cameraRig.focusCoordinates(settlement.latitude, settlement.longitude, 10, true);
+      hud.inspector.inspectSettlement(settlement, clock.getTime());
+      updateUrlState({
+        lat: settlement.latitude,
+        lon: settlement.longitude,
+        time: clock.getTime(),
+      });
+    },
     onStyleChange: (style) => {
       updateUrlState({ style });
     },
@@ -96,6 +105,7 @@ export function initializeApp(): AppInstance {
     .then((settlements) => {
       settlementsList = settlements;
       globeScene.setSettlements(settlements);
+      hud.setSettlements(settlements);
 
       eventEngine = new AdhanEventEngine(settlements, {
         convention: initialConvention,
