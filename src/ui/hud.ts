@@ -784,7 +784,47 @@ export function createHudOverlay(
     });
     prayerSegment.appendChild(btn);
   }
-  controlsDock.appendChild(prayerSegment);
+  // Layers: prayer line toggles, convention and legend live in a popover above the dock
+  const layersPanel = document.createElement('div');
+  layersPanel.className = 'layers-panel hud-panel';
+
+  const layersTrigger = document.createElement('button');
+  layersTrigger.className = 'btn-layers-trigger';
+  layersTrigger.setAttribute('aria-haspopup', 'true');
+  layersTrigger.setAttribute('aria-expanded', 'false');
+  const layersTriggerLabel = document.createElement('span');
+  layersTriggerLabel.textContent = t.controls.layers;
+  const layersDots = document.createElement('span');
+  layersDots.className = 'layers-dots';
+  layersDots.setAttribute('aria-hidden', 'true');
+  for (const k of prayerKeys) {
+    const d = document.createElement('i');
+    d.style.setProperty('--prayer-color', `#${PRAYER_COLORS[k].toString(16).padStart(6, '0')}`);
+    layersDots.appendChild(d);
+  }
+  layersTrigger.appendChild(layersDots);
+  layersTrigger.appendChild(layersTriggerLabel);
+
+  const setLayersOpen = (open: boolean): void => {
+    layersPanel.classList.toggle('active', open);
+    layersTrigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  layersTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setLayersOpen(!layersPanel.classList.contains('active'));
+  });
+  const onLayersOutsideClick = (e: MouseEvent): void => {
+    const target = e.target as Node;
+    if (!layersPanel.contains(target) && !layersTrigger.contains(target)) setLayersOpen(false);
+  };
+  const onLayersEscape = (e: KeyboardEvent): void => {
+    if (e.key === 'Escape') setLayersOpen(false);
+  };
+  document.addEventListener('click', onLayersOutsideClick);
+  document.addEventListener('keydown', onLayersEscape);
+
+  layersPanel.appendChild(prayerSegment);
+  controlsDock.appendChild(layersTrigger);
 
   // Custom Convention Selector Dropdown
   const convWrapper = document.createElement('div');
@@ -835,7 +875,20 @@ export function createHudOverlay(
 
   convWrapper.appendChild(convTrigger);
   convWrapper.appendChild(convMenu);
-  controlsDock.appendChild(convWrapper);
+  layersPanel.appendChild(convWrapper);
+
+  const legend = document.createElement('ul');
+  legend.className = 'layers-legend';
+  const legendLines = document.createElement('li');
+  const legendRings = document.createElement('li');
+  const legendArcs = document.createElement('li');
+  legendLines.textContent = t.controls.legendLines;
+  legendRings.textContent = t.controls.legendRings;
+  legendArcs.textContent = t.controls.legendArcs;
+  legend.appendChild(legendLines);
+  legend.appendChild(legendRings);
+  legend.appendChild(legendArcs);
+  layersPanel.appendChild(legend);
 
   // Follow Adhan Tour Button
   const followBtn = document.createElement('button');
@@ -874,9 +927,40 @@ export function createHudOverlay(
   });
 
   // Group controls dock and timeline ribbon into bottom stack
+  bottomStack.appendChild(layersPanel);
   bottomStack.appendChild(controlsDock);
   bottomStack.appendChild(timeline.element);
   root.appendChild(bottomStack);
+
+  // First-visit hint: shown once, fades on its own or on first interaction
+  const HINT_KEY = 'adhan-earth-hint-seen';
+  let hintSeen = false;
+  try {
+    hintSeen = window.localStorage.getItem(HINT_KEY) === '1';
+  } catch {
+    hintSeen = true; // storage blocked: skip the hint rather than show it every visit
+  }
+  const hintEl = document.createElement('div');
+  hintEl.className = 'first-visit-hint hud-panel';
+  hintEl.setAttribute('role', 'status');
+  hintEl.textContent = t.controls.hint;
+  let hintTimer: number | undefined;
+  const dismissHint = (): void => {
+    window.clearTimeout(hintTimer);
+    hintEl.classList.remove('visible');
+    document.removeEventListener('pointerdown', dismissHint);
+  };
+  if (!hintSeen) {
+    root.appendChild(hintEl);
+    requestAnimationFrame(() => hintEl.classList.add('visible'));
+    hintTimer = window.setTimeout(dismissHint, 9000);
+    document.addEventListener('pointerdown', dismissHint);
+    try {
+      window.localStorage.setItem(HINT_KEY, '1');
+    } catch {
+      // ignore: hint just shows again next visit
+    }
+  }
 
   const unsubscribeLocale = i18n.onLocaleChange((locale, newTrans) => {
     currentLocale = locale;
@@ -894,6 +978,11 @@ export function createHudOverlay(
 
     if (speedLabel) speedLabel.textContent = t.controls.time;
     placesTriggerLabel.textContent = t.controls.places;
+    layersTriggerLabel.textContent = t.controls.layers;
+    legendLines.textContent = t.controls.legendLines;
+    legendRings.textContent = t.controls.legendRings;
+    legendArcs.textContent = t.controls.legendArcs;
+    hintEl.textContent = t.controls.hint;
     fsBtn.setAttribute('aria-label', t.controls.fullscreen);
     fsBtn.title = `${t.controls.fullscreen} (F)`;
     focusBtn.setAttribute('aria-label', t.controls.zenMode);
@@ -945,6 +1034,9 @@ export function createHudOverlay(
   const dispose = (): void => {
     unsubscribeLocale();
     document.removeEventListener('keydown', onHotkey);
+    document.removeEventListener('click', onLayersOutsideClick);
+    document.removeEventListener('keydown', onLayersEscape);
+    dismissHint();
     document.removeEventListener('pointermove', onPointerActivity);
     document.removeEventListener('fullscreenchange', onFullscreenChange);
     window.clearTimeout(restoreFadeTimer);

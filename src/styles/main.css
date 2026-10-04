@@ -1049,6 +1049,7 @@ html, body {
 
   .city-search-box {
     order: 3;
+    flex: 1 1 100%;
     max-width: 100%;
     width: 100%;
   }
@@ -1286,4 +1287,109 @@ html, body {
 
 .focus-restore:focus-visible {
   opacity: 1;
+}
+
+/* Layers popover: prayer line toggles, convention and legend above the dock */
+.btn-layers-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: rgba(6, 11, 25, 0.65);
+  border: 1px solid var(--color-glass-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.btn-layers-trigger:hover,
+.btn-layers-trigger:focus-visible,
+.btn-layers-trigger[aria-expanded='true'] {
+  color: var(--color-text-primary);
+  border-color: var(--color-glass-border-focus);
+  outline: none;
+}
+
+.layers-dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.layers-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--prayer-color);
+}
+
+.layers-panel {
+  display: none;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border-radius: var(--radius-lg);
+  max-width: min(640px, calc(100vw - var(--space-md) * 2));
+}
+
+.layers-panel.active {
+  display: flex;
+}
+
+.layers-panel .dock-segment {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.layers-panel .convention-menu-wrapper {
+  align-self: center;
+}
+
+.layers-legend {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-block-start: var(--space-sm);
+  border-block-start: 1px solid var(--color-glass-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+}
+
+/* First-visit hint */
+.first-visit-hint {
+  position: absolute;
+  inset-inline: 0px;
+  inset-block-end: 200px;
+  margin-inline: auto;
+  width: fit-content;
+  max-width: calc(100vw - var(--space-lg) * 2);
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.first-visit-hint.visible {
+  opacity: 1;
+}
+
+/* Convention menu opens downward inside the Layers panel so it never covers the line toggles */
+.layers-panel .convention-dropdown-menu {
+  inset-block-end: auto;
+  inset-block-start: calc(100% + var(--space-xs));
+}
+
+.layers-panel {
+  position: relative;
+  z-index: var(--z-dropdown);
 }

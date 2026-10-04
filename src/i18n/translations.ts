@@ -20,6 +20,11 @@ export interface Translations {
     zenMode: string;
     fullscreen: string;
     places: string;
+    layers: string;
+    legendLines: string;
+    legendRings: string;
+    legendArcs: string;
+    hint: string;
     language: string;
   };
   prayers: {
@@ -47,6 +52,9 @@ export interface Translations {
     peakFront: string;
     unbroken: string;
     cities: string;
+    coverageTip: string;
+    gapTip: string;
+    peakTip: string;
   };
 }
 
@@ -69,6 +77,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'Toggle clean planetary view',
       fullscreen: 'Full screen',
       places: 'Places',
+      layers: 'Layers',
+      legendLines: 'Lines: where each prayer time is starting right now.',
+      legendRings: 'Rings and beams: cities where the adhan is being called now.',
+      legendArcs: 'Arcs: the direction from a city to Makkah.',
+      hint: 'Drag to rotate · Scroll to zoom · H hides controls · F full screen',
       language: 'Language',
     },
     prayers: {
@@ -91,11 +104,14 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
     timeline: {
       title: 'Continuous Planetary Adhān',
       subtitle: '24-Hour Solar Traversal',
-      coverage: 'Coverage',
-      longestGap: 'Longest Gap',
-      peakFront: 'Peak Front',
-      unbroken: '0s (Unbroken)',
+      coverage: 'Adhan somewhere',
+      longestGap: 'Longest silence',
+      peakFront: 'Busiest moment',
+      unbroken: 'None',
       cities: 'cities',
+      coverageTip: 'Share of the day when the adhan is being called somewhere on Earth.',
+      gapTip: 'Longest stretch of the day with no adhan anywhere on Earth.',
+      peakTip: 'Most cities calling the adhan at the same time.',
     },
   },
 
@@ -117,6 +133,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'عرض الكوكب النقي',
       fullscreen: 'ملء الشاشة',
       places: 'أماكن',
+      layers: 'الطبقات',
+      legendLines: 'الخطوط: أين يدخل وقت كل صلاة الآن.',
+      legendRings: 'الحلقات والأعمدة: مدن يُرفع فيها الأذان الآن.',
+      legendArcs: 'الأقواس: اتجاه المدينة نحو مكة.',
+      hint: 'اسحب للتدوير · مرّر للتقريب · H لإخفاء الأدوات · F لملء الشاشة',
       language: 'اللغة',
     },
     prayers: {
@@ -144,6 +165,9 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       peakFront: 'ذروة المدن المتزامنة',
       unbroken: '0 ثانية (مستمر دون انقطاع)',
       cities: 'مدينة',
+      coverageTip: 'نسبة اليوم التي يُرفع فيها الأذان في مكان ما على الأرض.',
+      gapTip: 'أطول فترة في اليوم لا يُرفع فيها أذان في أي مكان.',
+      peakTip: 'أكبر عدد من المدن يرفع الأذان في اللحظة نفسها.',
     },
   },
 
@@ -165,6 +189,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'Sade küre görünümü',
       fullscreen: 'Tam ekran',
       places: 'Yerler',
+      layers: 'Katmanlar',
+      legendLines: 'Çizgiler: her vaktin şu anda girdiği yer.',
+      legendRings: 'Halkalar ve sütunlar: ezanın şu anda okunduğu şehirler.',
+      legendArcs: 'Yaylar: şehirden Mekke’ye yön.',
+      hint: 'Döndürmek için sürükleyin · Yakınlaştırmak için kaydırın · H: arayüzü gizle · F: tam ekran',
       language: 'Dil',
     },
     prayers: {
@@ -192,6 +221,9 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       peakFront: 'Eşzamanlı Zirve',
       unbroken: '0 sn (Kesintisiz)',
       cities: 'şehir',
+      coverageTip: 'Günün, dünyanın bir yerinde ezan okunan oranı.',
+      gapTip: 'Günün, dünyanın hiçbir yerinde ezan okunmayan en uzun süresi.',
+      peakTip: 'Aynı anda ezan okunan en çok şehir sayısı.',
     },
   },
 
@@ -213,6 +245,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'Tampilan bumi murni',
       fullscreen: 'Layar penuh',
       places: 'Tempat',
+      layers: 'Lapisan',
+      legendLines: 'Garis: tempat waktu salat tiba sekarang.',
+      legendRings: 'Cincin dan pilar: kota yang sedang mengumandangkan azan.',
+      legendArcs: 'Busur: arah dari kota ke Makkah.',
+      hint: 'Seret untuk memutar · Gulir untuk zoom · H sembunyikan kontrol · F layar penuh',
       language: 'Bahasa',
     },
     prayers: {
@@ -240,6 +277,9 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       peakFront: 'Puncak Bersamaan',
       unbroken: '0 detik (Tanpa Henti)',
       cities: 'kota',
+      coverageTip: 'Bagian hari ketika azan berkumandang di suatu tempat di Bumi.',
+      gapTip: 'Jeda terpanjang dalam sehari tanpa azan di mana pun di Bumi.',
+      peakTip: 'Jumlah kota terbanyak yang mengumandangkan azan bersamaan.',
     },
   },
 
@@ -261,6 +301,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'Paparan bumi penuh',
       fullscreen: 'Skrin penuh',
       places: 'Tempat',
+      layers: 'Lapisan',
+      legendLines: 'Garisan: tempat waktu solat bermula sekarang.',
+      legendRings: 'Cincin dan tiang: bandar yang sedang melaungkan azan.',
+      legendArcs: 'Lengkung: arah dari bandar ke Makkah.',
+      hint: 'Seret untuk putar · Tatal untuk zum · H sembunyi kawalan · F skrin penuh',
       language: 'Bahasa',
     },
     prayers: {
@@ -288,6 +333,9 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       peakFront: 'Kemuncak Serentak',
       unbroken: '0 saat (Tanpa Putus)',
       cities: 'bandar',
+      coverageTip: 'Bahagian hari azan berkumandang di suatu tempat di Bumi.',
+      gapTip: 'Tempoh terpanjang dalam sehari tanpa azan di mana-mana di Bumi.',
+      peakTip: 'Bilangan bandar terbanyak melaungkan azan serentak.',
     },
   },
 
@@ -309,6 +357,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'خالص سیاروی منظر',
       fullscreen: 'مکمل اسکرین',
       places: 'مقامات',
+      layers: 'تہیں',
+      legendLines: 'لکیریں: اس وقت ہر نماز کا وقت کہاں شروع ہو رہا ہے۔',
+      legendRings: 'حلقے اور ستون: وہ شہر جہاں اس وقت اذان ہو رہی ہے۔',
+      legendArcs: 'کمانیں: شہر سے مکہ کی سمت۔',
+      hint: 'گھمانے کے لیے گھسیٹیں · زوم کے لیے اسکرول کریں · H کنٹرول چھپائیں · F مکمل اسکرین',
       language: 'زبان',
     },
     prayers: {
@@ -336,6 +389,9 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       peakFront: 'بیک وقت اذان والے شہر',
       unbroken: '0 سیکنڈ (مسلسل)',
       cities: 'شہر',
+      coverageTip: 'دن کا وہ حصہ جس میں زمین پر کہیں نہ کہیں اذان ہو رہی ہوتی ہے۔',
+      gapTip: 'دن کا سب سے لمبا وقفہ جس میں زمین پر کہیں اذان نہیں ہوتی۔',
+      peakTip: 'ایک ہی وقت میں اذان دینے والے شہروں کی سب سے زیادہ تعداد۔',
     },
   },
 
@@ -357,6 +413,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'نمای خالص کره زمین',
       fullscreen: 'تمام صفحه',
       places: 'مکان‌ها',
+      layers: 'لایه‌ها',
+      legendLines: 'خط‌ها: جایی که اکنون وقت هر نماز آغاز می‌شود.',
+      legendRings: 'حلقه‌ها و ستون‌ها: شهرهایی که اکنون اذان می‌گویند.',
+      legendArcs: 'کمان‌ها: جهت از شهر به مکه.',
+      hint: 'برای چرخاندن بکشید · برای بزرگنمایی اسکرول کنید · H پنهان‌کردن کنترل‌ها · F تمام‌صفحه',
       language: 'زبان',
     },
     prayers: {
@@ -384,6 +445,9 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       peakFront: 'اوج شهرهای همزمان',
       unbroken: '0 ثانیه (پیوسته و بدون وقفه)',
       cities: 'شهر',
+      coverageTip: 'بخشی از روز که در جایی از زمین اذان گفته می‌شود.',
+      gapTip: 'طولانی‌ترین بازه روز که در هیچ جای زمین اذان گفته نمی‌شود.',
+      peakTip: 'بیشترین تعداد شهرهایی که هم‌زمان اذان می‌گویند.',
     },
   },
 
@@ -405,6 +469,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'পরিচ্ছন্ন গ্রহ দৃশ্য',
       fullscreen: 'পূর্ণ পর্দা',
       places: 'স্থান',
+      layers: 'স্তর',
+      legendLines: 'রেখা: এখন যেখানে প্রতিটি নামাজের ওয়াক্ত শুরু হচ্ছে।',
+      legendRings: 'বলয় ও স্তম্ভ: এখন যে শহরগুলোতে আজান হচ্ছে।',
+      legendArcs: 'চাপ: শহর থেকে মক্কার দিক।',
+      hint: 'ঘোরাতে টানুন · জুম করতে স্ক্রল করুন · H নিয়ন্ত্রণ লুকান · F পূর্ণ পর্দা',
       language: 'ভাষা',
     },
     prayers: {
@@ -432,6 +501,9 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       peakFront: 'একযোগে সর্বোচ্চ শহর',
       unbroken: '0 সেকেন্ড (অবিচ্ছিন্ন)',
       cities: 'শহর',
+      coverageTip: 'দিনের যে অংশে পৃথিবীর কোথাও না কোথাও আজান হয়।',
+      gapTip: 'দিনের সবচেয়ে দীর্ঘ সময় যখন পৃথিবীর কোথাও আজান হয় না।',
+      peakTip: 'একই সময়ে আজান দেওয়া শহরের সর্বোচ্চ সংখ্যা।',
     },
   },
 
@@ -453,6 +525,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'Vue planétaire épurée',
       fullscreen: 'Plein écran',
       places: 'Lieux',
+      layers: 'Calques',
+      legendLines: 'Lignes : où l’heure de chaque prière commence en ce moment.',
+      legendRings: 'Anneaux et colonnes : villes où l’adhan est appelé maintenant.',
+      legendArcs: 'Arcs : direction de la ville vers La Mecque.',
+      hint: 'Glissez pour tourner · Faites défiler pour zoomer · H masque les commandes · F plein écran',
       language: 'Langue',
     },
     prayers: {
@@ -480,6 +557,9 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       peakFront: 'Pic de villes simultanées',
       unbroken: '0s (Ininterrompu)',
       cities: 'villes',
+      coverageTip: 'Part de la journée où l’adhan retentit quelque part sur Terre.',
+      gapTip: 'Plus longue période de la journée sans adhan nulle part sur Terre.',
+      peakTip: 'Plus grand nombre de villes appelant l’adhan en même temps.',
     },
   },
 
@@ -501,6 +581,11 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       zenMode: 'Чистый вид планеты',
       fullscreen: 'Во весь экран',
       places: 'Места',
+      layers: 'Слои',
+      legendLines: 'Линии: где сейчас наступает время каждой молитвы.',
+      legendRings: 'Кольца и столбы: города, где сейчас звучит азан.',
+      legendArcs: 'Дуги: направление от города к Мекке.',
+      hint: 'Тяните, чтобы вращать · Прокрутка для масштаба · H скрыть панели · F полный экран',
       language: 'Язык',
     },
     prayers: {
@@ -528,6 +613,9 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       peakFront: 'Пик одновременных городов',
       unbroken: '0 сек (Непрерывно)',
       cities: 'городов',
+      coverageTip: 'Доля суток, когда азан звучит где-нибудь на Земле.',
+      gapTip: 'Самый долгий промежуток суток без азана на всей Земле.',
+      peakTip: 'Наибольшее число городов, где азан звучит одновременно.',
     },
   },
 };

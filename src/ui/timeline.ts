@@ -48,6 +48,15 @@ export function createTimelineUI(
     </div>
   `;
 
+  const applyChipTips = (): void => {
+    const tips = [trans.timeline.coverageTip, trans.timeline.gapTip, trans.timeline.peakTip];
+    statsStrip.querySelectorAll('.stat-chip').forEach((chip, i) => {
+      chip.setAttribute('title', tips[i] ?? '');
+      chip.setAttribute('tabindex', '0');
+    });
+  };
+  applyChipTips();
+
   header.appendChild(titleGroup);
   header.appendChild(statsStrip);
   container.appendChild(header);
@@ -179,6 +188,7 @@ export function createTimelineUI(
     if (gapLabel) gapLabel.textContent = trans.timeline.longestGap;
     const peakLabel = container.querySelector('#stat-peak-label');
     if (peakLabel) peakLabel.textContent = trans.timeline.peakFront;
+    applyChipTips();
 
     if (currentStats) {
       updateStats(currentStats);
