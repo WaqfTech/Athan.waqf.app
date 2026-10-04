@@ -8,7 +8,7 @@ Always read and strictly adhere to the universal agent operating rules located a
 - Core 3D engine: Three.js (v0.180+) with custom GLSL shaders for day and night terminator, atmosphere glow, and GPU-instanced settlements.
 - Astronomy: Pure TypeScript solar position and Julian date algorithms (NOAA and Meeus).
 - Prayer calculations: Pure TypeScript astronomical and fiqh calculation engine.
-- Build tool: Vite with static output suitable for GitHub Pages.
+- Build tool: Vite with static output suitable for Cloudflare Workers Static Assets or GitHub Pages.
 - Package manager: aube, aubr, aubx; otherwise pnpm. Never use npm or yarn.
 - Test runner: Vitest.
 
@@ -19,6 +19,8 @@ Always read and strictly adhere to the universal agent operating rules located a
 - Run tests: `aube test` (or `pnpm test`)
 - Typecheck and build: `aube build` (or `pnpm build`)
 - Preview production build: `aube run preview` (or `pnpm preview`)
+- Deploy dry-run: `aube run deploy:dry` (or `pnpm run deploy:dry`)
+- Deploy to Cloudflare: `aube run deploy` (or `pnpm run deploy`)
 
 ## Key Codebase Conventions
 

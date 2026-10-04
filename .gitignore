@@ -17,5 +17,8 @@ rm/
 .DS_Store
 *.log
 
+# Sila internal database and locks
+.sila/
+
 # Ephemeral goal claim locks (managed by sila)
 goals/*/claim.json

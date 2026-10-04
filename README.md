@@ -12,7 +12,7 @@ Adhan Earth is an interactive 3D planetary observatory. It displays Earth in spa
 - 24-hour continuity timeline ribbon with statistical metrics proving uninterrupted global adhan coverage.
 - Interactive inspector panel displaying 5 prayer times, current period, and countdown for any city or coordinate.
 - Follow the Adhan cinematic camera director tracking active prayer fronts westward around the world.
-- Zero-backend static architecture designed for free hosting on GitHub Pages.
+- Zero-backend static architecture deployable to Cloudflare Workers Static Assets or GitHub Pages.
 
 ## Getting Started
 
@@ -53,6 +53,13 @@ Preview Production Build:
 aube run preview
 # or
 pnpm preview
+```
+
+Cloudflare Deployment:
+```bash
+aube run deploy:dry
+# or deploy
+aube run deploy
 ```
 
 ## Mathematical Models

@@ -1,7 +1,7 @@
 # Plan: Configure Cloudflare Worker for athan.waqf.dev
 
 ## Execution Steps
-- [ ] **Phase 1 — Contracts & Schemas**: Define models, data structures, and signatures.
-- [ ] **Phase 2 — Core Implementation**: Implement business logic, routes, and error handling.
-- [ ] **Phase 3 — Verification & Tests**: Write unit tests and run end-to-end verification.
-- [ ] **Phase 4 — Attribution Commit**: Commit with `(goals/cloudflare-worker-athan-waqf-dev/goal.md)` using a `feat:`, `fix:`, `refactor:`, `perf:`, or `chore:` subject (docs/test commits are ignored), then run `sila goals`.
+- [x] Phase 1: Contracts and Schemas. Define wrangler.jsonc with Workers Static Assets, account ID, and athan.waqf.dev route.
+- [x] Phase 2: Core Configuration. Add deploy and deploy:dry npm scripts to package.json, update .gitignore for .sila.
+- [x] Phase 3: Verification and Tests. Run aube test, aube build, and wrangler deploy --dry-run locally.
+- [x] Phase 4: Attribution Commit. Commit with (goals/cloudflare-worker-athan-waqf-dev/goal.md) using feat: prefix, then run sila goals.
