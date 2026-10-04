@@ -21,6 +21,8 @@ export interface HudOverlay {
   updateStats: (stats: ContinuityStats) => void;
   updateTime: (date: Date) => void;
   setSettlements: (settlements: Settlement[]) => void;
+  /** Shows the Follow Adhan caption for the current target, or hides it when prayer is null. */
+  setNowPlaying: (prayer: PrayerFrontKey | null, city?: string) => void;
   onFollowAdhanToggle?: (active: boolean) => void;
   dispose: () => void;
 }
@@ -493,7 +495,7 @@ export function createHudOverlay(
 
   const langTrigger = document.createElement('button');
   langTrigger.className = 'btn-lang-trigger';
-  langTrigger.setAttribute('aria-label', 'Select interface language');
+  langTrigger.setAttribute('aria-label', t.controls.language);
   langTrigger.setAttribute('aria-expanded', 'false');
   langTrigger.setAttribute('aria-haspopup', 'listbox');
 
@@ -615,6 +617,52 @@ export function createHudOverlay(
     topBar.appendChild(fsBtn);
   }
 
+  // Share: native share sheet where available, otherwise copy the link
+  const toast = document.createElement('div');
+  toast.className = 'hud-toast hud-panel';
+  toast.setAttribute('role', 'status');
+  let toastTimer: number | undefined;
+  const showToast = (text: string): void => {
+    toast.textContent = text;
+    toast.classList.add('visible');
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => toast.classList.remove('visible'), 2200);
+  };
+
+  const shareBtn = document.createElement('button');
+  shareBtn.className = 'btn-icon-toggle';
+  shareBtn.setAttribute('aria-label', t.controls.share);
+  shareBtn.title = t.controls.share;
+  shareBtn.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="18" cy="5" r="3"/>
+      <circle cx="6" cy="12" r="3"/>
+      <circle cx="18" cy="19" r="3"/>
+      <line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/>
+      <line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/>
+    </svg>
+  `;
+  shareBtn.addEventListener('click', () => {
+    const url = new URL(window.location.href);
+    // A live view should stay live for whoever opens the link
+    if (clock.isLive()) url.searchParams.delete('t');
+    if (typeof navigator.share === 'function') {
+      navigator.share({ title: t.brand.title, url: url.toString() }).catch(() => {
+        // User dismissed the share sheet; nothing to do.
+      });
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(url.toString()).then(
+        () => showToast(t.controls.linkCopied),
+        () => {
+          // Clipboard blocked by the browser; leave the URL bar as the fallback.
+        },
+      );
+    }
+  });
+  if (typeof navigator.share === 'function' || navigator.clipboard) {
+    topBar.appendChild(shareBtn);
+  }
+
   // Focus mode: hides every HUD element, leaving only a small restore button that fades when idle
   const focusBtn = document.createElement('button');
   focusBtn.className = 'btn-icon-toggle';
@@ -626,6 +674,13 @@ export function createHudOverlay(
       <line x1="3" y1="21" x2="21" y2="3"/>
     </svg>
   `;
+  const helpBtn = document.createElement('button');
+  helpBtn.className = 'btn-icon-toggle btn-help';
+  helpBtn.setAttribute('aria-label', t.controls.shortcuts);
+  helpBtn.setAttribute('aria-expanded', 'false');
+  helpBtn.title = `${t.controls.shortcuts} (?)`;
+  helpBtn.textContent = '?';
+  topBar.appendChild(helpBtn);
   topBar.appendChild(focusBtn);
 
   const restoreBtn = document.createElement('button');
@@ -673,8 +728,14 @@ export function createHudOverlay(
       setFocusMode(!isFocusMode);
     } else if (key === 'f' && document.fullscreenEnabled) {
       toggleFullscreen();
-    } else if (key === 'escape' && isFocusMode) {
-      setFocusMode(false);
+    } else if (key === '/') {
+      e.preventDefault();
+      searchInput.focus();
+    } else if (key === '?') {
+      setShortcutsOpen(!shortcutsPanel.classList.contains('active'));
+    } else if (key === 'escape') {
+      if (shortcutsPanel.classList.contains('active')) setShortcutsOpen(false);
+      else if (isFocusMode) setFocusMode(false);
     }
   };
   document.addEventListener('keydown', onHotkey);
@@ -763,7 +824,8 @@ export function createHudOverlay(
     const btn = document.createElement('button');
     btn.className = 'btn-prayer-pill active';
     btn.setAttribute('data-prayer', k);
-    btn.setAttribute('aria-label', `Toggle ${k} prayer front`);
+    btn.setAttribute('aria-label', t.prayers[k] || k);
+    btn.setAttribute('aria-pressed', 'true');
     btn.style.setProperty('--prayer-color', hexColor);
 
     const dot = document.createElement('span');
@@ -780,6 +842,7 @@ export function createHudOverlay(
     btn.addEventListener('click', () => {
       visible = !visible;
       btn.classList.toggle('active', visible);
+      btn.setAttribute('aria-pressed', visible ? 'true' : 'false');
       globeScene.prayerFronts.setVisibility(k, visible);
     });
     prayerSegment.appendChild(btn);
@@ -832,7 +895,7 @@ export function createHudOverlay(
 
   const convTrigger = document.createElement('button');
   convTrigger.className = 'btn-convention-trigger';
-  convTrigger.setAttribute('aria-label', 'Prayer calculation convention');
+  convTrigger.setAttribute('aria-label', t.controls.convention);
   convTrigger.innerHTML = `
     <span id="active-conv-name">Umm al-Qura</span>
     <span aria-hidden="true" style="font-size: 10px; opacity: 0.7;">▾</span>
@@ -913,9 +976,19 @@ export function createHudOverlay(
   const inspector = createInspectorPanel({
     onOpen: () => {
       root.classList.add('has-inspector-open');
+      // Slide the globe clear of the panel: sideways on desktop, upward above the bottom sheet on phones
+      if (window.innerWidth > 640) {
+        const dir = document.documentElement.dir === 'rtl' ? -1 : 1;
+        globeScene.cameraRig.setViewShift(dir * 150, 0);
+      } else {
+        globeScene.cameraRig.setViewShift(0, -window.innerHeight * 0.25);
+      }
+      globeScene.cameraRig.setAutoRotateAllowed(false);
     },
     onClose: () => {
       root.classList.remove('has-inspector-open');
+      globeScene.cameraRig.setViewShift(0, 0);
+      globeScene.cameraRig.setAutoRotateAllowed(true);
       globeScene.qiblaArcs.clearInspectedCity();
     },
   });
@@ -931,6 +1004,74 @@ export function createHudOverlay(
   bottomStack.appendChild(controlsDock);
   bottomStack.appendChild(timeline.element);
   root.appendChild(bottomStack);
+
+  root.appendChild(toast);
+
+  // Follow Adhan caption: what the tour is looking at right now
+  const nowPlayingEl = document.createElement('div');
+  nowPlayingEl.className = 'now-playing hud-panel';
+  nowPlayingEl.setAttribute('role', 'status');
+  let nowPlaying: { prayer: PrayerFrontKey; city: string } | null = null;
+  const renderNowPlaying = (): void => {
+    nowPlayingEl.innerHTML = '';
+    if (!nowPlaying) {
+      nowPlayingEl.classList.remove('active');
+      return;
+    }
+    const dot = document.createElement('span');
+    dot.className = 'prayer-indicator-dot';
+    dot.style.setProperty('--prayer-color', `#${PRAYER_COLORS[nowPlaying.prayer].toString(16).padStart(6, '0')}`);
+    const text = document.createElement('span');
+    text.textContent = `${t.prayers[nowPlaying.prayer] || nowPlaying.prayer} · ${nowPlaying.city}`;
+    nowPlayingEl.appendChild(dot);
+    nowPlayingEl.appendChild(text);
+    nowPlayingEl.classList.add('active');
+  };
+  const setNowPlaying = (prayer: PrayerFrontKey | null, city = ''): void => {
+    nowPlaying = prayer ? { prayer, city } : null;
+    renderNowPlaying();
+  };
+  bottomStack.insertBefore(nowPlayingEl, bottomStack.firstChild);
+
+  // Keyboard shortcuts panel
+  const shortcutsPanel = document.createElement('div');
+  shortcutsPanel.className = 'shortcuts-panel hud-panel';
+  shortcutsPanel.setAttribute('role', 'dialog');
+  shortcutsPanel.setAttribute('aria-label', t.controls.shortcuts);
+  const shortcutsTitle = document.createElement('div');
+  shortcutsTitle.className = 'shortcuts-title';
+  shortcutsTitle.textContent = t.controls.shortcuts;
+  shortcutsPanel.appendChild(shortcutsTitle);
+  const shortcutRows: { key: string; label: () => string; el: HTMLElement }[] = [];
+  const shortcutDefs: { key: string; label: () => string }[] = [
+    { key: 'H', label: () => t.controls.zenMode },
+    { key: 'F', label: () => t.controls.fullscreen },
+    { key: '/', label: () => t.controls.search },
+    { key: '?', label: () => t.controls.shortcuts },
+  ];
+  for (const def of shortcutDefs) {
+    const row = document.createElement('div');
+    row.className = 'shortcut-row';
+    const kbd = document.createElement('kbd');
+    kbd.textContent = def.key;
+    const desc = document.createElement('span');
+    desc.textContent = def.label();
+    row.appendChild(kbd);
+    row.appendChild(desc);
+    shortcutsPanel.appendChild(row);
+    shortcutRows.push({ ...def, el: desc });
+  }
+  const setShortcutsOpen = (open: boolean): void => {
+    shortcutsPanel.classList.toggle('active', open);
+    helpBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  };
+  root.appendChild(shortcutsPanel);
+  const onShortcutsOutsideClick = (e: MouseEvent): void => {
+    const target = e.target as Node;
+    if (!shortcutsPanel.contains(target) && !helpBtn.contains(target)) setShortcutsOpen(false);
+  };
+  document.addEventListener('click', onShortcutsOutsideClick);
+  helpBtn.addEventListener('click', () => setShortcutsOpen(!shortcutsPanel.classList.contains('active')));
 
   // First-visit hint: shown once, fades on its own or on first interaction
   const HINT_KEY = 'adhan-earth-hint-seen';
@@ -979,6 +1120,16 @@ export function createHudOverlay(
     if (speedLabel) speedLabel.textContent = t.controls.time;
     placesTriggerLabel.textContent = t.controls.places;
     layersTriggerLabel.textContent = t.controls.layers;
+    langTrigger.setAttribute('aria-label', t.controls.language);
+    convTrigger.setAttribute('aria-label', t.controls.convention);
+    shareBtn.setAttribute('aria-label', t.controls.share);
+    shareBtn.title = t.controls.share;
+    helpBtn.setAttribute('aria-label', t.controls.shortcuts);
+    helpBtn.title = `${t.controls.shortcuts} (?)`;
+    shortcutsPanel.setAttribute('aria-label', t.controls.shortcuts);
+    shortcutsTitle.textContent = t.controls.shortcuts;
+    for (const row of shortcutRows) row.el.textContent = row.label();
+    renderNowPlaying();
     legendLines.textContent = t.controls.legendLines;
     legendRings.textContent = t.controls.legendRings;
     legendArcs.textContent = t.controls.legendArcs;
@@ -994,6 +1145,7 @@ export function createHudOverlay(
 
     for (const [k, lbl] of prayerLabels.entries()) {
       lbl.textContent = t.prayers[k] || k;
+      lbl.parentElement?.setAttribute('aria-label', t.prayers[k] || k);
     }
 
     if (followBtnSpan) {
@@ -1034,6 +1186,8 @@ export function createHudOverlay(
   const dispose = (): void => {
     unsubscribeLocale();
     document.removeEventListener('keydown', onHotkey);
+    document.removeEventListener('click', onShortcutsOutsideClick);
+    window.clearTimeout(toastTimer);
     document.removeEventListener('click', onLayersOutsideClick);
     document.removeEventListener('keydown', onLayersEscape);
     dismissHint();
@@ -1052,6 +1206,7 @@ export function createHudOverlay(
     updateStats,
     updateTime,
     setSettlements,
+    setNowPlaying,
     dispose,
   };
 }

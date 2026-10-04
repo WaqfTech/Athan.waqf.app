@@ -7,6 +7,7 @@ import { loadSettlements, Settlement } from './population/loader';
 import { AdhanEventEngine } from './simulation/eventEngine';
 import { computeGlobalAdhanContinuity } from './simulation/continuity';
 import { createNarrativeDirector, NarrativeDirector } from './simulation/narrative';
+import type { PrayerFrontKey } from './globe/fronts';
 import { parseUrlState, updateUrlState } from './ui/urlState';
 import { CALCULATION_CONVENTIONS, CalculationConventionName } from './prayer/conventions';
 import { i18n } from './i18n';
@@ -67,7 +68,9 @@ export function initializeApp(): AppInstance {
     globeScene.cameraRig.focusCoordinates(urlState.lat, urlState.lon, 12);
   }
 
-  const narrativeDirector = createNarrativeDirector(globeScene.cameraRig);
+  const narrativeDirector = createNarrativeDirector(globeScene.cameraRig, (settlement, prayer) => {
+    hud.setNowPlaying(prayer as PrayerFrontKey, settlement.name);
+  });
 
   const hud = createHudOverlay(clock, globeScene, {
     onConventionChange: (convName) => {
@@ -83,6 +86,7 @@ export function initializeApp(): AppInstance {
     onFollowAdhan: () => {
       isNarrativeActive = !isNarrativeActive;
       narrativeDirector.setActive(isNarrativeActive);
+      if (!isNarrativeActive) hud.setNowPlaying(null);
     },
     onSelectCity: (settlement) => {
       globeScene.cameraRig.focusCoordinates(settlement.latitude, settlement.longitude, 14, true);

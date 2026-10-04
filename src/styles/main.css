@@ -15,7 +15,7 @@
   --color-text-primary: #f8fafc;
   --color-text-secondary: #cbd5e1;
   --color-text-muted: #94a3b8;
-  --color-text-dim: #64748b;
+  --color-text-dim: #8091a7;
   --color-white: #ffffff;
   --color-black: #000000;
   --color-emerald: #10b981;
@@ -1392,4 +1392,98 @@ html, body {
 .layers-panel {
   position: relative;
   z-index: var(--z-dropdown);
+}
+
+/* Share toast, Follow Adhan caption, shortcuts panel, help button */
+.hud-toast {
+  position: absolute;
+  inset-inline: 0px;
+  inset-block-start: 72px;
+  margin-inline: auto;
+  width: fit-content;
+  padding-block: var(--space-sm);
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.hud-toast.visible {
+  opacity: 1;
+}
+
+.now-playing {
+  display: none;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-md);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+}
+
+.now-playing.active {
+  display: inline-flex;
+}
+
+.btn-help {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  width: 34px;
+  height: 34px;
+}
+
+.shortcuts-panel {
+  display: none;
+  position: absolute;
+  inset-inline: 0px;
+  inset-block-start: 72px;
+  margin-inline: auto;
+  width: 280px;
+  max-width: calc(100vw - var(--space-md) * 2);
+  padding: var(--space-md);
+  flex-direction: column;
+  gap: var(--space-sm);
+  border-radius: var(--radius-lg);
+  z-index: var(--z-dropdown);
+  pointer-events: auto;
+}
+
+.shortcuts-panel.active {
+  display: flex;
+}
+
+.shortcuts-title {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.shortcut-row kbd {
+  min-width: 28px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  padding-block: var(--space-xs);
+  padding-inline: var(--space-sm);
+  border: 1px solid var(--color-glass-border-hover);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-primary);
+}
+
+.btn-places-trigger {
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
 }

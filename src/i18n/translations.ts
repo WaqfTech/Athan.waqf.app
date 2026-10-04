@@ -25,6 +25,10 @@ export interface Translations {
     legendRings: string;
     legendArcs: string;
     hint: string;
+    shortcuts: string;
+    search: string;
+    share: string;
+    linkCopied: string;
     language: string;
   };
   prayers: {
@@ -82,6 +86,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'Rings and beams: cities where the adhan is being called now.',
       legendArcs: 'Arcs: the direction from a city to Makkah.',
       hint: 'Drag to rotate · Scroll to zoom · H hides controls · F full screen',
+      shortcuts: 'Keyboard shortcuts',
+      search: 'Search',
+      share: 'Share view',
+      linkCopied: 'Link copied',
       language: 'Language',
     },
     prayers: {
@@ -138,6 +146,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'الحلقات والأعمدة: مدن يُرفع فيها الأذان الآن.',
       legendArcs: 'الأقواس: اتجاه المدينة نحو مكة.',
       hint: 'اسحب للتدوير · مرّر للتقريب · H لإخفاء الأدوات · F لملء الشاشة',
+      shortcuts: 'اختصارات لوحة المفاتيح',
+      search: 'بحث',
+      share: 'مشاركة العرض',
+      linkCopied: 'تم نسخ الرابط',
       language: 'اللغة',
     },
     prayers: {
@@ -194,6 +206,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'Halkalar ve sütunlar: ezanın şu anda okunduğu şehirler.',
       legendArcs: 'Yaylar: şehirden Mekke’ye yön.',
       hint: 'Döndürmek için sürükleyin · Yakınlaştırmak için kaydırın · H: arayüzü gizle · F: tam ekran',
+      shortcuts: 'Klavye kısayolları',
+      search: 'Ara',
+      share: 'Görünümü paylaş',
+      linkCopied: 'Bağlantı kopyalandı',
       language: 'Dil',
     },
     prayers: {
@@ -250,6 +266,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'Cincin dan pilar: kota yang sedang mengumandangkan azan.',
       legendArcs: 'Busur: arah dari kota ke Makkah.',
       hint: 'Seret untuk memutar · Gulir untuk zoom · H sembunyikan kontrol · F layar penuh',
+      shortcuts: 'Pintasan keyboard',
+      search: 'Cari',
+      share: 'Bagikan tampilan',
+      linkCopied: 'Tautan disalin',
       language: 'Bahasa',
     },
     prayers: {
@@ -306,6 +326,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'Cincin dan tiang: bandar yang sedang melaungkan azan.',
       legendArcs: 'Lengkung: arah dari bandar ke Makkah.',
       hint: 'Seret untuk putar · Tatal untuk zum · H sembunyi kawalan · F skrin penuh',
+      shortcuts: 'Pintasan papan kekunci',
+      search: 'Cari',
+      share: 'Kongsi paparan',
+      linkCopied: 'Pautan disalin',
       language: 'Bahasa',
     },
     prayers: {
@@ -362,6 +386,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'حلقے اور ستون: وہ شہر جہاں اس وقت اذان ہو رہی ہے۔',
       legendArcs: 'کمانیں: شہر سے مکہ کی سمت۔',
       hint: 'گھمانے کے لیے گھسیٹیں · زوم کے لیے اسکرول کریں · H کنٹرول چھپائیں · F مکمل اسکرین',
+      shortcuts: 'کی بورڈ شارٹ کٹس',
+      search: 'تلاش',
+      share: 'منظر شیئر کریں',
+      linkCopied: 'لنک کاپی ہو گیا',
       language: 'زبان',
     },
     prayers: {
@@ -418,6 +446,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'حلقه‌ها و ستون‌ها: شهرهایی که اکنون اذان می‌گویند.',
       legendArcs: 'کمان‌ها: جهت از شهر به مکه.',
       hint: 'برای چرخاندن بکشید · برای بزرگنمایی اسکرول کنید · H پنهان‌کردن کنترل‌ها · F تمام‌صفحه',
+      shortcuts: 'میانبرهای صفحه‌کلید',
+      search: 'جستجو',
+      share: 'هم‌رسانی نما',
+      linkCopied: 'پیوند کپی شد',
       language: 'زبان',
     },
     prayers: {
@@ -474,6 +506,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'বলয় ও স্তম্ভ: এখন যে শহরগুলোতে আজান হচ্ছে।',
       legendArcs: 'চাপ: শহর থেকে মক্কার দিক।',
       hint: 'ঘোরাতে টানুন · জুম করতে স্ক্রল করুন · H নিয়ন্ত্রণ লুকান · F পূর্ণ পর্দা',
+      shortcuts: 'কীবোর্ড শর্টকাট',
+      search: 'অনুসন্ধান',
+      share: 'দৃশ্য শেয়ার করুন',
+      linkCopied: 'লিঙ্ক কপি হয়েছে',
       language: 'ভাষা',
     },
     prayers: {
@@ -530,6 +566,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'Anneaux et colonnes : villes où l’adhan est appelé maintenant.',
       legendArcs: 'Arcs : direction de la ville vers La Mecque.',
       hint: 'Glissez pour tourner · Faites défiler pour zoomer · H masque les commandes · F plein écran',
+      shortcuts: 'Raccourcis clavier',
+      search: 'Rechercher',
+      share: 'Partager la vue',
+      linkCopied: 'Lien copié',
       language: 'Langue',
     },
     prayers: {
@@ -586,6 +626,10 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendRings: 'Кольца и столбы: города, где сейчас звучит азан.',
       legendArcs: 'Дуги: направление от города к Мекке.',
       hint: 'Тяните, чтобы вращать · Прокрутка для масштаба · H скрыть панели · F полный экран',
+      shortcuts: 'Горячие клавиши',
+      search: 'Поиск',
+      share: 'Поделиться видом',
+      linkCopied: 'Ссылка скопирована',
       language: 'Язык',
     },
     prayers: {

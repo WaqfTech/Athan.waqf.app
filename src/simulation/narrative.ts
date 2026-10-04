@@ -10,7 +10,10 @@ export interface NarrativeDirector {
   update: (activeEvents: ActiveAdhanEvent[], settlements: Settlement[]) => void;
 }
 
-export function createNarrativeDirector(cameraRig: CameraRig): NarrativeDirector {
+export function createNarrativeDirector(
+  cameraRig: CameraRig,
+  onFocus?: (settlement: Settlement, prayer: string) => void,
+): NarrativeDirector {
   let active = false;
   let currentTargetIndex: number | null = null;
   let targetLat = 0;
@@ -18,6 +21,7 @@ export function createNarrativeDirector(cameraRig: CameraRig): NarrativeDirector
 
   const setActive = (flag: boolean): void => {
     active = flag;
+    cameraRig.setAutoRotateAllowed(!flag);
     if (!flag) {
       currentTargetIndex = null;
     }
@@ -46,6 +50,7 @@ export function createNarrativeDirector(cameraRig: CameraRig): NarrativeDirector
       targetLat = s.latitude;
       targetLon = s.longitude;
       cameraRig.focusCoordinates(targetLat, targetLon, 12, true);
+      onFocus?.(s, bestEvent.prayer);
     }
   };
 
