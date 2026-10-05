@@ -9,7 +9,7 @@ export interface LocaleSeoMeta {
   noscript: string;
 }
 
-export const BASE_URL = 'https://athan.waqf.dev';
+export const BASE_URL = 'https://athan.waqf.app';
 
 export const SEO_METADATA: Record<SupportedLocale, LocaleSeoMeta> = {
   en: {

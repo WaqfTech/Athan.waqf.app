@@ -65,7 +65,7 @@ describe('i18n configuration and locale detection', () => {
   it('detects locale from URL path prefix', () => {
     const originalWindow = globalThis.window;
     globalThis.window = {
-      location: new URL('https://athan.waqf.dev/ar'),
+      location: new URL('https://athan.waqf.app/ar'),
     } as unknown as Window & typeof globalThis;
 
     expect(detectLocale()).toBe('ar');
@@ -76,7 +76,7 @@ describe('i18n configuration and locale detection', () => {
   it('prioritizes path prefix over query param', () => {
     const originalWindow = globalThis.window;
     globalThis.window = {
-      location: new URL('https://athan.waqf.dev/fr?lang=tr'),
+      location: new URL('https://athan.waqf.app/fr?lang=tr'),
     } as unknown as Window & typeof globalThis;
 
     expect(detectLocale()).toBe('fr');
@@ -87,7 +87,7 @@ describe('i18n configuration and locale detection', () => {
   it('detects locale from URL search params when at root', () => {
     const originalWindow = globalThis.window;
     globalThis.window = {
-      location: new URL('https://athan.waqf.dev/?lang=tr'),
+      location: new URL('https://athan.waqf.app/?lang=tr'),
     } as unknown as Window & typeof globalThis;
 
     expect(detectLocale()).toBe('tr');
@@ -98,7 +98,7 @@ describe('i18n configuration and locale detection', () => {
   it('falls back to default locale when unsupported code is provided in URL', () => {
     const originalWindow = globalThis.window;
     globalThis.window = {
-      location: new URL('https://athan.waqf.dev/?lang=xx'),
+      location: new URL('https://athan.waqf.app/?lang=xx'),
     } as unknown as Window & typeof globalThis;
 
     expect(detectLocale()).toBe(DEFAULT_LOCALE);
@@ -164,9 +164,9 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
   });
 
   it('generates canonical URLs correctly with root for en and path for others', () => {
-    expect(getCanonicalUrl('en')).toBe('https://athan.waqf.dev/');
-    expect(getCanonicalUrl('ar')).toBe('https://athan.waqf.dev/ar');
-    expect(getCanonicalUrl('fr')).toBe('https://athan.waqf.dev/fr');
+    expect(getCanonicalUrl('en')).toBe('https://athan.waqf.app/');
+    expect(getCanonicalUrl('ar')).toBe('https://athan.waqf.app/ar');
+    expect(getCanonicalUrl('fr')).toBe('https://athan.waqf.app/fr');
   });
 
   it('generates all 11 hreflang alternates including x-default and all 10 locales', () => {
@@ -175,21 +175,21 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
 
     const xDefault = links.find((l) => l.hreflang === 'x-default');
     expect(xDefault).toBeDefined();
-    expect(xDefault?.href).toBe('https://athan.waqf.dev/');
+    expect(xDefault?.href).toBe('https://athan.waqf.app/');
 
     const enLink = links.find((l) => l.hreflang === 'en');
-    expect(enLink?.href).toBe('https://athan.waqf.dev/');
+    expect(enLink?.href).toBe('https://athan.waqf.app/');
 
     const arLink = links.find((l) => l.hreflang === 'ar');
-    expect(arLink?.href).toBe('https://athan.waqf.dev/ar');
+    expect(arLink?.href).toBe('https://athan.waqf.app/ar');
   });
 
   it('builds RFC 5988/8288 compliant Link header', () => {
     const header = buildLinkHeader();
-    expect(header).toContain('<https://athan.waqf.dev/>; rel="alternate"; hreflang="x-default"');
-    expect(header).toContain('<https://athan.waqf.dev/>; rel="alternate"; hreflang="en"');
-    expect(header).toContain('<https://athan.waqf.dev/ar>; rel="alternate"; hreflang="ar"');
-    expect(header).toContain('<https://athan.waqf.dev/ru>; rel="alternate"; hreflang="ru"');
+    expect(header).toContain('<https://athan.waqf.app/>; rel="alternate"; hreflang="x-default"');
+    expect(header).toContain('<https://athan.waqf.app/>; rel="alternate"; hreflang="en"');
+    expect(header).toContain('<https://athan.waqf.app/ar>; rel="alternate"; hreflang="ar"');
+    expect(header).toContain('<https://athan.waqf.app/ru>; rel="alternate"; hreflang="ru"');
   });
 
   it('transforms HTML for non-English locales on the edge', () => {
@@ -198,10 +198,10 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
   <head>
     <title>Adhan Earth | Live 3D Map of Prayer Times Worldwide</title>
     <meta name="description" content="Watch prayer times move around the Earth in real time." />
-    <link rel="canonical" href="https://athan.waqf.dev/" />
+    <link rel="canonical" href="https://athan.waqf.app/" />
     <meta property="og:title" content="Adhan Earth | Live 3D Map of Prayer Times Worldwide" />
     <meta property="og:description" content="Watch prayer times move around the Earth in real time." />
-    <meta property="og:url" content="https://athan.waqf.dev/" />
+    <meta property="og:url" content="https://athan.waqf.app/" />
     <meta name="twitter:title" content="Adhan Earth | Live 3D Map of Prayer Times Worldwide" />
     <meta name="twitter:description" content="Watch prayer times move around the Earth in real time." />
     <script type="application/ld+json">
@@ -209,7 +209,7 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Adhan Earth",
-        "url": "https://athan.waqf.dev/",
+        "url": "https://athan.waqf.app/",
         "description": "Watch prayer times move around the Earth in real time."
       }
     </script>
@@ -226,31 +226,31 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
     expect(transformed).toContain('<html lang="ar" dir="rtl">');
     expect(transformed).toContain(`<title>${SEO_METADATA.ar.title}</title>`);
     expect(transformed).toContain(`<meta name="description" content="${SEO_METADATA.ar.description}" />`);
-    expect(transformed).toContain('<link rel="canonical" href="https://athan.waqf.dev/ar" />');
+    expect(transformed).toContain('<link rel="canonical" href="https://athan.waqf.app/ar" />');
     expect(transformed).toContain(`<meta property="og:title" content="${SEO_METADATA.ar.title}" />`);
     expect(transformed).toContain(`<meta property="og:description" content="${SEO_METADATA.ar.description}" />`);
-    expect(transformed).toContain('<meta property="og:url" content="https://athan.waqf.dev/ar" />');
+    expect(transformed).toContain('<meta property="og:url" content="https://athan.waqf.app/ar" />');
     expect(transformed).toContain(`<meta name="twitter:title" content="${SEO_METADATA.ar.title}" />`);
     expect(transformed).toContain(`<meta name="twitter:description" content="${SEO_METADATA.ar.description}" />`);
     expect(transformed).toContain(SEO_METADATA.ar.noscript);
     expect(transformed).toContain('"name": "أذان الأرض"');
-    expect(transformed).toContain('"url": "https://athan.waqf.dev/ar"');
+    expect(transformed).toContain('"url": "https://athan.waqf.app/ar"');
   });
 
   it('generates localized structured JSON-LD data for all locales', () => {
     const enJson = generateJsonLd('en');
     expect(enJson.name).toBe('Adhan Earth');
-    expect(enJson.url).toBe('https://athan.waqf.dev/');
+    expect(enJson.url).toBe('https://athan.waqf.app/');
     expect(enJson.description).toBe(SEO_METADATA.en.description);
 
     const arJson = generateJsonLd('ar');
     expect(arJson.name).toBe('أذان الأرض');
-    expect(arJson.url).toBe('https://athan.waqf.dev/ar');
+    expect(arJson.url).toBe('https://athan.waqf.app/ar');
     expect(arJson.description).toBe(SEO_METADATA.ar.description);
 
     const trJson = generateJsonLd('tr');
     expect(trJson.name).toBe('Adhan Earth');
-    expect(trJson.url).toBe('https://athan.waqf.dev/tr');
+    expect(trJson.url).toBe('https://athan.waqf.app/tr');
     expect(trJson.description).toBe(SEO_METADATA.tr.description);
   });
 

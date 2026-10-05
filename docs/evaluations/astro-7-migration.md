@@ -153,7 +153,7 @@ const jsonLd = {
   applicationCategory: 'LifestyleApplication',
   operatingSystem: 'Any (web browser with WebGL)',
   inLanguage: Object.keys(SUPPORTED_LOCALES),
-  image: 'https://athan.waqf.dev/og-image.jpg',
+  image: 'https://athan.waqf.app/og-image.jpg',
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   publisher: { '@type': 'Organization', name: 'Waqf Tech' },
 };
@@ -181,7 +181,7 @@ const jsonLd = {
     <meta property="og:title" content={seo.title} />
     <meta property="og:description" content={seo.description} />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content="https://athan.waqf.dev/og-image.jpg" />
+    <meta property="og:image" content="https://athan.waqf.app/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={seo.description} />
@@ -189,7 +189,7 @@ const jsonLd = {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={seo.title} />
     <meta name="twitter:description" content={seo.description} />
-    <meta name="twitter:image" content="https://athan.waqf.dev/og-image.jpg" />
+    <meta name="twitter:image" content="https://athan.waqf.app/og-image.jpg" />
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
@@ -246,7 +246,7 @@ import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
-  site: 'https://athan.waqf.dev',
+  site: 'https://athan.waqf.app',
   output: 'server',
   adapter: cloudflare({ imageService: 'passthrough' }),
   trailingSlash: 'never',

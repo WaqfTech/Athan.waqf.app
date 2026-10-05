@@ -16,7 +16,7 @@
   },
   "routes": [
     {
-      "pattern": "athan.waqf.dev",
+      "pattern": "athan.waqf.app",
       "custom_domain": true
     }
   ],

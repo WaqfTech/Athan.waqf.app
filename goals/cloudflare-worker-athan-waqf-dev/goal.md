@@ -1,7 +1,7 @@
-# Goal: Configure Cloudflare Worker for athan.waqf.dev
+# Goal: Configure Cloudflare Worker for athan.waqf.app
 
 ## Goal Description
-Configure Cloudflare Workers Static Assets with custom domain on athan.waqf.dev using wrangler.jsonc, SPA routing, and local dry-run verification.
+Configure Cloudflare Workers Static Assets with custom domain on athan.waqf.app using wrangler.jsonc, SPA routing, and local dry-run verification.
 
 ## Dependencies & Execution Order
 - **Mode**: Independent (disjoint, parallelizable)

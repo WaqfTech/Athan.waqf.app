@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://athan.waqf.dev/sitemap.xml
+Sitemap: https://athan.waqf.app/sitemap.xml

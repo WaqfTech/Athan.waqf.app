@@ -1,9 +1,9 @@
-# Facts: Configure Cloudflare Worker for athan.waqf.dev
+# Facts: Configure Cloudflare Worker for athan.waqf.app
 
 ## Architectural Invariants & Constraints
 - Cloudflare Workers Static Assets serves the static assets from ./dist directly.
 - Configuration must use JSONC (wrangler.jsonc), never TOML.
-- Target custom domain is athan.waqf.dev with custom_domain: true.
+- Target custom domain is athan.waqf.app with custom_domain: true.
 - SPA routing fallback: not_found_handling set to single-page-application to support URL parameters.
 - No unprompted remote deployment: all verification performed locally with wrangler deploy --dry-run.
 
