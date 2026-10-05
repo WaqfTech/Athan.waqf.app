@@ -23,8 +23,13 @@ export function createCameraRig(canvas: HTMLCanvasElement): CameraRig {
   const far = 1000;
 
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  // Initial camera position viewing Prime Meridian & Equator from space
-  camera.position.set(0, 4, 15);
+  // Initial camera position viewing Prime Meridian & Equator from space (25% smaller on first load)
+  const baseDistance = 20.7; // Decreases projected diameter from 78% to 58% of screen height
+  const initialDistance = aspect < 1 ? baseDistance / Math.max(0.55, aspect) : baseDistance;
+  const pitchRatio = 4 / 15;
+  const initZ = initialDistance / Math.sqrt(1 + pitchRatio * pitchRatio);
+  const initY = initZ * pitchRatio;
+  camera.position.set(0, initY, initZ);
 
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true;
@@ -32,7 +37,7 @@ export function createCameraRig(canvas: HTMLCanvasElement): CameraRig {
   controls.rotateSpeed = 0.75;
   controls.zoomSpeed = 1.0;
   controls.minDistance = 6.2; // Closest zoom near Earth surface (R = 5)
-  controls.maxDistance = 40.0; // Deep space zoom
+  controls.maxDistance = 50.0; // Deep space zoom
   controls.enablePan = false; // Keep planetary center locked
 
   // With a delta time, speed 1 is one turn per 30s. 0.3 is about one turn per 100s, independent of frame rate.
