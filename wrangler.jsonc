@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "athan-waqf-dev",
   "main": "./src/server.ts",
-  "account_id": "f1e7c7c68165026fbc0f205ffba26463",
+  "account_id": "<CLOUDFLARE_ACCOUNT_ID>",
   "compatibility_date": "2026-08-27",
   "compatibility_flags": [
     "nodejs_compat"
