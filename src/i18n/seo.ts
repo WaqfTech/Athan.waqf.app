@@ -134,6 +134,26 @@ export function escapeHtml(str: string): string {
     .replace(/'/g, '&#39;');
 }
 
+export function generateJsonLd(locale: SupportedLocale): Record<string, unknown> {
+  const seo = SEO_METADATA[locale] || SEO_METADATA[DEFAULT_LOCALE];
+  const pageUrl = getCanonicalUrl(locale);
+  const name = seo.title.split('|')[0].trim();
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name,
+    url: pageUrl,
+    description: seo.description,
+    applicationCategory: 'LifestyleApplication',
+    operatingSystem: 'Any (web browser with WebGL)',
+    inLanguage: Object.keys(SUPPORTED_LOCALES),
+    image: `${BASE_URL}/og-image.jpg`,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    publisher: { '@type': 'Organization', name: 'Waqf Tech' },
+  };
+}
+
 export function transformIndexHtml(html: string, locale: SupportedLocale): string {
   if (locale === DEFAULT_LOCALE) {
     return html;
@@ -143,6 +163,7 @@ export function transformIndexHtml(html: string, locale: SupportedLocale): strin
   const seo = SEO_METADATA[locale] || SEO_METADATA[DEFAULT_LOCALE];
   const trans = getTranslations(locale);
   const pageUrl = getCanonicalUrl(locale);
+  const jsonLdString = JSON.stringify(generateJsonLd(locale), null, 2);
 
   let output = html;
 
@@ -189,6 +210,11 @@ export function transformIndexHtml(html: string, locale: SupportedLocale): strin
   output = output.replace(
     /<meta\s+name="twitter:description"\s+content=".*?"\s*\/?>/i,
     `<meta name="twitter:description" content="${escapeHtml(seo.description)}" />`
+  );
+
+  output = output.replace(
+    /<script\s+type="application\/ld\+json">[\s\S]*?<\/script>/i,
+    `<script type="application/ld+json">\n${jsonLdString}\n    </script>`
   );
 
   output = output.replace(

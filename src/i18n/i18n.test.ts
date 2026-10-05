@@ -13,6 +13,7 @@ import {
   getHreflangLinks,
   buildLinkHeader,
   transformIndexHtml,
+  generateJsonLd,
 } from './seo';
 
 describe('i18n configuration and locale detection', () => {
@@ -203,6 +204,15 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
     <meta property="og:url" content="https://athan.waqf.dev/" />
     <meta name="twitter:title" content="Adhan Earth | Live 3D Map of Prayer Times Worldwide" />
     <meta name="twitter:description" content="Watch prayer times move around the Earth in real time." />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Adhan Earth",
+        "url": "https://athan.waqf.dev/",
+        "description": "Watch prayer times move around the Earth in real time."
+      }
+    </script>
   </head>
   <body>
     <noscript>
@@ -223,6 +233,25 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
     expect(transformed).toContain(`<meta name="twitter:title" content="${SEO_METADATA.ar.title}" />`);
     expect(transformed).toContain(`<meta name="twitter:description" content="${SEO_METADATA.ar.description}" />`);
     expect(transformed).toContain(SEO_METADATA.ar.noscript);
+    expect(transformed).toContain('"name": "أذان الأرض"');
+    expect(transformed).toContain('"url": "https://athan.waqf.dev/ar"');
+  });
+
+  it('generates localized structured JSON-LD data for all locales', () => {
+    const enJson = generateJsonLd('en');
+    expect(enJson.name).toBe('Adhan Earth');
+    expect(enJson.url).toBe('https://athan.waqf.dev/');
+    expect(enJson.description).toBe(SEO_METADATA.en.description);
+
+    const arJson = generateJsonLd('ar');
+    expect(arJson.name).toBe('أذان الأرض');
+    expect(arJson.url).toBe('https://athan.waqf.dev/ar');
+    expect(arJson.description).toBe(SEO_METADATA.ar.description);
+
+    const trJson = generateJsonLd('tr');
+    expect(trJson.name).toBe('Adhan Earth');
+    expect(trJson.url).toBe('https://athan.waqf.dev/tr');
+    expect(trJson.description).toBe(SEO_METADATA.tr.description);
   });
 
   it('returns original HTML untouched when locale is English', () => {

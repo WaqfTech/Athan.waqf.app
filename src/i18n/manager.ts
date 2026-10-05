@@ -2,7 +2,7 @@
 
 import { SupportedLocale, SUPPORTED_LOCALES, detectLocale } from './config';
 import { Translations, getTranslations } from './translations';
-import { SEO_METADATA, getCanonicalUrl } from './seo';
+import { SEO_METADATA, getCanonicalUrl, generateJsonLd } from './seo';
 
 export type LocaleChangeListener = (locale: SupportedLocale, translations: Translations) => void;
 
@@ -85,6 +85,11 @@ class I18nManager {
 
       const canonical = document.querySelector('link[rel="canonical"]');
       if (canonical) canonical.setAttribute('href', getCanonicalUrl(locale));
+
+      const jsonLdScript = document.querySelector('script[type="application/ld+json"]');
+      if (jsonLdScript) {
+        jsonLdScript.textContent = JSON.stringify(generateJsonLd(locale), null, 2);
+      }
     }
   }
 }
