@@ -22,3 +22,6 @@ rm/
 
 # Ephemeral goal claim locks (managed by sila)
 goals/*/claim.json
+
+# Agent scratch and multi-agent coordination
+.agents/
