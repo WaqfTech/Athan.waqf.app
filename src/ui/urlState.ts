@@ -51,7 +51,7 @@ export function parseUrlState(search = window.location.search): PlanetaryUrlStat
       .replace(/^\/+|\/+$/g, '')
       .split('/')[0]
       ?.toLowerCase();
-    if (pathSegment) state.lang = pathSegment;
+    if (pathSegment && pathSegment !== 'credits') state.lang = pathSegment;
   }
 
   return state;
@@ -73,11 +73,12 @@ export function updateUrlState(state: PlanetaryUrlState): void {
   params.delete('lang');
 
   let newPath = window.location.pathname;
+  const isCredits = window.location.pathname === '/credits' || window.location.pathname.endsWith('/credits');
   if (state.lang !== undefined) {
     if (state.lang === 'en') {
-      newPath = '/';
+      newPath = isCredits ? '/credits' : '/';
     } else {
-      newPath = `/${state.lang}`;
+      newPath = isCredits ? `/${state.lang}/credits` : `/${state.lang}`;
     }
   }
 

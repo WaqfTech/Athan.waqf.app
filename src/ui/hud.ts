@@ -6,6 +6,7 @@ import { PrayerFrontKey, PRAYER_COLORS } from '../globe/fronts';
 import { GlobeScene } from '../globe/scene';
 import { createTimelineUI, TimelineUI } from './timeline';
 import { createInspectorPanel, InspectorPanel } from './inspector';
+import { createCreditsModal, CreditsModal } from './credits';
 import { ContinuityStats } from '../simulation/continuity';
 import { Settlement } from '../population/loader';
 import { SettlementSpatialIndex } from '../population/spatialIndex';
@@ -18,6 +19,7 @@ export interface HudOverlay {
   element: HTMLElement;
   timeline: TimelineUI;
   inspector: InspectorPanel;
+  creditsModal: CreditsModal;
   updateStats: (stats: ContinuityStats) => void;
   updateTime: (date: Date) => void;
   setSettlements: (settlements: Settlement[]) => void;
@@ -680,6 +682,22 @@ export function createHudOverlay(
       <line x1="3" y1="21" x2="21" y2="3"/>
     </svg>
   `;
+  const creditsModal = createCreditsModal({});
+
+  const creditsBtn = document.createElement('button');
+  creditsBtn.className = 'btn-icon-toggle btn-credits-trigger';
+  creditsBtn.setAttribute('aria-label', t.controls.credits);
+  creditsBtn.title = `${t.controls.credits} (C)`;
+  creditsBtn.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="12" y1="16" x2="12" y2="12"/>
+      <line x1="12" y1="8" x2="12.01" y2="8"/>
+    </svg>
+  `;
+  creditsBtn.addEventListener('click', () => creditsModal.toggle());
+  topBar.appendChild(creditsBtn);
+
   const helpBtn = document.createElement('button');
   helpBtn.className = 'btn-icon-toggle btn-help';
   helpBtn.setAttribute('aria-label', t.controls.shortcuts);
@@ -737,10 +755,13 @@ export function createHudOverlay(
     } else if (key === '/') {
       e.preventDefault();
       searchInput.focus();
+    } else if (key === 'c') {
+      creditsModal.toggle();
     } else if (key === '?') {
       setShortcutsOpen(!shortcutsPanel.classList.contains('active'));
     } else if (key === 'escape') {
-      if (shortcutsPanel.classList.contains('active')) setShortcutsOpen(false);
+      if (creditsModal.isOpen()) creditsModal.close();
+      else if (shortcutsPanel.classList.contains('active')) setShortcutsOpen(false);
       else if (isFocusMode) setFocusMode(false);
     }
   };
@@ -748,6 +769,7 @@ export function createHudOverlay(
 
   root.appendChild(topBar);
   root.appendChild(restoreBtn);
+  root.appendChild(creditsModal.element);
 
   // 2. Floating Controls Dock
   const controlsDock = document.createElement('div');
@@ -1077,6 +1099,7 @@ export function createHudOverlay(
     { key: 'H', label: () => t.controls.zenMode },
     { key: 'F', label: () => t.controls.fullscreen },
     { key: '/', label: () => t.controls.search },
+    { key: 'C', label: () => t.controls.credits },
     { key: '?', label: () => t.controls.shortcuts },
   ];
   for (const def of shortcutDefs) {
@@ -1157,6 +1180,9 @@ export function createHudOverlay(
     convTrigger.setAttribute('aria-label', t.controls.convention);
     shareBtn.setAttribute('aria-label', t.controls.share);
     shareBtn.title = t.controls.share;
+    creditsBtn.setAttribute('aria-label', t.controls.credits);
+    creditsBtn.title = `${t.controls.credits} (C)`;
+    creditsModal.updateTranslations(t);
     helpBtn.setAttribute('aria-label', t.controls.shortcuts);
     helpBtn.title = `${t.controls.shortcuts} (?)`;
     shortcutsPanel.setAttribute('aria-label', t.controls.shortcuts);
@@ -1219,6 +1245,7 @@ export function createHudOverlay(
   const dispose = (): void => {
     unsubscribeLocale();
     unsubscribeClock();
+    creditsModal.dispose();
     document.removeEventListener('keydown', onHotkey);
     document.removeEventListener('click', onShortcutsOutsideClick);
     window.clearTimeout(toastTimer);
@@ -1237,6 +1264,7 @@ export function createHudOverlay(
     element: root,
     timeline,
     inspector,
+    creditsModal,
     updateStats,
     updateTime,
     setSettlements,

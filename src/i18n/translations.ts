@@ -33,6 +33,23 @@ export interface Translations {
     pause: string;
     clearSearch: string;
     language: string;
+    credits: string;
+  };
+  credits: {
+    title: string;
+    acknowledgments: string;
+    contributorName: string;
+    contributorHandle: string;
+    contributorArabicName: string;
+    contributorRole: string;
+    projectBy: string;
+    waqfDescription: string;
+    licenseTitle: string;
+    stackTitle: string;
+    stack3d: string;
+    stackAstronomy: string;
+    stackEdge: string;
+    close: string;
   };
   prayers: {
     fajr: string;
@@ -97,6 +114,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'Pause',
       clearSearch: 'Clear search',
       language: 'Language',
+      credits: 'Credits & Stack',
+    },
+    credits: {
+      title: 'Credits & About',
+      acknowledgments: 'Special Thanks & Contributors',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'For the technical discussions, ideations, and bug reporting.',
+      projectBy: 'A Project by WaqfTech.org',
+      waqfDescription: 'An independent open-source digital waqf building technology for the Muslim world.',
+      licenseTitle: 'Waqf Digital Public License (Waqf-DPL 1.0)',
+      stackTitle: 'Technology Stack',
+      stack3d: '3D Engine: Three.js with custom GLSL shaders for solar day/night terminator, atmospheric scattering, and GPU-instanced minarets.',
+      stackAstronomy: 'Astronomy & Fiqh: Pure TypeScript NOAA and Meeus algorithms calculating solar position, prayer contours, and Qibla bearings.',
+      stackEdge: 'Edge Compute: Cloudflare Workers with zero ambient telemetry, edge geolocation, and global asset caching.',
+      close: 'Close credits',
     },
     prayers: {
       fajr: 'Fajr',
@@ -160,6 +194,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'إيقاف مؤقت',
       clearSearch: 'مسح البحث',
       language: 'اللغة',
+      credits: 'شكر وتقدير والتقنيات',
+    },
+    credits: {
+      title: 'شكر وتقدير وعن المشروع',
+      acknowledgments: 'شكر وتقدير خاص',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'للمناقشات التقنية، وتوليد الأفكار، والإبلاغ عن الملاحظات والخلل البرمجي.',
+      projectBy: 'مشروع مقدم من وقف تك (WaqfTech.org)',
+      waqfDescription: 'مبادرة تقنية وقفية مفتوحة المصدر لخدمة الأمة وبناء بنية تحتية رقمية حرة.',
+      licenseTitle: 'رخصة الوقف الرقمية العامة (Waqf-DPL 1.0)',
+      stackTitle: 'الحزمة التقنية',
+      stack3d: 'المحرك ثلاثي الأبعاد: مكتبة Three.js مع مظللات GLSL مخصصة لخط الشفق ليل/نهار وتشتت الغلاف الجوي وأعمدة المآذن.',
+      stackAstronomy: 'الفلك والمواقيت: خوارزميات NOAA وميوس بحسابات TypeScript نقية لمواقع الشمس ومسارات الأذان واتجاه القبلة.',
+      stackEdge: 'الحوسبة الطرفية: منصة Cloudflare Workers دون أي تتبع، مع تحديد الموقع الجغرافي وتوزيع الملفات عالمياً.',
+      close: 'إغلاق',
     },
     prayers: {
       fajr: 'الفجر',
@@ -223,6 +274,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'Duraklat',
       clearSearch: 'Aramayı temizle',
       language: 'Dil',
+      credits: 'Katkıda Bulunanlar ve Teknoloji',
+    },
+    credits: {
+      title: 'Katkıda Bulunanlar ve Hakkında',
+      acknowledgments: 'Özel Teşekkür',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'Teknik tartışmalar, fikir geliştirme ve hata bildirimleri için.',
+      projectBy: 'WaqfTech.org Projesi',
+      waqfDescription: 'İslam dünyası için dijital kamu altyapısı geliştiren açık kaynaklı vakıf girişimi.',
+      licenseTitle: 'Vakıf Dijital Kamu Lisansı (Waqf-DPL 1.0)',
+      stackTitle: 'Teknoloji Mimarisi',
+      stack3d: '3D Motoru: Özel GLSL gölgelendiricileriyle Three.js, gündüz/gece aydınlanma çizgisi ve minare görselleştirmesi.',
+      stackAstronomy: 'Astronomi ve Vakitler: NOAA ve Meeus algoritmalarıyla saf TypeScript güneş konumu ve namaz hatları hesabı.',
+      stackEdge: 'Uç Bilişim: Sıfır telemetri ve küresel önbellekleme ile Cloudflare Workers.',
+      close: 'Kapat',
     },
     prayers: {
       fajr: 'İmsak',
@@ -286,6 +354,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'Jeda',
       clearSearch: 'Hapus pencarian',
       language: 'Bahasa',
+      credits: 'Kredit & Teknologi',
+    },
+    credits: {
+      title: 'Kredit & Tentang',
+      acknowledgments: 'Penghargaan Khusus',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'Untuk diskusi teknis, pengembangan ide, dan pelaporan bug.',
+      projectBy: 'Proyek oleh WaqfTech.org',
+      waqfDescription: 'Wakaf teknologi sumber terbuka yang didedikasikan untuk infrastruktur digital publik umat.',
+      licenseTitle: 'Lisensi Publik Digital Waqf (Waqf-DPL 1.0)',
+      stackTitle: 'Teknologi yang Digunakan',
+      stack3d: 'Mesin 3D: Three.js dengan shader GLSL kustom untuk garis siang/malam dan pancaran menara masjid.',
+      stackAstronomy: 'Astronomi & Fiqih: Algoritma NOAA dan Meeus dalam TypeScript murni untuk hisab waktu salat dan kiblat.',
+      stackEdge: 'Komputasi Tepi: Cloudflare Workers tanpa telemetri dengan latensi rendah di seluruh dunia.',
+      close: 'Tutup',
     },
     prayers: {
       fajr: 'Subuh',
@@ -349,6 +434,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'Jeda',
       clearSearch: 'Kosongkan carian',
       language: 'Bahasa',
+      credits: 'Kredit & Teknologi',
+    },
+    credits: {
+      title: 'Kredit & Perihal',
+      acknowledgments: 'Penghargaan Khas',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'Untuk perbincangan teknikal, percambahan idea, dan pelaporan pepijat.',
+      projectBy: 'Projek oleh WaqfTech.org',
+      waqfDescription: 'Wakaf teknologi sumber terbuka untuk infrastruktur digital awam umat Islam.',
+      licenseTitle: 'Lesen Awam Digital Waqf (Waqf-DPL 1.0)',
+      stackTitle: 'Timbunan Teknologi',
+      stack3d: 'Enjin 3D: Three.js dengan shader GLSL khas untuk sempadan siang/malam dan tiang cahaya azan.',
+      stackAstronomy: 'Astronomi & Fiqh: Algoritma NOAA dan Meeus dalam TypeScript tulen untuk waktu solat dan arah kiblat.',
+      stackEdge: 'Pengkomputeran Pinggir: Cloudflare Workers tanpa telemetri dengan cache aset global.',
+      close: 'Tutup',
     },
     prayers: {
       fajr: 'Subuh',
@@ -412,6 +514,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'روکیں',
       clearSearch: 'تلاش صاف کریں',
       language: 'زبان',
+      credits: 'شکریہ اور ٹیکنالوجی',
+    },
+    credits: {
+      title: 'شکریہ اور تعارف',
+      acknowledgments: 'خصوصی شکریہ و معاونین',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'تکنیکی مشاورت، تجاویز اور نقائص کی نشاندہی کے لیے۔',
+      projectBy: 'وقف ٹیک (WaqfTech.org) کا منصوبہ',
+      waqfDescription: 'امت کے لیے اوپن سورس ڈیجیٹل انفراسٹرکچر کی فراہمی کے لیے وقف منصوبہ۔',
+      licenseTitle: 'وقف ڈیجیٹل پبلک لائسنس (Waqf-DPL 1.0)',
+      stackTitle: 'تکنیکی ڈھانچہ',
+      stack3d: '3D انجن: تھری جے ایس (Three.js) مع کسٹم GLSL شیڈرز برائے شب و روز و مینار۔',
+      stackAstronomy: 'علم الفلکیات و فقہ: نووا (NOAA) اور میئس کے خالص ٹائپ اسکرپٹ الگورتھمز برائے اوقاتِ نماز و قبلہ۔',
+      stackEdge: 'ایج کمپیوٹنگ: کلاؤڈ فلیئر ورکرز (Cloudflare Workers) بغیر کسی ٹریکنگ کے اور عالمی رسائی کے ساتھ۔',
+      close: 'بند کریں',
     },
     prayers: {
       fajr: 'فجر',
@@ -475,6 +594,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'مکث',
       clearSearch: 'پاک‌کردن جستجو',
       language: 'زبان',
+      credits: 'قدردانی و فناوری',
+    },
+    credits: {
+      title: 'قدردانی و درباره',
+      acknowledgments: 'سپاس ویژه و همراهان',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'برای گفت‌وگوهای فنی، ایده‌پردازی و گزارش باگ‌ها.',
+      projectBy: 'پروژه‌ای از WaqfTech.org',
+      waqfDescription: 'وقف فناوری متن‌باز با هدف ایجاد زیرساخت‌های دیجیتال برای امت اسلامی.',
+      licenseTitle: 'مجوز عمومی دیجیتال وقف (Waqf-DPL 1.0)',
+      stackTitle: 'پشته فناوری',
+      stack3d: 'موتور سه‌بعدی: Three.js به همراه شیدرهای اختصاصی GLSL برای خط شب/روز و گنبد و گلدسته‌ها.',
+      stackAstronomy: 'نجوم و شرعیات: الگوریتم‌های خالص TypeScript بر پایه محاسبات NOAA و Meeus برای اوقات شرعی و قبله.',
+      stackEdge: 'رایانش ابری لبه: Cloudflare Workers بدون ردگیری کاربر با توزیع جهانی محتوا.',
+      close: 'بستن',
     },
     prayers: {
       fajr: 'اذان صبح',
@@ -538,6 +674,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'বিরতি',
       clearSearch: 'অনুসন্ধান মুছুন',
       language: 'ভাষা',
+      credits: 'কৃতজ্ঞতা ও প্রযুক্তি',
+    },
+    credits: {
+      title: 'কৃতজ্ঞতা স্বীকার ও বিবরণ',
+      acknowledgments: 'বিশেষ কৃতজ্ঞতা',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'কারিগরি আলোচনা, ধারণা ও বাগ চিহ্নিতকরণের জন্য।',
+      projectBy: 'WaqfTech.org এর একটি প্রকল্প',
+      waqfDescription: 'উম্মাহর জন্য উন্মুক্ত ডিজিটাল পাবলিক অবকাঠামো তৈরির একটি মুক্ত ওয়াকফ উদ্যোগ।',
+      licenseTitle: 'ওয়াকফ ডিজিটাল পাবলিক লাইসেন্স (Waqf-DPL 1.0)',
+      stackTitle: 'প্রযুক্তি কাঠামো',
+      stack3d: '৩ডি ইঞ্জিন: কাস্টম GLSL শেডার সহ Three.js, দিবারাত্রির সীমারেখা ও মিনার স্তম্ভ ভিজ্যুয়ালাইজেশন।',
+      stackAstronomy: 'জ্যোতির্বিজ্ঞান ও নামাজ: নামাজের সময় ও কিবলা গণনায় খাঁটি TypeScript-এ NOAA ও Meeus অ্যালগরিদম।',
+      stackEdge: 'এজ কম্পিউটিং: কোনো ট্র্যাকিং ছাড়া বিশ্বব্যাপী ক্যাশযুক্ত Cloudflare Workers।',
+      close: 'বন্ধ করুন',
     },
     prayers: {
       fajr: 'ফজর',
@@ -601,6 +754,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'Pause',
       clearSearch: 'Effacer la recherche',
       language: 'Langue',
+      credits: 'Crédits & Technologie',
+    },
+    credits: {
+      title: 'Crédits & À propos',
+      acknowledgments: 'Remerciements spéciaux',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'Pour les échanges techniques, les idées et le signalement de bugs.',
+      projectBy: 'Un projet par WaqfTech.org',
+      waqfDescription: 'Une initiative de dotation technologique open-source pour les infrastructures numériques publiques de la Oummah.',
+      licenseTitle: 'Licence Publique Numérique Waqf (Waqf-DPL 1.0)',
+      stackTitle: 'Architecture Technique',
+      stack3d: 'Moteur 3D : Three.js avec shaders GLSL personnalisés pour le terminateur jour/nuit et les faisceaux de minarets.',
+      stackAstronomy: 'Astronomie & Fiqh : Algorithmes NOAA et Meeus en TypeScript pur pour les heures de prière et la Qibla.',
+      stackEdge: 'Edge Computing : Cloudflare Workers avec zéro télémétrie et distribution mondiale sans latence.',
+      close: 'Fermer',
     },
     prayers: {
       fajr: 'Fajr',
@@ -664,6 +834,23 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       pause: 'Пауза',
       clearSearch: 'Очистить поиск',
       language: 'Язык',
+      credits: 'Благодарности и технологии',
+    },
+    credits: {
+      title: 'Благодарности и о проекте',
+      acknowledgments: 'Особая благодарность',
+      contributorName: 'Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī',
+      contributorHandle: '@theIslampill',
+      contributorArabicName: 'مدثر إسماعيل بن دانيال',
+      contributorRole: 'За технические обсуждения, идеи и сообщения об ошибках.',
+      projectBy: 'Проект от WaqfTech.org',
+      waqfDescription: 'Инициатива открытого вакфа цифровой общественной инфраструктуры для уммы.',
+      licenseTitle: 'Цифровая общественная лицензия Вакф (Waqf-DPL 1.0)',
+      stackTitle: 'Технический стек',
+      stack3d: '3D-движок: Three.js с кастомными шейдерами GLSL для линии терминатора и лучей минаретов.',
+      stackAstronomy: 'Астрономия и фикх: Алгоритмы NOAA и Meeus на чистом TypeScript для расчета времени молитв и киблы.',
+      stackEdge: 'Периферийные вычисления: Cloudflare Workers с нулевой телеметрией и глобальным кэшированием.',
+      close: 'Закрыть',
     },
     prayers: {
       fajr: 'Фаджр',
