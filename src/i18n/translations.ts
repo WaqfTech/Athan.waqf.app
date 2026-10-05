@@ -29,6 +29,7 @@ export interface Translations {
     search: string;
     share: string;
     linkCopied: string;
+    shareMessage: string;
     pause: string;
     clearSearch: string;
     language: string;
@@ -92,6 +93,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Search',
       share: 'Share view',
       linkCopied: 'Link copied',
+      shareMessage: 'Watch prayer times and the adhan move across the Earth in real-time on a live 3D planetary globe 🌍🕌',
       pause: 'Pause',
       clearSearch: 'Clear search',
       language: 'Language',
@@ -154,6 +156,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'بحث',
       share: 'مشاركة العرض',
       linkCopied: 'تم نسخ الرابط',
+      shareMessage: 'شاهد حركة مواقيت الصلاة ونداء الأذان حول كوكب الأرض في بث حي ومباشر عبر مرصد ثلاثي الأبعاد 🌍🕌',
       pause: 'إيقاف مؤقت',
       clearSearch: 'مسح البحث',
       language: 'اللغة',
@@ -216,6 +219,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Ara',
       share: 'Görünümü paylaş',
       linkCopied: 'Bağlantı kopyalandı',
+      shareMessage: 'Ezanın ve namaz vakitlerinin Dünya genelindeki hareketini canlı 3D küre üzerinde anlık izleyin 🌍🕌',
       pause: 'Duraklat',
       clearSearch: 'Aramayı temizle',
       language: 'Dil',
@@ -278,6 +282,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Cari',
       share: 'Bagikan tampilan',
       linkCopied: 'Tautan disalin',
+      shareMessage: 'Saksikan pergerakan waktu salat dan kumandang azan di seluruh dunia secara langsung di globe 3D 🌍🕌',
       pause: 'Jeda',
       clearSearch: 'Hapus pencarian',
       language: 'Bahasa',
@@ -340,6 +345,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Cari',
       share: 'Kongsi paparan',
       linkCopied: 'Pautan disalin',
+      shareMessage: 'Saksikan pergerakan waktu solat dan laungan azan di seluruh dunia secara langsung di glob 3D 🌍🕌',
       pause: 'Jeda',
       clearSearch: 'Kosongkan carian',
       language: 'Bahasa',
@@ -402,6 +408,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'تلاش',
       share: 'منظر شیئر کریں',
       linkCopied: 'لنک کاپی ہو گیا',
+      shareMessage: 'زمین پر نماز کے اوقات اور اذان کی گونج کو لائیو 3D گلوب پر براہِ راست دیکھیں 🌍🕌',
       pause: 'روکیں',
       clearSearch: 'تلاش صاف کریں',
       language: 'زبان',
@@ -464,6 +471,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'جستجو',
       share: 'هم‌رسانی نما',
       linkCopied: 'پیوند کپی شد',
+      shareMessage: 'حرکت اوقات شرعی و طنین اذان را بر پهنه کره زمین به صورت زنده در یک کره سه‌بعدی مشاهده کنید 🌍🕌',
       pause: 'مکث',
       clearSearch: 'پاک‌کردن جستجو',
       language: 'زبان',
@@ -526,6 +534,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'অনুসন্ধান',
       share: 'দৃশ্য শেয়ার করুন',
       linkCopied: 'লিঙ্ক কপি হয়েছে',
+      shareMessage: 'একটি লাইভ ৩ডি গ্লোবে বিশ্বজুড়ে নামাজের সময় ও আজানের গতিপথ সরাসরি দেখুন 🌍🕌',
       pause: 'বিরতি',
       clearSearch: 'অনুসন্ধান মুছুন',
       language: 'ভাষা',
@@ -588,6 +597,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Rechercher',
       share: 'Partager la vue',
       linkCopied: 'Lien copié',
+      shareMessage: "Observez en direct le déplacement des heures de prière et de l'adhan autour de la Terre sur un globe 3D 🌍🕌",
       pause: 'Pause',
       clearSearch: 'Effacer la recherche',
       language: 'Langue',
@@ -650,6 +660,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       search: 'Поиск',
       share: 'Поделиться видом',
       linkCopied: 'Ссылка скопирована',
+      shareMessage: 'Смотрите движение времен намаза и призыв к молитве по всей Земле в реальном времени на 3D-глобусе 🌍🕌',
       pause: 'Пауза',
       clearSearch: 'Очистить поиск',
       language: 'Язык',

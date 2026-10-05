@@ -258,4 +258,15 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
     const sampleHtml = '<html><head><title>Original</title></head></html>';
     expect(transformIndexHtml(sampleHtml, 'en')).toBe(sampleHtml);
   });
+
+  it('defines an engaging, localized share message for every supported language', () => {
+    const locales = Object.keys(SUPPORTED_LOCALES) as SupportedLocale[];
+    for (const loc of locales) {
+      const trans = getTranslations(loc);
+      expect(trans.controls.shareMessage).toBeDefined();
+      expect(trans.controls.shareMessage.length).toBeGreaterThan(20);
+    }
+    expect(getTranslations('ar').controls.shareMessage).toContain('شاهد حركة مواقيت الصلاة');
+    expect(getTranslations('en').controls.shareMessage).toContain('Watch prayer times');
+  });
 });
