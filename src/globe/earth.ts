@@ -117,24 +117,24 @@ export function createEarth(
   group.name = 'earth-system';
 
   // Load 4K Satellite textures (NASA Blue Marble and Black Marble photographic)
-  const satelliteDayTexture = textureLoader.load('./textures/earth-day-4k.jpg');
+  const satelliteDayTexture = textureLoader.load('/textures/earth-day-4k.jpg');
   satelliteDayTexture.colorSpace = THREE.SRGBColorSpace;
 
-  const satelliteNightTexture = textureLoader.load('./textures/earth-night-4k.jpg');
+  const satelliteNightTexture = textureLoader.load('/textures/earth-night-4k.jpg');
   satelliteNightTexture.colorSpace = THREE.SRGBColorSpace;
 
   // Load Normal and Specular topography maps
-  const normalTexture = textureLoader.load('./textures/earth-normal.jpg');
-  const specularTexture = textureLoader.load('./textures/earth-specular.jpg');
+  const normalTexture = textureLoader.load('/textures/earth-normal.jpg');
+  const specularTexture = textureLoader.load('/textures/earth-specular.jpg');
 
   // Load Roadmap textures (Google Maps vector aesthetic)
-  const roadmapDayTexture = textureLoader.load('./textures/earth-roadmap-day.png');
+  const roadmapDayTexture = textureLoader.load('/textures/earth-roadmap-day.png');
   roadmapDayTexture.colorSpace = THREE.SRGBColorSpace;
 
-  const roadmapNightTexture = textureLoader.load('./textures/earth-roadmap-night.png');
+  const roadmapNightTexture = textureLoader.load('/textures/earth-roadmap-night.png');
   roadmapNightTexture.colorSpace = THREE.SRGBColorSpace;
 
-  const cloudsTexture = textureLoader.load('./textures/earth-clouds.png');
+  const cloudsTexture = textureLoader.load('/textures/earth-clouds.png');
 
   // Sphere geometry aligned with coordinate system
   const geometry = new THREE.SphereGeometry(EARTH_RADIUS, 96, 96);

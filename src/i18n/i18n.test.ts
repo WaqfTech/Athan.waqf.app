@@ -7,6 +7,13 @@ import {
 } from './config';
 import { DICTIONARIES, getTranslations } from './translations';
 import { i18n } from './manager';
+import {
+  SEO_METADATA,
+  getCanonicalUrl,
+  getHreflangLinks,
+  buildLinkHeader,
+  transformIndexHtml,
+} from './seo';
 
 describe('i18n configuration and locale detection', () => {
   it('defines 10 major Muslim-world and international languages', () => {
@@ -54,7 +61,29 @@ describe('i18n configuration and locale detection', () => {
     }
   });
 
-  it('detects locale from URL search params', () => {
+  it('detects locale from URL path prefix', () => {
+    const originalWindow = globalThis.window;
+    globalThis.window = {
+      location: new URL('https://athan.waqf.dev/ar'),
+    } as unknown as Window & typeof globalThis;
+
+    expect(detectLocale()).toBe('ar');
+
+    globalThis.window = originalWindow;
+  });
+
+  it('prioritizes path prefix over query param', () => {
+    const originalWindow = globalThis.window;
+    globalThis.window = {
+      location: new URL('https://athan.waqf.dev/fr?lang=tr'),
+    } as unknown as Window & typeof globalThis;
+
+    expect(detectLocale()).toBe('fr');
+
+    globalThis.window = originalWindow;
+  });
+
+  it('detects locale from URL search params when at root', () => {
     const originalWindow = globalThis.window;
     globalThis.window = {
       location: new URL('https://athan.waqf.dev/?lang=tr'),
@@ -118,5 +147,86 @@ describe('I18nManager reactivity and DOM sync', () => {
     expect(notifiedBrand).toBe('EZAN DÜNYASI');
 
     unsub();
+  });
+});
+
+describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
+  it('provides complete SEO title, description, and noscript for all 10 locales', () => {
+    const locales = Object.keys(SUPPORTED_LOCALES) as SupportedLocale[];
+    for (const loc of locales) {
+      const meta = SEO_METADATA[loc];
+      expect(meta, `Missing SEO metadata for ${loc}`).toBeDefined();
+      expect(meta.title.length, `Title too short for ${loc}`).toBeGreaterThan(15);
+      expect(meta.description.length, `Description too short for ${loc}`).toBeGreaterThan(30);
+      expect(meta.noscript.length, `Noscript too short for ${loc}`).toBeGreaterThan(30);
+    }
+  });
+
+  it('generates canonical URLs correctly with root for en and path for others', () => {
+    expect(getCanonicalUrl('en')).toBe('https://athan.waqf.dev/');
+    expect(getCanonicalUrl('ar')).toBe('https://athan.waqf.dev/ar');
+    expect(getCanonicalUrl('fr')).toBe('https://athan.waqf.dev/fr');
+  });
+
+  it('generates all 11 hreflang alternates including x-default and all 10 locales', () => {
+    const links = getHreflangLinks();
+    expect(links).toHaveLength(11);
+
+    const xDefault = links.find((l) => l.hreflang === 'x-default');
+    expect(xDefault).toBeDefined();
+    expect(xDefault?.href).toBe('https://athan.waqf.dev/');
+
+    const enLink = links.find((l) => l.hreflang === 'en');
+    expect(enLink?.href).toBe('https://athan.waqf.dev/');
+
+    const arLink = links.find((l) => l.hreflang === 'ar');
+    expect(arLink?.href).toBe('https://athan.waqf.dev/ar');
+  });
+
+  it('builds RFC 5988/8288 compliant Link header', () => {
+    const header = buildLinkHeader();
+    expect(header).toContain('<https://athan.waqf.dev/>; rel="alternate"; hreflang="x-default"');
+    expect(header).toContain('<https://athan.waqf.dev/>; rel="alternate"; hreflang="en"');
+    expect(header).toContain('<https://athan.waqf.dev/ar>; rel="alternate"; hreflang="ar"');
+    expect(header).toContain('<https://athan.waqf.dev/ru>; rel="alternate"; hreflang="ru"');
+  });
+
+  it('transforms HTML for non-English locales on the edge', () => {
+    const sampleHtml = `<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <title>Adhan Earth | Live 3D Map of Prayer Times Worldwide</title>
+    <meta name="description" content="Watch prayer times move around the Earth in real time." />
+    <link rel="canonical" href="https://athan.waqf.dev/" />
+    <meta property="og:title" content="Adhan Earth | Live 3D Map of Prayer Times Worldwide" />
+    <meta property="og:description" content="Watch prayer times move around the Earth in real time." />
+    <meta property="og:url" content="https://athan.waqf.dev/" />
+    <meta name="twitter:title" content="Adhan Earth | Live 3D Map of Prayer Times Worldwide" />
+    <meta name="twitter:description" content="Watch prayer times move around the Earth in real time." />
+  </head>
+  <body>
+    <noscript>
+      <h1>Adhan Earth</h1>
+      <p>Original english noscript</p>
+    </noscript>
+  </body>
+</html>`;
+
+    const transformed = transformIndexHtml(sampleHtml, 'ar');
+    expect(transformed).toContain('<html lang="ar" dir="rtl">');
+    expect(transformed).toContain(`<title>${SEO_METADATA.ar.title}</title>`);
+    expect(transformed).toContain(`<meta name="description" content="${SEO_METADATA.ar.description}" />`);
+    expect(transformed).toContain('<link rel="canonical" href="https://athan.waqf.dev/ar" />');
+    expect(transformed).toContain(`<meta property="og:title" content="${SEO_METADATA.ar.title}" />`);
+    expect(transformed).toContain(`<meta property="og:description" content="${SEO_METADATA.ar.description}" />`);
+    expect(transformed).toContain('<meta property="og:url" content="https://athan.waqf.dev/ar" />');
+    expect(transformed).toContain(`<meta name="twitter:title" content="${SEO_METADATA.ar.title}" />`);
+    expect(transformed).toContain(`<meta name="twitter:description" content="${SEO_METADATA.ar.description}" />`);
+    expect(transformed).toContain(SEO_METADATA.ar.noscript);
+  });
+
+  it('returns original HTML untouched when locale is English', () => {
+    const sampleHtml = '<html><head><title>Original</title></head></html>';
+    expect(transformIndexHtml(sampleHtml, 'en')).toBe(sampleHtml);
   });
 });

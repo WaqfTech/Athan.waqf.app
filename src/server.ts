@@ -1,5 +1,13 @@
 // Cloudflare Worker entry point for Adhan Earth edge routing & geolocation
 
+import {
+  SUPPORTED_LOCALES,
+  SupportedLocale,
+  DEFAULT_LOCALE,
+  buildLinkHeader,
+  transformIndexHtml,
+} from './i18n';
+
 interface Env {
   ASSETS: {
     fetch: (request: Request) => Promise<Response>;
@@ -23,7 +31,7 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
-    // Dynamic edge geolocation endpoint powered by Cloudflare request.cf
+    // 1. Dynamic edge geolocation endpoint powered by Cloudflare request.cf
     if (url.pathname === '/api/geo') {
       const cf = (request as unknown as { cf?: IncomingRequestCfProperties }).cf;
       const data = {
@@ -48,7 +56,77 @@ export default {
       });
     }
 
-    // Serve static assets from Vite build directory
+    // 2. Canonical redirect for English (/en, /en/) to root (/)
+    if (url.pathname === '/en' || url.pathname === '/en/') {
+      const target = new URL('/', request.url);
+      target.search = url.search;
+      return Response.redirect(target.toString(), 301);
+    }
+
+    // 3. Normalize trailing slashes on supported locales (e.g. /ar/ -> /ar)
+    const stripped = url.pathname.replace(/^\/+|\/+$/g, '');
+    const segments = stripped.split('/');
+    if (segments.length === 1 && segments[0] in SUPPORTED_LOCALES) {
+      const loc = segments[0] as SupportedLocale;
+
+      if (loc !== DEFAULT_LOCALE && url.pathname.endsWith('/')) {
+        const target = new URL(`/${loc}`, request.url);
+        target.search = url.search;
+        return Response.redirect(target.toString(), 301);
+      }
+
+      // Serve localized page for supported locale (/ar, /tr, etc.)
+      if (loc !== DEFAULT_LOCALE) {
+        const indexUrl = new URL('/', request.url);
+        const indexReq = new Request(indexUrl.toString(), request);
+        const assetRes = await env.ASSETS.fetch(indexReq);
+
+        if (!assetRes.ok) {
+          return assetRes;
+        }
+
+        const rawHtml = await assetRes.text();
+        const localizedHtml = transformIndexHtml(rawHtml, loc);
+
+        const headers = new Headers(assetRes.headers);
+        headers.set('Content-Type', 'text/html; charset=utf-8');
+        headers.set('Content-Language', loc);
+        headers.set('Link', buildLinkHeader());
+
+        const existingCache = headers.get('cache-control') || 'public, max-age=0, must-revalidate';
+        if (!existingCache.includes('no-transform')) {
+          headers.set('cache-control', `${existingCache}, no-transform`);
+        }
+
+        return new Response(localizedHtml, {
+          status: 200,
+          headers,
+        });
+      }
+    }
+
+    // 4. Serve root (/) with Content-Language and Link headers
+    if (url.pathname === '/') {
+      const response = await env.ASSETS.fetch(request);
+      if (response.ok) {
+        const headers = new Headers(response.headers);
+        headers.set('Content-Language', 'en');
+        headers.set('Link', buildLinkHeader());
+
+        const existingCache = headers.get('cache-control') || 'public, max-age=0, must-revalidate';
+        if (!existingCache.includes('no-transform')) {
+          headers.set('cache-control', `${existingCache}, no-transform`);
+        }
+
+        return new Response(response.body, {
+          status: response.status,
+          headers,
+        });
+      }
+      return response;
+    }
+
+    // 5. Fallthrough for static assets (js, css, images, data, robots, sitemap)
     const response = await env.ASSETS.fetch(request);
     const contentType = response.headers.get('content-type') || '';
 

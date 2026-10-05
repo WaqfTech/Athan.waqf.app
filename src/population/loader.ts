@@ -207,7 +207,7 @@ export function parseSettlements(data: CompactSettlementRow[]): Settlement[] {
   });
 }
 
-export async function loadSettlements(url = './data/cities-core.json'): Promise<Settlement[]> {
+export async function loadSettlements(url = '/data/cities-core.json'): Promise<Settlement[]> {
   if (cachedSettlements) {
     return cachedSettlements;
   }

@@ -36,24 +36,34 @@ export const DEFAULT_LOCALE: SupportedLocale = 'en';
 
 /**
  * Detects preferred locale based on:
- * 1. URL search parameter (?lang=)
- * 2. LocalStorage preference (adhan_locale)
- * 3. Browser navigator language (navigator.languages / navigator.language)
- * 4. Fallback to DEFAULT_LOCALE
+ * 1. Path-based locale prefix (e.g. /ar, /tr, /ur)
+ * 2. URL search parameter (?lang=)
+ * 3. LocalStorage preference (adhan_locale)
+ * 4. Browser navigator language (navigator.languages / navigator.language)
+ * 5. Fallback to DEFAULT_LOCALE
  */
 export function detectLocale(): SupportedLocale {
   if (typeof window === 'undefined') {
     return DEFAULT_LOCALE;
   }
 
-  // 1. Query parameter override
+  // 1. Path-based locale
+  const pathSegment = window.location.pathname
+    .replace(/^\/+|\/+$/g, '')
+    .split('/')[0]
+    ?.toLowerCase();
+  if (pathSegment && pathSegment in SUPPORTED_LOCALES) {
+    return pathSegment as SupportedLocale;
+  }
+
+  // 2. Query parameter override
   const params = new URLSearchParams(window.location.search);
   const langParam = params.get('lang')?.toLowerCase();
   if (langParam && langParam in SUPPORTED_LOCALES) {
     return langParam as SupportedLocale;
   }
 
-  // 2. Saved user preference
+  // 3. Saved user preference
   try {
     const saved = localStorage.getItem('adhan_locale')?.toLowerCase();
     if (saved && saved in SUPPORTED_LOCALES) {
@@ -63,7 +73,7 @@ export function detectLocale(): SupportedLocale {
     // Ignore localStorage access issues
   }
 
-  // 3. Browser navigator languages
+  // 4. Browser navigator languages
   const navLangs = navigator.languages || [navigator.language || ''];
   for (const raw of navLangs) {
     if (!raw) continue;

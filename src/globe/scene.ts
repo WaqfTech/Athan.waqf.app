@@ -72,7 +72,7 @@ export function createGlobeScene(
 
   // Panoramic starry deep space celestial sphere
   const textureLoader = new THREE.TextureLoader();
-  const skyTexture = textureLoader.load('./textures/night-sky.png');
+  const skyTexture = textureLoader.load('/textures/night-sky.png');
   skyTexture.colorSpace = THREE.SRGBColorSpace;
   const skyGeometry = new THREE.SphereGeometry(300, 32, 32);
   const skyMaterial = new THREE.MeshBasicMaterial({

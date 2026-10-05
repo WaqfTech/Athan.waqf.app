@@ -10,7 +10,7 @@ import { createNarrativeDirector, NarrativeDirector } from './simulation/narrati
 import type { PrayerFrontKey } from './globe/fronts';
 import { parseUrlState, updateUrlState } from './ui/urlState';
 import { CALCULATION_CONVENTIONS, CalculationConventionName } from './prayer/conventions';
-import { i18n } from './i18n';
+import { i18n, detectLocale } from './i18n';
 
 export interface AppInstance {
   initialized: boolean;
@@ -107,6 +107,28 @@ export function initializeApp(): AppInstance {
     updateUrlState({ lang: locale });
   });
 
+  const handlePopstate = (): void => {
+    const loc = detectLocale();
+    if (loc !== i18n.getLocale()) {
+      i18n.setLocale(loc);
+    }
+  };
+
+  if (typeof window !== 'undefined') {
+    const currentLoc = i18n.getLocale();
+    const expectedPath = currentLoc === 'en' ? '/' : `/${currentLoc}`;
+    const params = new URLSearchParams(window.location.search);
+    if (
+      params.has('lang') ||
+      (window.location.pathname !== expectedPath &&
+        (currentLoc !== 'en' || window.location.pathname === '/en'))
+    ) {
+      updateUrlState({ lang: currentLoc });
+    }
+
+    window.addEventListener('popstate', handlePopstate);
+  }
+
   globeScene.setConvention(CALCULATION_CONVENTIONS[initialConvention]);
   globeScene.setTime(initialTime);
 
@@ -165,6 +187,9 @@ export function initializeApp(): AppInstance {
     cancelAnimationFrame(animationId);
     globeScene.dispose();
     hud.dispose();
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('popstate', handlePopstate);
+    }
   };
 
   return {

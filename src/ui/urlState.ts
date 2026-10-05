@@ -44,7 +44,15 @@ export function parseUrlState(search = window.location.search): PlanetaryUrlStat
   }
 
   const lang = params.get('lang');
-  if (lang) state.lang = lang;
+  if (lang) {
+    state.lang = lang;
+  } else if (typeof window !== 'undefined') {
+    const pathSegment = window.location.pathname
+      .replace(/^\/+|\/+$/g, '')
+      .split('/')[0]
+      ?.toLowerCase();
+    if (pathSegment) state.lang = pathSegment;
+  }
 
   return state;
 }
@@ -60,8 +68,20 @@ export function updateUrlState(state: PlanetaryUrlState): void {
   if (state.mode !== undefined) params.set('mode', state.mode);
   if (state.convention !== undefined) params.set('convention', state.convention);
   if (state.style !== undefined) params.set('style', state.style);
-  if (state.lang !== undefined) params.set('lang', state.lang);
 
-  const newUrl = `${window.location.pathname}?${params.toString()}`;
+  // Remove redundant ?lang= from search query since language lives in path
+  params.delete('lang');
+
+  let newPath = window.location.pathname;
+  if (state.lang !== undefined) {
+    if (state.lang === 'en') {
+      newPath = '/';
+    } else {
+      newPath = `/${state.lang}`;
+    }
+  }
+
+  const query = params.toString();
+  const newUrl = query ? (newPath === '/' ? `/?${query}` : `${newPath}?${query}`) : newPath;
   window.history.replaceState(null, '', newUrl);
 }

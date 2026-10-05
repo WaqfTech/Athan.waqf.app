@@ -2,6 +2,7 @@
 
 import { SupportedLocale, SUPPORTED_LOCALES, detectLocale } from './config';
 import { Translations, getTranslations } from './translations';
+import { SEO_METADATA, getCanonicalUrl } from './seo';
 
 export type LocaleChangeListener = (locale: SupportedLocale, translations: Translations) => void;
 
@@ -57,6 +58,34 @@ class I18nManager {
     const meta = SUPPORTED_LOCALES[locale] || SUPPORTED_LOCALES.en;
     document.documentElement.lang = meta.code;
     document.documentElement.dir = meta.dir;
+
+    const seo = SEO_METADATA[locale] || SEO_METADATA.en;
+    if ('title' in document) {
+      document.title = seo.title;
+    }
+
+    if (typeof document.querySelector === 'function') {
+      const descMeta = document.querySelector('meta[name="description"]');
+      if (descMeta) descMeta.setAttribute('content', seo.description);
+
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', seo.title);
+
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute('content', seo.description);
+
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute('content', getCanonicalUrl(locale));
+
+      const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+      if (twitterTitle) twitterTitle.setAttribute('content', seo.title);
+
+      const twitterDesc = document.querySelector('meta[name="twitter:description"]');
+      if (twitterDesc) twitterDesc.setAttribute('content', seo.description);
+
+      const canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) canonical.setAttribute('href', getCanonicalUrl(locale));
+    }
   }
 }
 
