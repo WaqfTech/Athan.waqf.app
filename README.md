@@ -1,5 +1,7 @@
 # Adhan Earth (athan.waqf.app)
 
+[العربية](README.ar.md) | English
+
 Adhan Earth is an interactive 3D planetary observatory.
 It visualizes Earth in space with astronomical solar illumination,
 moving Islamic prayer fronts, and continuous global adhan events across 15,000 settlements.
