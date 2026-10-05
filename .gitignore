@@ -16,6 +16,8 @@ rm/
 .vite/
 .DS_Store
 *.log
+.cursor/
+.devin/
 
 # Sila internal database and locks
 .sila/

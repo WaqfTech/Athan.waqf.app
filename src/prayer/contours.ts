@@ -1,11 +1,21 @@
 // Global continuous prayer front and twilight contour generator
 
-import { SubsolarCoordinates } from '../astronomy/solar';
+import { getSubsolarPoint, SubsolarCoordinates } from '../astronomy/solar';
 import { latLonToVector3, Vector3Tuple } from '../astronomy/coordinates';
 import { CalculationParameters, Madhab } from './conventions';
 
 const DEG2RAD = Math.PI / 180;
 const RAD2DEG = 180 / Math.PI;
+
+/**
+ * Normalizes an angle into [-180, 180] degrees.
+ */
+export function wrap180(deg: number): number {
+  let val = deg % 360;
+  if (val > 180) val -= 360;
+  if (val < -180) val += 360;
+  return val;
+}
 
 export interface PrayerContourPoints {
   /** Array of 3D Cartesian coordinates [x, y, z, x, y, z, ...] for line rendering */
@@ -22,6 +32,8 @@ export interface GlobalPrayerFronts {
   maghrib: PrayerContourPoints;
   isha: PrayerContourPoints;
   terminator: PrayerContourPoints;
+  geometricTerminator: PrayerContourPoints;
+  apparentTerminator: PrayerContourPoints;
 }
 
 /**
@@ -86,6 +98,7 @@ export function generateSolarAltitudeRing(
 
 /**
  * Generate dawn or dusk half-arc of a solar altitude ring.
+ * Preserves curve continuity by sampling along alpha in sequential order.
  */
 export function generateSolarAltitudeArc(
   subsolar: SubsolarCoordinates,
@@ -120,9 +133,9 @@ export function generateSolarAltitudeArc(
   const cosTheta = Math.cos(theta);
   const sinTheta = Math.sin(theta);
 
-  // Filter circle points to only include points whose local hour angle matches dawn or dusk
-  const rawPoints: Vector3Tuple[] = [];
   const samples = segmentCount * 2;
+  const circlePoints: Vector3Tuple[] = [];
+  const matches: boolean[] = [];
 
   for (let i = 0; i < samples; i++) {
     const alpha = (i / samples) * Math.PI * 2;
@@ -135,20 +148,51 @@ export function generateSolarAltitudeArc(
 
     // Compute point longitude in degrees [-180, 180]
     const lon = Math.atan2(px, pz) * RAD2DEG;
-    let diffLon = subsolar.longitude - lon;
-    while (diffLon > 180) diffLon -= 360;
-    while (diffLon < -180) diffLon += 360;
+    const H = wrap180(lon - subsolar.longitude);
 
-    // diffLon < 0 means point is East of subsolar meridian (morning / dawn)
-    // diffLon > 0 means point is West of subsolar meridian (afternoon / dusk)
-    const isDawn = diffLon < 0;
-    if ((type === 'dawn' && isDawn) || (type === 'dusk' && !isDawn)) {
-      rawPoints.push([px * radius, py * radius, pz * radius]);
+    // Morning dawn is where H < 0 (rising Sun, dh/dt > 0)
+    // Evening dusk is where H > 0 (falling Sun, dh/dt < 0)
+    const isDawn = H < 0;
+    const isDusk = H > 0;
+    const isMatch = type === 'dawn' ? isDawn : isDusk;
+
+    circlePoints.push([px * radius, py * radius, pz * radius]);
+    matches.push(isMatch);
+  }
+
+  // Find the contiguous segment of alpha where the condition holds.
+  // Sampling sequentially along alpha eliminates sorting by Cartesian y which caused high-latitude zig-zags.
+  let bestStart = -1;
+  let bestLen = 0;
+
+  if (matches.every(Boolean)) {
+    bestStart = 0;
+    bestLen = samples;
+  } else {
+    for (let i = 0; i < samples; i++) {
+      const prev = (i - 1 + samples) % samples;
+      if (matches[i] && !matches[prev]) {
+        let len = 0;
+        let curr = i;
+        while (matches[curr] && len < samples) {
+          len++;
+          curr = (curr + 1) % samples;
+        }
+        if (len > bestLen) {
+          bestLen = len;
+          bestStart = i;
+        }
+      }
     }
   }
 
-  // Sort arc points from South to North for smooth line continuity
-  rawPoints.sort((a, b) => a[1] - b[1]);
+  const rawPoints: Vector3Tuple[] = [];
+  if (bestStart !== -1) {
+    for (let k = 0; k < bestLen; k++) {
+      const idx = (bestStart + k) % samples;
+      rawPoints.push(circlePoints[idx]);
+    }
+  }
 
   const positions = new Float32Array(rawPoints.length * 3);
   for (let i = 0; i < rawPoints.length; i++) {
@@ -185,6 +229,7 @@ export function generateDhuhrFront(
 
 /**
  * Generate Asr front: the curve where shadow length equals noon shadow plus shadow factor (1 or 2).
+ * Strictly placed on the afternoon side (H > 0) with positive noon shadow check.
  */
 export function generateAsrFront(
   subsolar: SubsolarCoordinates,
@@ -196,20 +241,25 @@ export function generateAsrFront(
   const shadowFactor = madhab === 'Hanafi' ? 2 : 1;
   const rawPoints: Vector3Tuple[] = [];
 
-  for (let lat = -80; lat <= 80; lat += stepDeg) {
+  for (let lat = -89.5; lat <= 89.5; lat += stepDeg) {
+    const zenithDeg = Math.abs(lat - subsolar.latitude);
+    // Positive noon shadow check: noon altitude = 90 - zenithDeg must be > 0
+    if (zenithDeg >= 90) continue;
+
     const phi = lat * DEG2RAD;
-    const noonShadow = Math.tan(Math.abs(phi - delta));
+    const noonShadow = Math.tan(zenithDeg * DEG2RAD);
     const asrAltitudeRad = Math.atan(1 / (noonShadow + shadowFactor));
 
+    const denom = Math.cos(phi) * Math.cos(delta);
+    if (Math.abs(denom) < 1e-6) continue;
+
     const sinH = Math.sin(asrAltitudeRad);
-    const cosH = (sinH - Math.sin(phi) * Math.sin(delta)) / (Math.cos(phi) * Math.cos(delta));
+    const cosH = (sinH - Math.sin(phi) * Math.sin(delta)) / denom;
 
     if (cosH >= -1 && cosH <= 1) {
       const hourAngleDeg = Math.acos(cosH) * RAD2DEG;
-      // In afternoon, Asr front is West of subsolar meridian
-      let asrLon = subsolar.longitude - hourAngleDeg;
-      while (asrLon > 180) asrLon -= 360;
-      while (asrLon < -180) asrLon += 360;
+      // In afternoon, Asr front is strictly East of subsolar meridian (H > 0)
+      const asrLon = wrap180(subsolar.longitude + hourAngleDeg);
 
       const [x, y, z] = latLonToVector3(lat, asrLon, radius);
       rawPoints.push([x, y, z]);
@@ -234,18 +284,47 @@ export function generateGlobalPrayerFronts(
   convention: CalculationParameters,
   madhab: Madhab,
   radius: number,
+  date?: Date,
 ): GlobalPrayerFronts {
   const fajr = generateSolarAltitudeArc(subsolar, -convention.fajrAngle, 'dawn', radius);
-  const sunrise = generateSolarAltitudeArc(subsolar, -0.833, 'dawn', radius);
+  const sunrise = generateSolarAltitudeArc(subsolar, -0.8333, 'dawn', radius);
   const dhuhr = generateDhuhrFront(subsolar, radius);
   const asr = generateAsrFront(subsolar, madhab, radius);
-  const maghrib = generateSolarAltitudeArc(subsolar, -0.833, 'dusk', radius);
+  const maghribAngle = convention.maghribAngle && convention.maghribAngle > 0
+    ? -convention.maghribAngle
+    : -0.8333;
+  const maghrib = generateSolarAltitudeArc(subsolar, maghribAngle, 'dusk', radius);
 
-  const ishaAngle = convention.ishaAngle > 0 ? convention.ishaAngle : 18;
-  const isha = generateSolarAltitudeArc(subsolar, -ishaAngle, 'dusk', radius);
+  let isha: PrayerContourPoints;
+  const isFixedInterval =
+    (convention.ishaIntervalMinutes !== undefined && convention.ishaIntervalMinutes > 0) ||
+    (convention.ishaAngle === 0 && (convention.name === 'UmmAlQura' || convention.name === 'Qatar'));
 
-  // Full terminator circle (sunrise + sunset boundary)
-  const terminator = generateSolarAltitudeRing(subsolar, -0.833, radius);
+  if (isFixedInterval) {
+    const intervalMinutes = convention.ishaIntervalMinutes || 90;
+    let prevSubsolar: SubsolarCoordinates;
+    if (date) {
+      const prevDate = new Date(date.getTime() - intervalMinutes * 60000);
+      prevSubsolar = getSubsolarPoint(prevDate);
+    } else {
+      // If date is not provided, rotate subsolar longitude by -0.25 deg/min:
+      // Subsolar point moves westward at 0.25 deg/min (15 deg/hr).
+      // At t - intervalMinutes, subsolar point was eastward:
+      prevSubsolar = {
+        latitude: subsolar.latitude,
+        longitude: wrap180(subsolar.longitude + intervalMinutes * 0.25),
+      };
+    }
+    isha = generateSolarAltitudeArc(prevSubsolar, maghribAngle, 'dusk', radius);
+  } else {
+    const ishaAngle = convention.ishaAngle > 0 ? convention.ishaAngle : 18;
+    isha = generateSolarAltitudeArc(subsolar, -ishaAngle, 'dusk', radius);
+  }
+
+  // Geometric terminator (solar center at horizon: 0.0 deg)
+  const geometricTerminator = generateSolarAltitudeRing(subsolar, 0.0, radius);
+  // Apparent terminator (solar upper limb touching apparent horizon: -0.8333 deg)
+  const apparentTerminator = generateSolarAltitudeRing(subsolar, -0.8333, radius);
 
   return {
     fajr,
@@ -254,6 +333,8 @@ export function generateGlobalPrayerFronts(
     asr,
     maghrib,
     isha,
-    terminator,
+    terminator: apparentTerminator,
+    geometricTerminator,
+    apparentTerminator,
   };
 }

@@ -101,6 +101,9 @@ export interface ActiveAdhanEvent {
   settlementIndex: number;
   prayer: PrayerFrontKey;
   progress: number; // 0.0 to 1.0 across adhan duration
+  eventId?: string;
+  startTime?: Date;
+  endTime?: Date;
 }
 
 export interface SettlementPointCloud {

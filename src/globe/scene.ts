@@ -163,7 +163,7 @@ export function createGlobeScene(
     const sunDir = earth.mesh.material.uniforms.uSunDirection.value;
     sunLight.position.copy(sunDir).multiplyScalar(50);
     atmosphere.updateSun(sunDir);
-    prayerFronts.update(subsolar, currentConvention, currentMadhab);
+    prayerFronts.update(subsolar, currentConvention, currentMadhab, date);
     return subsolar;
   };
 

@@ -1,0 +1,40 @@
+{
+  "repository": "WaqfTech/Athan.waqf.app",
+  "title": "R0001 \u2014 Solar-state integrity: polar events, prayer-front correctness and physically based Earth illumination",
+  "canonical_id": "R0001",
+  "state": "NOT_FILED_INTEGRATION_FORBIDDEN",
+  "creation_attempted": true,
+  "observed_response": {
+    "message": "Resource not accessible by integration",
+    "status": "403",
+    "is_error": true
+  },
+  "issue_number": null,
+  "public_issue_url": null,
+  "post_attempt_tracker_read": {
+    "endpoint": "https://api.github.com/repos/WaqfTech/Athan.waqf.app/issues?state=all&per_page=100&page=1",
+    "observation_date_utc": "2026-10-05",
+    "items": 4,
+    "pull_requests": 4,
+    "ordinary_issues": 0,
+    "numbers": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "observation_scope": "complete returned first page; fewer than requested page size"
+  },
+  "final_manual_delivery": {
+    "sha256": "224c2b960753f7f0b58050f75a25b7c86eb53a62e7a2b8262b2a019a648aa671",
+    "bytes": 63073,
+    "characters": 62928,
+    "words": 7613,
+    "lines": 516
+  },
+  "attempted_body_byte_identity_claim_for_manual_delivery": false,
+  "independent_cold_review": "NOT_PERFORMED",
+  "maintainer_adoption": "PENDING",
+  "source_changes": false,
+  "deployment": false
+}

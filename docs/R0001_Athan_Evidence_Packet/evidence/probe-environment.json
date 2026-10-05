@@ -1,0 +1,18 @@
+{
+  "node": "v22.16.0",
+  "typescript": "5.8.3",
+  "transpiledModules": [
+    "astronomy/julian.ts",
+    "astronomy/coordinates.ts",
+    "astronomy/solar.ts",
+    "prayer/conventions.ts",
+    "prayer/calculator.ts",
+    "prayer/contours.ts",
+    "simulation/eventEngine.ts",
+    "simulation/continuity.ts",
+    "simulation/clock.ts",
+    "population/loader.ts"
+  ],
+  "fullTypecheck": false,
+  "vitestRun": false
+}

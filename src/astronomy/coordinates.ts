@@ -26,6 +26,16 @@ export function latLonToVector3(
   longitude: number,
   radius = 1,
 ): Vector3Tuple {
+  if (typeof latitude !== 'number' || !Number.isFinite(latitude)) {
+    throw new TypeError('Latitude must be a finite number');
+  }
+  if (typeof longitude !== 'number' || !Number.isFinite(longitude)) {
+    throw new TypeError('Longitude must be a finite number');
+  }
+  if (typeof radius !== 'number' || !Number.isFinite(radius)) {
+    throw new TypeError('Radius must be a finite number');
+  }
+
   const phi = latitude * DEG2RAD;
   const lambda = longitude * DEG2RAD;
 
@@ -41,6 +51,14 @@ export function latLonToVector3(
  * Convert a 3D Cartesian vector back to geographic latitude and longitude in degrees.
  */
 export function vector3ToLatLon(x: number, y: number, z: number): GeographicCoordinate {
+  if (
+    typeof x !== 'number' || !Number.isFinite(x) ||
+    typeof y !== 'number' || !Number.isFinite(y) ||
+    typeof z !== 'number' || !Number.isFinite(z)
+  ) {
+    throw new TypeError('Vector coordinates must be finite numbers');
+  }
+
   const r = Math.hypot(x, y, z);
   if (r === 0) {
     return { latitude: 0, longitude: 0 };
@@ -53,6 +71,34 @@ export function vector3ToLatLon(x: number, y: number, z: number): GeographicCoor
     latitude: phi,
     longitude: lambda,
   };
+}
+
+/**
+ * Type-safe aliases matching Display Coordinate System specifications.
+ */
+export const toDisplayCoordinates = latLonToVector3;
+export const fromDisplayCoordinates = vector3ToLatLon;
+
+/**
+ * Calculate the local hour angle in degrees wrapped into [-180, 180].
+ * H = wrap180(observerLon - subsolarLon).
+ *
+ * For East-positive coordinates:
+ * - H < 0: Observer is West of the Sun (morning, rising sun, dh/dt > 0).
+ * - H > 0: Observer is East of the Sun (afternoon, setting sun, dh/dt < 0).
+ */
+export function getLocalHourAngle(observerLon: number, subsolarLon: number): number {
+  if (typeof observerLon !== 'number' || !Number.isFinite(observerLon)) {
+    throw new TypeError('Observer longitude must be a finite number');
+  }
+  if (typeof subsolarLon !== 'number' || !Number.isFinite(subsolarLon)) {
+    throw new TypeError('Subsolar longitude must be a finite number');
+  }
+
+  let diff = (observerLon - subsolarLon) % 360;
+  if (diff > 180) diff -= 360;
+  if (diff < -180) diff += 360;
+  return diff;
 }
 
 /**
@@ -78,3 +124,4 @@ export function angularDistanceDegrees(
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(Math.max(0, 1 - a)));
   return c * RAD2DEG;
 }
+

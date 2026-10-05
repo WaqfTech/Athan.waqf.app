@@ -47,53 +47,59 @@ const fragmentShader = /* glsl */ `
   varying vec3 vBitangent;
 
   void main() {
-    // Construct TBN matrix for normal/bump relief
-    mat3 tbn = mat3(normalize(vTangent), normalize(vBitangent), normalize(vNormal));
-    vec3 normalMapSample = texture2D(uNormalTexture, vUv).xyz * 2.0 - 1.0;
-    vec3 perturbedNormal = normalize(tbn * (normalMapSample * vec3(uBumpScale, uBumpScale, 1.0)));
-    vec3 normal = mix(normalize(vNormal), perturbedNormal, clamp(uBumpScale * 2.0, 0.0, 1.0));
-
+    vec3 geomNormal = normalize(vNormal);
     vec3 sunDir = normalize(uSunDirection);
 
-    // Cosine of angle between surface normal and sun direction
-    float sunDot = dot(normal, sunDir);
+    // Unperturbed geometric solar dot product for planetary macro occlusion
+    float sunDotMacro = dot(geomNormal, sunDir);
 
-    // Day / Night transition band between -0.08 and +0.08
-    float dayFactor = smoothstep(-0.08, 0.08, sunDot);
+    // Planetary geometric direct sunlight horizon cutoff (strictly 0 when sunDotMacro <= 0)
+    float directOcclusion = smoothstep(0.0, 0.025, sunDotMacro);
 
-    // Sample textures
+    // Micro-shading normal for local terrain bump relief
+    mat3 tbn = mat3(normalize(vTangent), normalize(vBitangent), geomNormal);
+    vec3 normalMapSample = texture2D(uNormalTexture, vUv).xyz * 2.0 - 1.0;
+    vec3 perturbedNormal = normalize(tbn * (normalMapSample * vec3(uBumpScale, uBumpScale, 1.0)));
+    vec3 shadingNormal = mix(geomNormal, perturbedNormal, clamp(uBumpScale * 2.0, 0.0, 1.0));
+
+    // Local Lambertian diffuse scaling gated strictly by geometric occlusion (0.03 floor eliminated)
+    float nDotL = max(dot(shadingNormal, sunDir), 0.0);
+    float diffuse = nDotL * directOcclusion;
+
+    // Sample input textures (decoded to linear space by Three.js)
     vec4 dayColor = texture2D(uDayTexture, vUv);
     vec4 nightColor = texture2D(uNightTexture, vUv);
     vec4 cloudsColor = texture2D(uCloudsTexture, vUv);
     float specMask = texture2D(uSpecularTexture, vUv).r;
 
-    // Enhance night city lights brightness and warm gold glow
-    vec3 lights = nightColor.rgb * vec3(1.35, 1.15, 0.85) * (1.0 - dayFactor) * 1.5;
+    // Night emission modulation: city lights active only in night hemisphere
+    float nightFactor = 1.0 - smoothstep(-0.03, 0.03, sunDotMacro);
+    vec3 lights = nightColor.rgb * vec3(1.35, 1.15, 0.85) * nightFactor * 1.5;
 
-    // Sunset / sunrise warm rim in the terminator transition zone
-    float terminator = 1.0 - smoothstep(0.0, 0.16, abs(sunDot));
-    vec3 sunsetGlow = vec3(1.0, 0.45, 0.16) * terminator * 0.35;
+    // Grazing sunset rim glow along the terminator transition zone, strictly zero in night
+    float sunsetBand = smoothstep(-0.03, 0.0, sunDotMacro) * (1.0 - smoothstep(0.0, 0.05, sunDotMacro));
+    vec3 sunsetGlow = vec3(1.0, 0.45, 0.16) * sunsetBand * 0.35;
 
-    // Direct sunlight diffuse scaling
-    float diffuse = clamp(sunDot, 0.03, 1.0);
-
-    // Ocean specular reflection (sun glint)
+    // Ocean specular reflection (sun glint) gated strictly by geometric horizon
     vec3 viewDir = normalize(cameraPosition - vWorldPosition);
-    vec3 reflectDir = reflect(-sunDir, normal);
-    float specFactor = pow(max(dot(reflectDir, viewDir), 0.0), 28.0);
-    vec3 oceanGlint = vec3(1.0, 0.96, 0.88) * specFactor * specMask * clamp(sunDot + 0.05, 0.0, 1.0) * 1.35;
+    vec3 reflectDir = reflect(-sunDir, shadingNormal);
+    float specFactor = pow(max(dot(reflectDir, viewDir), 0.0), 32.0);
+    vec3 oceanGlint = vec3(1.0, 0.96, 0.88) * specFactor * specMask * directOcclusion * 1.5;
 
+    // Day surface radiance
     vec3 litDay = dayColor.rgb * diffuse + sunsetGlow + oceanGlint;
 
-    // Blend clouds
+    // Cloud direct illumination gated strictly by geometric horizon
     float cloudIntensity = cloudsColor.r * uCloudsOpacity;
-    vec3 cloudsLit = vec3(cloudIntensity) * clamp(sunDot + 0.1, 0.0, 1.0);
+    vec3 cloudsLit = vec3(cloudIntensity) * directOcclusion;
 
-    // Combine day surface and night lights
-    vec3 surface = mix(lights, litDay, dayFactor);
-    surface += cloudsLit * dayFactor * 0.35;
+    // Combined linear radiance: day reflectance plus night emission plus clouds
+    vec3 surface = litDay + lights + cloudsLit * 0.35;
 
     gl_FragColor = vec4(surface, 1.0);
+
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
   }
 `;
 

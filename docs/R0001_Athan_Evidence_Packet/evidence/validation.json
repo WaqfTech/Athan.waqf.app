@@ -1,0 +1,26 @@
+{
+  "work_order": {
+    "sha256": "224c2b960753f7f0b58050f75a25b7c86eb53a62e7a2b8262b2a019a648aa671",
+    "bytes": 63073,
+    "characters": 62928,
+    "words": 7613,
+    "lines": 516
+  },
+  "findings": 13,
+  "baseline_witnesses": 8,
+  "implementation_cells": 12,
+  "acceptance_rows": 30,
+  "source_references": 36,
+  "undefined_references": 0,
+  "all_pinned_code_anchor_files_and_line_ranges_exist": true,
+  "markdown_parse": "PASS",
+  "diagnostic_repeat_byte_match": true,
+  "source_tree": "4564106c2b5515727dd29a8e984a91da8bf0d577",
+  "source_file_count": 94,
+  "native_test_run": false,
+  "full_typecheck": false,
+  "production_build": false,
+  "gpu_or_deployment_validation": false,
+  "independent_review": false,
+  "publication_success": false
+}
