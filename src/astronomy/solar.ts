@@ -89,10 +89,17 @@ export function getObliquityOfEcliptic(T: number): number {
   return e0 + 0.00256 * Math.cos(omega * DEG2RAD);
 }
 
+function assertValidDate(date: Date): void {
+  if (!(date instanceof Date) || !Number.isFinite(date.getTime())) {
+    throw new TypeError('Invalid date: date must be a valid Date instance with a finite timestamp');
+  }
+}
+
 /**
  * Compute the solar declination in degrees [-23.5, 23.5].
  */
 export function getSolarDeclination(date: Date): number {
+  assertValidDate(date);
   const T = getJulianCenturies(date);
   const lambdaApp = getSunApparentLongitude(T);
   const epsilon = getObliquityOfEcliptic(T);
@@ -105,6 +112,7 @@ export function getSolarDeclination(date: Date): number {
  * Compute the Equation of Time (EoT) in minutes.
  */
 export function getEquationOfTime(date: Date): number {
+  assertValidDate(date);
   const T = getJulianCenturies(date);
   const epsilon = getObliquityOfEcliptic(T);
   const L0 = getSunGeometricMeanLongitude(T);
@@ -133,6 +141,7 @@ export function getEquationOfTime(date: Date): number {
  * Compute the subsolar point (latitude and longitude where the Sun is directly at zenith) at a given UTC date.
  */
 export function getSubsolarPoint(date: Date): SubsolarCoordinates {
+  assertValidDate(date);
   const declination = getSolarDeclination(date);
   const eot = getEquationOfTime(date);
 
@@ -166,6 +175,17 @@ export function getSolarAltitude(
   observerLon: number,
   date: Date,
 ): number {
+  if (typeof observerLat !== 'number' || !Number.isFinite(observerLat)) {
+    throw new TypeError('Observer latitude must be a finite number');
+  }
+  if (observerLat < -90 || observerLat > 90) {
+    throw new RangeError('Observer latitude must be between -90 and 90 degrees');
+  }
+  if (typeof observerLon !== 'number' || !Number.isFinite(observerLon)) {
+    throw new TypeError('Observer longitude must be a finite number');
+  }
+  assertValidDate(date);
+
   const subsolar = getSubsolarPoint(date);
 
   const phi1 = observerLat * DEG2RAD;
@@ -183,3 +203,40 @@ export function getSolarAltitude(
   const clampedSinH = Math.max(-1, Math.min(1, sinH));
   return Math.asin(clampedSinH) * RAD2DEG;
 }
+
+/**
+ * Compute the solar azimuth angle in degrees clockwise from North [0, 360).
+ */
+export function getSolarAzimuth(
+  observerLat: number,
+  observerLon: number,
+  date: Date,
+): number {
+  if (typeof observerLat !== 'number' || !Number.isFinite(observerLat)) {
+    throw new TypeError('Observer latitude must be a finite number');
+  }
+  if (observerLat < -90 || observerLat > 90) {
+    throw new RangeError('Observer latitude must be between -90 and 90 degrees');
+  }
+  if (typeof observerLon !== 'number' || !Number.isFinite(observerLon)) {
+    throw new TypeError('Observer longitude must be a finite number');
+  }
+  assertValidDate(date);
+
+  const subsolar = getSubsolarPoint(date);
+  const phi = observerLat * DEG2RAD;
+  const delta = subsolar.latitude * DEG2RAD;
+  const deltaLon = (observerLon - subsolar.longitude) * DEG2RAD;
+
+  // y = -cos(delta) * sin(deltaLon)
+  // x = cos(phi) * sin(delta) - sin(phi) * cos(delta) * cos(deltaLon)
+  const y = -Math.cos(delta) * Math.sin(deltaLon);
+  const x =
+    Math.cos(phi) * Math.sin(delta) -
+    Math.sin(phi) * Math.cos(delta) * Math.cos(deltaLon);
+
+  let azimuth = Math.atan2(y, x) * RAD2DEG;
+  if (azimuth < 0) azimuth += 360;
+  return azimuth % 360;
+}
+

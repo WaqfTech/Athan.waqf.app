@@ -1,16 +1,21 @@
 // URL query parameter state serialization and parsing for reproducible planetary views
 
+import { Madhab, HighLatitudeRule } from '../prayer/conventions';
+
 export interface PlanetaryUrlState {
   lat?: number;
   lon?: number;
   time?: Date;
   mode?: string;
   convention?: string;
+  madhab?: Madhab;
+  highLatitudeRule?: HighLatitudeRule;
+  rule?: HighLatitudeRule;
   style?: 'roadmap' | 'satellite';
   lang?: string;
 }
 
-export function parseUrlState(search = window.location.search): PlanetaryUrlState {
+export function parseUrlState(search = typeof window !== 'undefined' ? window.location.search : ''): PlanetaryUrlState {
   const params = new URLSearchParams(search);
   const state: PlanetaryUrlState = {};
 
@@ -37,6 +42,21 @@ export function parseUrlState(search = window.location.search): PlanetaryUrlStat
 
   const conv = params.get('convention');
   if (conv) state.convention = conv;
+
+  const madhabStr = params.get('madhab');
+  if (madhabStr === 'Shafi' || madhabStr === 'Hanafi') {
+    state.madhab = madhabStr;
+  }
+
+  const ruleStr = params.get('highLatitudeRule') || params.get('rule');
+  if (
+    ruleStr === 'MiddleOfTheNight' ||
+    ruleStr === 'SeventhOfTheNight' ||
+    ruleStr === 'AngleBased'
+  ) {
+    state.highLatitudeRule = ruleStr;
+    state.rule = ruleStr;
+  }
 
   const style = params.get('style');
   if (style === 'satellite' || style === 'roadmap') {
@@ -67,6 +87,12 @@ export function updateUrlState(state: PlanetaryUrlState): void {
   if (state.time !== undefined) params.set('t', state.time.toISOString());
   if (state.mode !== undefined) params.set('mode', state.mode);
   if (state.convention !== undefined) params.set('convention', state.convention);
+  if (state.madhab !== undefined) params.set('madhab', state.madhab);
+  if (state.highLatitudeRule !== undefined) {
+    params.set('rule', state.highLatitudeRule);
+  } else if (state.rule !== undefined) {
+    params.set('rule', state.rule);
+  }
   if (state.style !== undefined) params.set('style', state.style);
 
   // Remove redundant ?lang= from search query since language lives in path

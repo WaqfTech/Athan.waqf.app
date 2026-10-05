@@ -1,8 +1,11 @@
-// Geoscape HUD layout and interactive observatory controls overlay
-
 import { SimulationClock, PlaybackSpeed } from '../simulation/clock';
-import { CalculationConventionName, CALCULATION_CONVENTIONS } from '../prayer/conventions';
-import { PrayerFrontKey, PRAYER_COLORS } from '../globe/fronts';
+import {
+  CalculationConventionName,
+  CALCULATION_CONVENTIONS,
+  Madhab,
+  HighLatitudeRule,
+} from '../prayer/conventions';
+import { PrayerFrontKey, AllFrontKey, PRAYER_COLORS } from '../globe/fronts';
 import { GlobeScene } from '../globe/scene';
 import { createTimelineUI, TimelineUI } from './timeline';
 import { createInspectorPanel, InspectorPanel } from './inspector';
@@ -12,6 +15,47 @@ import { Settlement } from '../population/loader';
 import { SettlementSpatialIndex } from '../population/spatialIndex';
 import { fetchVisitorLocation, VisitorLocation } from '../population/visitorGeo';
 import { i18n, SUPPORTED_LOCALES, SupportedLocale } from '../i18n';
+import { Translations } from '../i18n/translations';
+import { AppStore } from './state';
+
+const CONVENTION_I18N_KEYS: Record<CalculationConventionName, keyof Translations['controls']> = {
+  MuslimWorldLeague: 'convMuslimWorldLeague',
+  UmmAlQura: 'convUmmAlQura',
+  Egyptian: 'convEgyptian',
+  Karachi: 'convKarachi',
+  NorthAmerica: 'convNorthAmerica',
+  Dubai: 'convDubai',
+  Qatar: 'convQatar',
+  Kuwait: 'convKuwait',
+  Singapore: 'convSingapore',
+  Turkey: 'convTurkey',
+};
+
+const MADHAB_I18N_KEYS: Record<Madhab, keyof Translations['controls']> = {
+  Shafi: 'madhabShafi',
+  Hanafi: 'madhabHanafi',
+};
+
+const RULE_I18N_KEYS: Record<HighLatitudeRule, keyof Translations['controls']> = {
+  MiddleOfTheNight: 'ruleMiddleOfTheNight',
+  SeventhOfTheNight: 'ruleSeventhOfTheNight',
+  AngleBased: 'ruleAngleBased',
+};
+
+function getConventionName(c: CalculationConventionName, trans: Translations): string {
+  const k = CONVENTION_I18N_KEYS[c];
+  return (k && (trans.controls[k] as string)) || c.replace(/([A-Z])/g, ' $1').trim();
+}
+
+function getMadhabName(m: Madhab, trans: Translations): string {
+  const k = MADHAB_I18N_KEYS[m];
+  return (k && (trans.controls[k] as string)) || m;
+}
+
+function getRuleName(r: HighLatitudeRule, trans: Translations): string {
+  const k = RULE_I18N_KEYS[r];
+  return (k && (trans.controls[k] as string)) || r.replace(/([A-Z])/g, ' $1').trim();
+}
 
 export type ViewMode = 'visual' | 'astronomy' | 'prayer' | 'adhan';
 
@@ -74,9 +118,13 @@ export function createHudOverlay(
   globeScene: GlobeScene,
   callbacks: {
     onConventionChange?: (conv: CalculationConventionName) => void;
+    onMadhabChange?: (madhab: Madhab) => void;
+    onHighLatitudeRuleChange?: (rule: HighLatitudeRule) => void;
     onFollowAdhan?: () => void;
     onStyleChange?: (style: 'roadmap' | 'satellite') => void;
     onSelectCity?: (settlement: Settlement) => void;
+    onDayBoundary?: (date: Date) => void;
+    store?: AppStore;
   } = {},
 ): HudOverlay {
   const root = document.getElementById('hud-overlay') || document.createElement('div');
@@ -848,8 +896,12 @@ export function createHudOverlay(
     satBtn.classList.remove('active');
     mapBtn.setAttribute('aria-pressed', 'true');
     satBtn.setAttribute('aria-pressed', 'false');
-    globeScene.setMapStyle('roadmap');
-    if (callbacks.onStyleChange) callbacks.onStyleChange('roadmap');
+    if (callbacks.store) {
+      callbacks.store.updateConfig({ mapStyle: 'roadmap' });
+    } else {
+      globeScene.setMapStyle('roadmap');
+      if (callbacks.onStyleChange) callbacks.onStyleChange('roadmap');
+    }
   });
 
   satBtn.addEventListener('click', () => {
@@ -857,8 +909,12 @@ export function createHudOverlay(
     mapBtn.classList.remove('active');
     satBtn.setAttribute('aria-pressed', 'true');
     mapBtn.setAttribute('aria-pressed', 'false');
-    globeScene.setMapStyle('satellite');
-    if (callbacks.onStyleChange) callbacks.onStyleChange('satellite');
+    if (callbacks.store) {
+      callbacks.store.updateConfig({ mapStyle: 'satellite' });
+    } else {
+      globeScene.setMapStyle('satellite');
+      if (callbacks.onStyleChange) callbacks.onStyleChange('satellite');
+    }
   });
 
   mapSegment.appendChild(mapBtn);
@@ -869,8 +925,17 @@ export function createHudOverlay(
   const prayerSegment = document.createElement('div');
   prayerSegment.className = 'dock-segment';
 
-  const prayerLabels: Map<PrayerFrontKey, HTMLSpanElement> = new Map();
-  const prayerKeys: PrayerFrontKey[] = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha', 'terminator'];
+  const prayerLabels: Map<AllFrontKey, HTMLSpanElement> = new Map();
+  const prayerKeys: AllFrontKey[] = [
+    'fajr',
+    'sunrise',
+    'dhuhr',
+    'asr',
+    'maghrib',
+    'isha',
+    'apparentTerminator',
+    'geometricTerminator',
+  ];
   for (const k of prayerKeys) {
     const hexColor = `#${PRAYER_COLORS[k].toString(16).padStart(6, '0')}`;
     const btn = document.createElement('button');
@@ -945,33 +1010,43 @@ export function createHudOverlay(
   const convWrapper = document.createElement('div');
   convWrapper.className = 'convention-menu-wrapper';
 
+  let activeConv: CalculationConventionName = 'UmmAlQura';
   const convTrigger = document.createElement('button');
   convTrigger.className = 'btn-convention-trigger';
   convTrigger.setAttribute('aria-label', t.controls.convention);
   convTrigger.innerHTML = `
-    <span id="active-conv-name">Umm al-Qura</span>
+    <span id="active-conv-name">${getConventionName(activeConv, t)}</span>
     <span aria-hidden="true" style="font-size: 10px; opacity: 0.7;">▾</span>
   `;
 
   const convMenu = document.createElement('div');
   convMenu.className = 'convention-dropdown-menu hud-panel';
 
+  const convItemSpans: Map<CalculationConventionName, HTMLSpanElement> = new Map();
   const conventionEntries = Object.keys(CALCULATION_CONVENTIONS) as CalculationConventionName[];
   for (const c of conventionEntries) {
     const item = document.createElement('button');
-    item.className = `convention-menu-item ${c === 'UmmAlQura' ? 'active' : ''}`;
-    const displayName = c.replace(/([A-Z])/g, ' $1').trim();
-    item.innerHTML = `<span>${displayName}</span>`;
+    item.className = `convention-menu-item ${c === activeConv ? 'active' : ''}`;
+    item.setAttribute('data-convention', c);
+    const span = document.createElement('span');
+    span.textContent = getConventionName(c, t);
+    convItemSpans.set(c, span);
+    item.appendChild(span);
 
     item.addEventListener('click', () => {
+      activeConv = c;
       convMenu.querySelectorAll('.convention-menu-item').forEach((el) => el.classList.remove('active'));
       item.classList.add('active');
       const activeSpan = convTrigger.querySelector('#active-conv-name');
-      if (activeSpan) activeSpan.textContent = displayName;
+      if (activeSpan) activeSpan.textContent = getConventionName(c, t);
       convMenu.classList.remove('active');
 
-      globeScene.setConvention(CALCULATION_CONVENTIONS[c]);
-      if (callbacks.onConventionChange) callbacks.onConventionChange(c);
+      if (callbacks.store) {
+        callbacks.store.updateConfig({ convention: c });
+      } else {
+        globeScene.setConvention(CALCULATION_CONVENTIONS[c]);
+        if (callbacks.onConventionChange) callbacks.onConventionChange(c);
+      }
     });
 
     convMenu.appendChild(item);
@@ -992,17 +1067,204 @@ export function createHudOverlay(
   convWrapper.appendChild(convMenu);
   layersPanel.appendChild(convWrapper);
 
-  const legend = document.createElement('ul');
-  legend.className = 'layers-legend';
-  const legendLines = document.createElement('li');
-  const legendRings = document.createElement('li');
-  const legendArcs = document.createElement('li');
-  legendLines.textContent = t.controls.legendLines;
-  legendRings.textContent = t.controls.legendRings;
-  legendArcs.textContent = t.controls.legendArcs;
-  legend.appendChild(legendLines);
-  legend.appendChild(legendRings);
-  legend.appendChild(legendArcs);
+  // Custom Madhab Selector Dropdown
+  const madhabWrapper = document.createElement('div');
+  madhabWrapper.className = 'convention-menu-wrapper madhab-menu-wrapper';
+
+  let activeMadhabVal: Madhab = 'Shafi';
+  const madhabTrigger = document.createElement('button');
+  madhabTrigger.className = 'btn-convention-trigger';
+  madhabTrigger.setAttribute('aria-label', t.controls.madhabLabel);
+  madhabTrigger.innerHTML = `
+    <span id="active-madhab-name">${getMadhabName(activeMadhabVal, t)}</span>
+    <span aria-hidden="true" style="font-size: 10px; opacity: 0.7;">▾</span>
+  `;
+
+  const madhabMenu = document.createElement('div');
+  madhabMenu.className = 'convention-dropdown-menu hud-panel';
+
+  const madhabItemSpans: Map<Madhab, HTMLSpanElement> = new Map();
+  const madhabEntries: Madhab[] = ['Shafi', 'Hanafi'];
+  for (const m of madhabEntries) {
+    const item = document.createElement('button');
+    item.className = `convention-menu-item ${m === activeMadhabVal ? 'active' : ''}`;
+    item.setAttribute('data-madhab', m);
+    const span = document.createElement('span');
+    span.textContent = getMadhabName(m, t);
+    madhabItemSpans.set(m, span);
+    item.appendChild(span);
+
+    item.addEventListener('click', () => {
+      activeMadhabVal = m;
+      madhabMenu.querySelectorAll('.convention-menu-item').forEach((el) => el.classList.remove('active'));
+      item.classList.add('active');
+      const activeSpan = madhabTrigger.querySelector('#active-madhab-name');
+      if (activeSpan) activeSpan.textContent = getMadhabName(m, t);
+      madhabMenu.classList.remove('active');
+
+      if (callbacks.store) {
+        callbacks.store.updateConfig({ madhab: m });
+      } else {
+        globeScene.setMadhab(m);
+        if (callbacks.onMadhabChange) callbacks.onMadhabChange(m);
+      }
+    });
+
+    madhabMenu.appendChild(item);
+  }
+
+  madhabTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    madhabMenu.classList.toggle('active');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!madhabWrapper.contains(e.target as Node)) {
+      madhabMenu.classList.remove('active');
+    }
+  });
+
+  madhabWrapper.appendChild(madhabTrigger);
+  madhabWrapper.appendChild(madhabMenu);
+  layersPanel.appendChild(madhabWrapper);
+
+  // Custom High-Latitude Rule Selector Dropdown
+  const ruleWrapper = document.createElement('div');
+  ruleWrapper.className = 'convention-menu-wrapper rule-menu-wrapper';
+
+  let activeRuleVal: HighLatitudeRule = 'MiddleOfTheNight';
+  const ruleTrigger = document.createElement('button');
+  ruleTrigger.className = 'btn-convention-trigger';
+  ruleTrigger.setAttribute('aria-label', t.controls.ruleLabel);
+  ruleTrigger.innerHTML = `
+    <span id="active-rule-name">${getRuleName(activeRuleVal, t)}</span>
+    <span aria-hidden="true" style="font-size: 10px; opacity: 0.7;">▾</span>
+  `;
+
+  const ruleMenu = document.createElement('div');
+  ruleMenu.className = 'convention-dropdown-menu hud-panel';
+
+  const ruleItemSpans: Map<HighLatitudeRule, HTMLSpanElement> = new Map();
+  const ruleEntries: HighLatitudeRule[] = [
+    'MiddleOfTheNight',
+    'SeventhOfTheNight',
+    'AngleBased',
+  ];
+  for (const r of ruleEntries) {
+    const item = document.createElement('button');
+    item.className = `convention-menu-item ${r === activeRuleVal ? 'active' : ''}`;
+    item.setAttribute('data-rule', r);
+    const span = document.createElement('span');
+    span.textContent = getRuleName(r, t);
+    ruleItemSpans.set(r, span);
+    item.appendChild(span);
+
+    item.addEventListener('click', () => {
+      activeRuleVal = r;
+      ruleMenu.querySelectorAll('.convention-menu-item').forEach((el) => el.classList.remove('active'));
+      item.classList.add('active');
+      const activeSpan = ruleTrigger.querySelector('#active-rule-name');
+      if (activeSpan) activeSpan.textContent = getRuleName(r, t);
+      ruleMenu.classList.remove('active');
+
+      if (callbacks.store) {
+        callbacks.store.updateConfig({ highLatitudeRule: r });
+      } else {
+        if (callbacks.onHighLatitudeRuleChange) callbacks.onHighLatitudeRuleChange(r);
+      }
+    });
+
+    ruleMenu.appendChild(item);
+  }
+
+  ruleTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    ruleMenu.classList.toggle('active');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!ruleWrapper.contains(e.target as Node)) {
+      ruleMenu.classList.remove('active');
+    }
+  });
+
+  ruleWrapper.appendChild(ruleTrigger);
+  ruleWrapper.appendChild(ruleMenu);
+  layersPanel.appendChild(ruleWrapper);
+
+  if (callbacks.store) {
+    const initialConfig = callbacks.store.getConfig();
+    activeConv = initialConfig.convention;
+    activeMadhabVal = initialConfig.madhab;
+    activeRuleVal = initialConfig.highLatitudeRule;
+
+    const activeSpan = convTrigger.querySelector('#active-conv-name');
+    if (activeSpan) activeSpan.textContent = getConventionName(activeConv, t);
+    convMenu.querySelectorAll('.convention-menu-item').forEach((el) => {
+      const match = el.getAttribute('data-convention') === activeConv;
+      el.classList.toggle('active', match);
+    });
+
+    const activeMadhab = madhabTrigger.querySelector('#active-madhab-name');
+    if (activeMadhab) activeMadhab.textContent = getMadhabName(activeMadhabVal, t);
+    madhabMenu.querySelectorAll('.convention-menu-item').forEach((el) => {
+      const match = el.getAttribute('data-madhab') === activeMadhabVal;
+      el.classList.toggle('active', match);
+    });
+
+    const activeRule = ruleTrigger.querySelector('#active-rule-name');
+    if (activeRule) activeRule.textContent = getRuleName(activeRuleVal, t);
+    ruleMenu.querySelectorAll('.convention-menu-item').forEach((el) => {
+      const match = el.getAttribute('data-rule') === activeRuleVal;
+      el.classList.toggle('active', match);
+    });
+
+    callbacks.store.subscribeConfig((cfg) => {
+      activeConv = cfg.convention;
+      activeMadhabVal = cfg.madhab;
+      activeRuleVal = cfg.highLatitudeRule;
+
+      const curConvSpan = convTrigger.querySelector('#active-conv-name');
+      if (curConvSpan) curConvSpan.textContent = getConventionName(cfg.convention, t);
+      convMenu.querySelectorAll('.convention-menu-item').forEach((el) => {
+        el.classList.toggle('active', el.getAttribute('data-convention') === cfg.convention);
+      });
+
+      const curMadhabSpan = madhabTrigger.querySelector('#active-madhab-name');
+      if (curMadhabSpan) curMadhabSpan.textContent = getMadhabName(cfg.madhab, t);
+      madhabMenu.querySelectorAll('.convention-menu-item').forEach((el) => {
+        el.classList.toggle('active', el.getAttribute('data-madhab') === cfg.madhab);
+      });
+
+      const curRuleSpan = ruleTrigger.querySelector('#active-rule-name');
+      if (curRuleSpan) curRuleSpan.textContent = getRuleName(cfg.highLatitudeRule, t);
+      ruleMenu.querySelectorAll('.convention-menu-item').forEach((el) => {
+        el.classList.toggle('active', el.getAttribute('data-rule') === cfg.highLatitudeRule);
+      });
+    });
+  }
+
+  const legend = document.createElement('div');
+  legend.className = 'layers-legend-container';
+  const updateLegend = (): void => {
+    legend.innerHTML = `
+      <div class="legend-header">${t.controls.legendTitle}</div>
+      <ul class="layers-legend-list">
+        <li class="legend-item"><span class="legend-dot" style="background: #38bdf8;"></span><span>${t.controls.legendFajr}</span></li>
+        <li class="legend-item"><span class="legend-dot" style="background: #34d399;"></span><span>${t.controls.legendSunrise}</span></li>
+        <li class="legend-item"><span class="legend-dot" style="background: #facc15;"></span><span>${t.controls.legendDhuhr}</span></li>
+        <li class="legend-item"><span class="legend-dot" style="background: #ff5500;"></span><span>${t.controls.legendAsr}</span></li>
+        <li class="legend-item"><span class="legend-dot" style="background: #ec4899;"></span><span>${t.controls.legendMaghrib}</span></li>
+        <li class="legend-item"><span class="legend-dot" style="background: #a855f7;"></span><span>${t.controls.legendIsha}</span></li>
+        <li class="legend-item"><span class="legend-dot" style="background: #e2e8f0;"></span><span>${t.controls.legendApparentTerminator}</span></li>
+        <li class="legend-item"><span class="legend-dot" style="background: #94a3b8;"></span><span>${t.controls.legendGeometricTerminator}</span></li>
+        <li class="legend-item"><span class="legend-dot dot-ring"></span><span>${t.controls.legendRings}</span></li>
+        <li class="legend-item"><span class="legend-dot dot-arc"></span><span>${t.controls.legendArcs}</span></li>
+      </ul>
+      <div class="legend-model-footnote">${t.controls.legendModelNote}</div>
+    `;
+  };
+  updateLegend();
   layersPanel.appendChild(legend);
 
   // Follow Adhan Tour Button
@@ -1026,6 +1288,10 @@ export function createHudOverlay(
 
   // 3. Floating Astronomical Inspector Panel
   const inspector = createInspectorPanel({
+    convention: callbacks.store?.getConfig().convention || 'UmmAlQura',
+    madhab: callbacks.store?.getConfig().madhab || 'Shafi',
+    highLatitudeRule: callbacks.store?.getConfig().highLatitudeRule || 'MiddleOfTheNight',
+    store: callbacks.store,
     onOpen: () => {
       root.classList.add('has-inspector-open');
       // Slide the globe clear of the panel: sideways on desktop, upward above the bottom sheet on phones
@@ -1047,8 +1313,18 @@ export function createHudOverlay(
   root.appendChild(inspector.element);
 
   // 4. Bottom 24-Hour Continuity Ribbon
-  const timeline = createTimelineUI(clock, (date) => {
-    globeScene.setTime(date);
+  const timeline = createTimelineUI(clock, {
+    onScrub: (date) => {
+      globeScene.setTime(date);
+      if (callbacks.store) {
+        callbacks.store.setDate(date);
+      }
+    },
+    onDayBoundary: (date) => {
+      if (callbacks.onDayBoundary) {
+        callbacks.onDayBoundary(date);
+      }
+    },
   });
 
   // Group controls dock and timeline ribbon into bottom stack
@@ -1178,20 +1454,28 @@ export function createHudOverlay(
     speedButtons.find((b) => b.dataset.speedKey === '0')?.setAttribute('aria-label', t.controls.pause);
     langTrigger.setAttribute('aria-label', t.controls.language);
     convTrigger.setAttribute('aria-label', t.controls.convention);
-    shareBtn.setAttribute('aria-label', t.controls.share);
-    shareBtn.title = t.controls.share;
-    creditsBtn.setAttribute('aria-label', t.controls.credits);
-    creditsBtn.title = `${t.controls.credits} (C)`;
-    creditsModal.updateTranslations(t);
-    helpBtn.setAttribute('aria-label', t.controls.shortcuts);
-    helpBtn.title = `${t.controls.shortcuts} (?)`;
-    shortcutsPanel.setAttribute('aria-label', t.controls.shortcuts);
-    shortcutsTitle.textContent = t.controls.shortcuts;
-    for (const row of shortcutRows) row.el.textContent = row.label();
-    renderNowPlaying();
-    legendLines.textContent = t.controls.legendLines;
-    legendRings.textContent = t.controls.legendRings;
-    legendArcs.textContent = t.controls.legendArcs;
+    madhabTrigger.setAttribute('aria-label', t.controls.madhabLabel);
+    ruleTrigger.setAttribute('aria-label', t.controls.ruleLabel);
+
+    const activeConvSpan = convTrigger.querySelector('#active-conv-name');
+    if (activeConvSpan) activeConvSpan.textContent = getConventionName(activeConv, t);
+    for (const [c, span] of convItemSpans.entries()) {
+      span.textContent = getConventionName(c, t);
+    }
+
+    const activeMadhabSpan = madhabTrigger.querySelector('#active-madhab-name');
+    if (activeMadhabSpan) activeMadhabSpan.textContent = getMadhabName(activeMadhabVal, t);
+    for (const [m, span] of madhabItemSpans.entries()) {
+      span.textContent = getMadhabName(m, t);
+    }
+
+    const activeRuleSpan = ruleTrigger.querySelector('#active-rule-name');
+    if (activeRuleSpan) activeRuleSpan.textContent = getRuleName(activeRuleVal, t);
+    for (const [r, span] of ruleItemSpans.entries()) {
+      span.textContent = getRuleName(r, t);
+    }
+
+    updateLegend();
     hintEl.textContent = t.controls.hint;
     fsBtn.setAttribute('aria-label', t.controls.fullscreen);
     fsBtn.title = `${t.controls.fullscreen} (F)`;

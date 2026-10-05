@@ -43,23 +43,83 @@ describe('i18n configuration and locale detection', () => {
     const enSections = Object.keys(DICTIONARIES.en).sort();
     const locales = Object.keys(SUPPORTED_LOCALES) as SupportedLocale[];
 
+    function assertMatchingEntries(
+      actual: Record<string, unknown>,
+      expected: Record<string, unknown>,
+      path: string,
+    ): void {
+      expect(Object.keys(actual).sort(), `${path} keys mismatch`).toEqual(
+        Object.keys(expected).sort(),
+      );
+
+      for (const [k, val] of Object.entries(actual)) {
+        const enVal = expected[k];
+        const currentPath = `${path}.${k}`;
+        if (typeof val === 'object' && val !== null) {
+          expect(typeof enVal, `${currentPath} expected object in English`).toBe('object');
+          assertMatchingEntries(
+            val as Record<string, unknown>,
+            enVal as Record<string, unknown>,
+            currentPath,
+          );
+        } else {
+          expect(typeof val, `${currentPath} should be string`).toBe('string');
+          expect((val as string).length, `${currentPath} should not be empty`).toBeGreaterThan(0);
+        }
+      }
+    }
+
     for (const loc of locales) {
       const trans = getTranslations(loc);
       const locSections = Object.keys(trans).sort();
       expect(locSections).toEqual(enSections);
 
-      // Verify every section has string entries
       for (const sectionKey of enSections) {
-        const section = (trans as unknown as Record<string, Record<string, string>>)[sectionKey];
-        const enSection = (DICTIONARIES.en as unknown as Record<string, Record<string, string>>)[sectionKey];
-        expect(Object.keys(section).sort()).toEqual(Object.keys(enSection).sort());
-
-        for (const [k, val] of Object.entries(section)) {
-          expect(typeof val, `${loc}.${sectionKey}.${k} should be string`).toBe('string');
-          expect(val.length, `${loc}.${sectionKey}.${k} should not be empty`).toBeGreaterThan(0);
-        }
+        const section = (trans as unknown as Record<string, unknown>)[sectionKey] as Record<string, unknown>;
+        const enSection = (DICTIONARIES.en as unknown as Record<string, unknown>)[sectionKey] as Record<string, unknown>;
+        assertMatchingEntries(section, enSection, `${loc}.${sectionKey}`);
       }
     }
+  });
+
+  it('validates Milestone 4 disclosures, terminators, and provenance keys', () => {
+    const locales = Object.keys(SUPPORTED_LOCALES) as SupportedLocale[];
+    for (const loc of locales) {
+      const trans = getTranslations(loc);
+      // Timeline qualified disclosures
+      expect(trans.timeline.modelDisclaimer.length).toBeGreaterThan(10);
+      expect(trans.timeline.coverageTip.length).toBeGreaterThan(15);
+      expect(trans.timeline.gapTip.length).toBeGreaterThan(15);
+      expect(trans.timeline.peakTip.length).toBeGreaterThan(15);
+      expect(trans.timeline.unbroken.length).toBeGreaterThan(0);
+
+      // Distinct terminators
+      expect(trans.prayers.apparentTerminator.length).toBeGreaterThan(0);
+      expect(trans.prayers.geometricTerminator.length).toBeGreaterThan(0);
+
+      // Inspector telemetry & provenance
+      expect(trans.inspector.solarAltitude.length).toBeGreaterThan(0);
+      expect(trans.inspector.geographicPoint.length).toBeGreaterThan(0);
+      expect(trans.inspector.provenance.astro.label.length).toBeGreaterThan(0);
+      expect(trans.inspector.provenance.fixed.label.length).toBeGreaterThan(0);
+      expect(trans.inspector.provenance.angle.label.length).toBeGreaterThan(0);
+      expect(trans.inspector.provenance.highLat.label.length).toBeGreaterThan(0);
+      expect(trans.inspector.provenance.unresolved.label.length).toBeGreaterThan(0);
+
+      // Fiqh & legend options
+      expect(trans.controls.legendTitle.length).toBeGreaterThan(0);
+      expect(trans.controls.legendModelNote.length).toBeGreaterThan(0);
+      expect(trans.controls.convUmmAlQura.length).toBeGreaterThan(0);
+      expect(trans.controls.madhabShafi.length).toBeGreaterThan(0);
+      expect(trans.controls.ruleMiddleOfTheNight.length).toBeGreaterThan(0);
+    }
+
+    // Arabic linguistic integrity
+    const ar = getTranslations('ar');
+    expect(ar.prayers.terminator).toBe('فاصل الليل والنهار');
+    expect(ar.controls.zenMode).toBe('العرض الكوكبي المجرّد');
+    expect(ar.inspector.atKaaba).toBe('عند الكعبة المشرفة');
+    expect(ar.timeline.unbroken).toContain('وفق النموذج');
   });
 
   it('detects locale from URL path prefix', () => {

@@ -1,0 +1,669 @@
+{
+  "archive_sha256": "8b9b39580c51ec71ec5f08d3c4be852a92abf25efc50f475fd03647331d4456d",
+  "zip_comment": "74bd4d593f2eecdd9a0047963144af76cce7a584",
+  "computed_git_tree": "4564106c2b5515727dd29a8e984a91da8bf0d577",
+  "expected_git_tree": "4564106c2b5515727dd29a8e984a91da8bf0d577",
+  "file_count": 94,
+  "zip_entry_count": 118,
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 337,
+      "mode": "100644",
+      "git_blob_sha1": "538e28399ec6e74445427212af12cba4e296b861",
+      "sha256": "792b6396d091fc2666b02f82f8203e34beba6e567a63c35d81948f741c3511ad"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 2199,
+      "mode": "100644",
+      "git_blob_sha1": "3b9afe8fb42f6f5706c0cbe68f724f383aee1012",
+      "sha256": "92762763353b524a0f7f1cd0ed206aa3fd63f849867707b22e0ccfcf3b9a2def"
+    },
+    {
+      "path": "LICENSE.md",
+      "bytes": 24960,
+      "mode": "100644",
+      "git_blob_sha1": "d5fa1cba58a84a70d0322549727c3849ce380054",
+      "sha256": "7844f9fe8749e49350ee43d8ef5b34d08df9ce3a014710fbaf8884e36b5b5af1"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2813,
+      "mode": "100644",
+      "git_blob_sha1": "852d45c13816d56f14945372bab73e9574014d36",
+      "sha256": "477d8294ab28c1c702772f286ae1f5a86e4943d9fbe83345842f1138530520ab"
+    },
+    {
+      "path": "aube-lock.yaml",
+      "bytes": 33062,
+      "mode": "100644",
+      "git_blob_sha1": "037a62a6e300be54041264f31dc1785b0fff4234",
+      "sha256": "ffae26173a791adc61277d95e5176de6c6d2e9987f8f00cb8831c18f410a0425"
+    },
+    {
+      "path": "docs/evaluations/astro-7-migration.md",
+      "bytes": 23723,
+      "mode": "100644",
+      "git_blob_sha1": "24a81b042e8bfd5df3b599b202d782ce2e0fb386",
+      "sha256": "65675097737edb96faa2141fc9b316da10b6f5a57f103a7ce9410bbeae5ce3c1"
+    },
+    {
+      "path": "goals/README.md",
+      "bytes": 2342,
+      "mode": "100644",
+      "git_blob_sha1": "c03c2aa2b81777934f3daeb2e6cb278caaf03c00",
+      "sha256": "8eab375351544bb4d7f036cc143217964a11abc00b9918ae473d68e6b8e1c814"
+    },
+    {
+      "path": "goals/adhan-3d-light-pillars/facts.md",
+      "bytes": 607,
+      "mode": "100644",
+      "git_blob_sha1": "10c089039dd34583ddb5052dcd849f568cfaa236",
+      "sha256": "c3d9abab7a45fe5e3d382e120f2f811ff6ba085b132567a2dc6024a30baa61e8"
+    },
+    {
+      "path": "goals/adhan-3d-light-pillars/goal.md",
+      "bytes": 840,
+      "mode": "100644",
+      "git_blob_sha1": "7ec0a3e595ccadb1a532c4e0f1dec6bb0d5595ba",
+      "sha256": "8bb23ff7d1775c8561f9e998c5ff95e3d9533b153d29f50db372e0f50ed0a3f9"
+    },
+    {
+      "path": "goals/adhan-3d-light-pillars/plan.md",
+      "bytes": 942,
+      "mode": "100644",
+      "git_blob_sha1": "1a120df85ec397d7615e8c6a515cc6acfbe7de0e",
+      "sha256": "846a625a9cc68ec7f219685738a426d20a9a7417bdc1679240e76f2440e692bd"
+    },
+    {
+      "path": "goals/adhan-earth-observatory/facts.md",
+      "bytes": 1415,
+      "mode": "100644",
+      "git_blob_sha1": "8ef85fbf78a80991805dcbd0b7d81e10bdb0b732",
+      "sha256": "6efa87dfc7957ac0bae98a44052bf010960c6ad580b5651e45114afd53b3cb94"
+    },
+    {
+      "path": "goals/adhan-earth-observatory/goal.md",
+      "bytes": 843,
+      "mode": "100644",
+      "git_blob_sha1": "a6b93812934f7e5390f4b531e907c671cfacc68e",
+      "sha256": "9abdaf7b48813a45e558af4676e3bdd37f1d20eab958551b02b0f6e3ba560c13"
+    },
+    {
+      "path": "goals/adhan-earth-observatory/plan.md",
+      "bytes": 679,
+      "mode": "100644",
+      "git_blob_sha1": "b0d77bff58774b364a06a007d4a5c074231ba538",
+      "sha256": "6d036975247587c2022c1586ea874aa0b4451d21613281c7f368e4008ad32858"
+    },
+    {
+      "path": "goals/adhan-sound-waves-and-qibla-arcs/facts.md",
+      "bytes": 601,
+      "mode": "100644",
+      "git_blob_sha1": "1104118188304cb077fb887b70e36cd8f44345c6",
+      "sha256": "5ed0465c31053382e606806d195e4aa734985b55f36a710b745980f384bc27e0"
+    },
+    {
+      "path": "goals/adhan-sound-waves-and-qibla-arcs/goal.md",
+      "bytes": 842,
+      "mode": "100644",
+      "git_blob_sha1": "c7eab58e82a4e04326f2b0434ba50c6c3012e8d8",
+      "sha256": "0cb604319c63e3ec24904a712ccafe8aeae0d241a920132851f8637271a1a672"
+    },
+    {
+      "path": "goals/adhan-sound-waves-and-qibla-arcs/plan.md",
+      "bytes": 889,
+      "mode": "100644",
+      "git_blob_sha1": "65179ab340e63166c30b37331ea6fbee98fd4308",
+      "sha256": "563e2034d8b303cbbfe011bf991fa831fb4ee72b9a5fd2538c3ef4a3da1dcbf3"
+    },
+    {
+      "path": "goals/cloudflare-worker-athan-waqf-dev/facts.md",
+      "bytes": 762,
+      "mode": "100644",
+      "git_blob_sha1": "c036337acfd6ca62de1e9fbff5541532a41d9ccf",
+      "sha256": "d08a0918581274adf768836e55056375e9189cfe4cb56b6e8a10c91748161a43"
+    },
+    {
+      "path": "goals/cloudflare-worker-athan-waqf-dev/goal.md",
+      "bytes": 868,
+      "mode": "100644",
+      "git_blob_sha1": "fb1fdd9ec5136122d7f64568923bd543496faaaf",
+      "sha256": "d39f43a8922fe8319ec95a718c104ffab4aee96b2af4c64a5a09fc8f4c7a8575"
+    },
+    {
+      "path": "goals/cloudflare-worker-athan-waqf-dev/plan.md",
+      "bytes": 562,
+      "mode": "100644",
+      "git_blob_sha1": "f360eeb7736040dfce44a37559bae5780deded77",
+      "sha256": "5f3325c79c9b40070c955db92e7bc7b2feeb1a92cfee120f5ced530dace278e2"
+    },
+    {
+      "path": "goals/crisp-globe-textures-and-shading/facts.md",
+      "bytes": 662,
+      "mode": "100644",
+      "git_blob_sha1": "4ecf44ee600a3c529b03d87800396418d69af805",
+      "sha256": "bed66c5e84b47e8a076d766cc0ef504ca7033352a91bbb4868299c3b4bcf4001"
+    },
+    {
+      "path": "goals/crisp-globe-textures-and-shading/goal.md",
+      "bytes": 865,
+      "mode": "100644",
+      "git_blob_sha1": "d1fa381b56b83fc26354de33b30ad642950b261d",
+      "sha256": "9ebdec01c6ea46f9a2c07ce35275031ae5038d031b87d6b76107cd6abcafa188"
+    },
+    {
+      "path": "goals/crisp-globe-textures-and-shading/plan.md",
+      "bytes": 883,
+      "mode": "100644",
+      "git_blob_sha1": "cf43f78737f56b310566904fc11a2c46af6e21c7",
+      "sha256": "e8610bea56f1597cf513db06d811791e0ddacb446044de4528652acd352cee42"
+    },
+    {
+      "path": "goals/visitor-edge-geolocation-cities/facts.md",
+      "bytes": 777,
+      "mode": "100644",
+      "git_blob_sha1": "ce1c4c3fa91f180b1428a9cf231ae931e2c7a2c5",
+      "sha256": "d421b719024a73423956019804b917023b7b38ca73324a86c2a3a54defe990cd"
+    },
+    {
+      "path": "goals/visitor-edge-geolocation-cities/goal.md",
+      "bytes": 866,
+      "mode": "100644",
+      "git_blob_sha1": "8d7dace422e6a91cfb9792f5374ac53ede6f8c06",
+      "sha256": "ef822da0ee0b1d2ec967c0664ed0b86ffd81b1a671ff02020d5f227e1257b922"
+    },
+    {
+      "path": "goals/visitor-edge-geolocation-cities/plan.md",
+      "bytes": 833,
+      "mode": "100644",
+      "git_blob_sha1": "da21321ff762511db5c0248c2257c0081c72c9a2",
+      "sha256": "fd59df57eab7a457ba55ff92485da56c27b4c9a7ddad32f14e8d9d16e3c6e2f4"
+    },
+    {
+      "path": "index.html",
+      "bytes": 4047,
+      "mode": "100644",
+      "git_blob_sha1": "5b0aa4878833b953ade4b1874ae78485ce5a951a",
+      "sha256": "8807348516e93036abf01610672345629dbdd0e6d737f134f80b2a6422cef44d"
+    },
+    {
+      "path": "package.json",
+      "bytes": 623,
+      "mode": "100644",
+      "git_blob_sha1": "867d5fcff1367d22d79bddea48ea5b8350a1eed3",
+      "sha256": "e5cad41cb6de2ab14600ef317d8f47cb3d8261d89f934d654989296fe2d6568b"
+    },
+    {
+      "path": "public/data/cities-core.json",
+      "bytes": 1020341,
+      "mode": "100644",
+      "git_blob_sha1": "4fab0bd75022d6f5b53e1e652a694f37826c534d",
+      "sha256": "ae471897fc6ed6828df22e2789526d3acaffafc8134b8ec1a22256917f840347"
+    },
+    {
+      "path": "public/favicon.svg",
+      "bytes": 394,
+      "mode": "100644",
+      "git_blob_sha1": "ae97337661442c3f7c2f5aa5304bc8e1db5bf92b",
+      "sha256": "28fc6f4b50951af754f4c7ef95392fd147c6492e79a6e1c9be862e0679a3246f"
+    },
+    {
+      "path": "public/og-image.jpg",
+      "bytes": 88104,
+      "mode": "100644",
+      "git_blob_sha1": "77ad5863010deb0355e47a26478e5f4d54d4acdd",
+      "sha256": "7409adc5d6056f4e38d785f961154907c98f379a040632f30b1976d21a20c115"
+    },
+    {
+      "path": "public/robots.txt",
+      "bytes": 84,
+      "mode": "100644",
+      "git_blob_sha1": "0bf63aabd5c41cddd7f77d52c95aac4651a59e81",
+      "sha256": "61357b7399d7c609bc7fff0d5cf6a8a856af382ac81357c9730880927cab47f0"
+    },
+    {
+      "path": "public/sitemap.xml",
+      "bytes": 10429,
+      "mode": "100644",
+      "git_blob_sha1": "2c2ea8c9687c76a77a2e72ffacf250cbcd1f44fc",
+      "sha256": "4eb47d8f4f46766827be1fd18291319a041f54570e29f78c4ba6672e8dfdd217"
+    },
+    {
+      "path": "public/textures/earth-clouds.png",
+      "bytes": 226113,
+      "mode": "100644",
+      "git_blob_sha1": "3f17c2123b7e2afb43735c901de128543e8bab08",
+      "sha256": "5f9612e4f4040975a195dd0d14e89c9ba72bd6bdd22e1454db4fcefb92d37d38"
+    },
+    {
+      "path": "public/textures/earth-day-4k.jpg",
+      "bytes": 473093,
+      "mode": "100644",
+      "git_blob_sha1": "b9410c7bea22e43c368b0757582160d0cf4cff03",
+      "sha256": "cd7712d3e891425d9948ea5ac18d3bb1e7e834ea038188587897e689a7b35d0f"
+    },
+    {
+      "path": "public/textures/earth-day.jpg",
+      "bytes": 512606,
+      "mode": "100644",
+      "git_blob_sha1": "4275ab0836b482e4fbe1d5081976f3f2ffb41ffa",
+      "sha256": "2faa400d1eade3bc44caf6750d1b772bd9bbb6d87362c02bc7c3304e78fa0a9d"
+    },
+    {
+      "path": "public/textures/earth-night-4k.jpg",
+      "bytes": 267061,
+      "mode": "100644",
+      "git_blob_sha1": "d5cfb85a9aba6f42d637d88cef4171f610abc0fe",
+      "sha256": "17a868f79c7be40fa1f557e6114d7889d907f18f7a3fce51f33b0b830ef50242"
+    },
+    {
+      "path": "public/textures/earth-night.png",
+      "bytes": 410160,
+      "mode": "100644",
+      "git_blob_sha1": "8ee6a669b6dcd215c97651455c9a9c4749e5ddc9",
+      "sha256": "0564fa57f5fade2f65e56d3ad59b3c6bf5e32c44f60370a3e46fd367b0cabaee"
+    },
+    {
+      "path": "public/textures/earth-normal.jpg",
+      "bytes": 336774,
+      "mode": "100644",
+      "git_blob_sha1": "5bf40df630d9ae7cb8ae026c930b8f3421bbec54",
+      "sha256": "3fc43e9639c34e8223c4a871e3bdf5b2d52ee79f7e89ce3f28cba45d4cac031a"
+    },
+    {
+      "path": "public/textures/earth-roadmap-day.png",
+      "bytes": 105328,
+      "mode": "100644",
+      "git_blob_sha1": "bb9004fd598d67ef6a76a02b4dd9e6adca636c25",
+      "sha256": "8be19bc96b10cbceea0f2f06be6662adbaec8447e5e6fb077cf7b71636e2a024"
+    },
+    {
+      "path": "public/textures/earth-roadmap-night.png",
+      "bytes": 676574,
+      "mode": "100644",
+      "git_blob_sha1": "cff934191bf97adcd45984cf62649fb74bc8a7d8",
+      "sha256": "eba5c8136edefac2e0755e8ebb0722fb1847f3444527a6fe30fe6ce499f2aba2"
+    },
+    {
+      "path": "public/textures/earth-specular.jpg",
+      "bytes": 223421,
+      "mode": "100644",
+      "git_blob_sha1": "06e03a3bfc7fe64f711175fe2c66bfb76b61cd0d",
+      "sha256": "2df48906732d7a458b2d0a7cdec51a829262307c6bdee4cfdf079a4dd7c71c69"
+    },
+    {
+      "path": "public/textures/night-sky.png",
+      "bytes": 904154,
+      "mode": "100644",
+      "git_blob_sha1": "f5d4f2beb79d87ec4156e8b737b4fc79daab077b",
+      "sha256": "7e1d5e780301e3a33bd79fd3ac414f7a742465f33ae4605abca743d43a3ab983"
+    },
+    {
+      "path": "scripts/build-cities.go",
+      "bytes": 30485,
+      "mode": "100644",
+      "git_blob_sha1": "41a50b637ab7dcbb6df0abb90fa3b5876c28fa5e",
+      "sha256": "0ee8b4a4fe75ff98b01005c341510b455ced1e90491d6400cb849ec184ff8afd"
+    },
+    {
+      "path": "scripts/build-roadmap-texture.go",
+      "bytes": 16744,
+      "mode": "100644",
+      "git_blob_sha1": "ba43bdb05e33fb7c68e6b8f6e66b84ada3f83c68",
+      "sha256": "5a33ef91f906e2b22e06c8b01e48b5941062f034c17a914058aff21f2a7468e9"
+    },
+    {
+      "path": "src/astronomy/coordinates.ts",
+      "bytes": 2221,
+      "mode": "100644",
+      "git_blob_sha1": "6ba39ac9c6e51634a36ead2293a785d109dad740",
+      "sha256": "fce6f88d856e4ba94d3c450d234ea9835f54b0e36334f46eb990044eee5f09e2"
+    },
+    {
+      "path": "src/astronomy/julian.ts",
+      "bytes": 591,
+      "mode": "100644",
+      "git_blob_sha1": "183a57bea13ac5e6cb5ff8680bc068985f74de7f",
+      "sha256": "a4708a0d78f27e10c947d6c670fe9484937e1f272287d5dc8534815f6908af57"
+    },
+    {
+      "path": "src/astronomy/solar.test.ts",
+      "bytes": 4512,
+      "mode": "100644",
+      "git_blob_sha1": "75ff9203858731987c0e61f6f9baac61b01a078e",
+      "sha256": "cb3531d99c6b252b47c2e49ef9c3dace02f8912ded851352d76274e62989360d"
+    },
+    {
+      "path": "src/astronomy/solar.ts",
+      "bytes": 5425,
+      "mode": "100644",
+      "git_blob_sha1": "fd15078d3ce9a96ae0a3ec39881ff2432e16cfbd",
+      "sha256": "c3652a8e954e0a183c00eea9cc18056ebaa164d5c5fd530fc85e40b61c37e148"
+    },
+    {
+      "path": "src/globe/atmosphere.ts",
+      "bytes": 2446,
+      "mode": "100644",
+      "git_blob_sha1": "a5906de260d1d9684ccdb383101d25d796ec2ba3",
+      "sha256": "77a8cd3b0b53ac5fa4b2473fcc597d8f81441382c9131a512157cf04873f4931"
+    },
+    {
+      "path": "src/globe/camera.ts",
+      "bytes": 5078,
+      "mode": "100644",
+      "git_blob_sha1": "b61e358e0ad0ccac97a143925633aac42abb7cfd",
+      "sha256": "8f1c470a49d901d5dcf41ba7e5964a769d33d107cda1d54445102ef2e6385c0d"
+    },
+    {
+      "path": "src/globe/cities.ts",
+      "bytes": 11962,
+      "mode": "100644",
+      "git_blob_sha1": "8bc33da31167df670729436bda90ec79f29592fd",
+      "sha256": "31ef7422d2b88cdbe9b0c3b3b2bbead02fd0bc7717822b96dc96944cdff67e4e"
+    },
+    {
+      "path": "src/globe/earth.ts",
+      "bytes": 8298,
+      "mode": "100644",
+      "git_blob_sha1": "5321dfe77d14df0d3619b4876dd3c8520c6bb35e",
+      "sha256": "c79504db0979fcc62a84af465607cad378db49172b0b68554b73dd7799899be9"
+    },
+    {
+      "path": "src/globe/fronts.ts",
+      "bytes": 5090,
+      "mode": "100644",
+      "git_blob_sha1": "1be9d04a78c1d7d2647062e584ab654892c584ae",
+      "sha256": "c9eb92708f9562211a285576909139d120554408b1bd30f016278aac40625b47"
+    },
+    {
+      "path": "src/globe/qibla.ts",
+      "bytes": 8161,
+      "mode": "100644",
+      "git_blob_sha1": "b1cf01d5e0974ba285819e840e22bc1b978338bb",
+      "sha256": "3d3780a82f7b9b68c50b553034ff75029e7d39405e2aae443ac3b006f74a7e93"
+    },
+    {
+      "path": "src/globe/rings.ts",
+      "bytes": 4114,
+      "mode": "100644",
+      "git_blob_sha1": "f1b1a61d1d2e2201506669ad1177c8a7b9ed846c",
+      "sha256": "8301940877516b2a25595a5c49b35c91b612b8af5ebe67be05bb8f57e521b319"
+    },
+    {
+      "path": "src/globe/scene.ts",
+      "bytes": 11015,
+      "mode": "100644",
+      "git_blob_sha1": "b83d89a2c23413196bb6575bae6d51a276fc2f9f",
+      "sha256": "128e11b12632241343f693a13d972d5b2862078ef13abeda2b325772053fd054"
+    },
+    {
+      "path": "src/i18n/config.ts",
+      "bytes": 2723,
+      "mode": "100644",
+      "git_blob_sha1": "3c98539c9861eda54bea5b264f8766288929065e",
+      "sha256": "90857e933b2b1581e0df3295956496af04470d9ab6990a86a9674c3f89d18e94"
+    },
+    {
+      "path": "src/i18n/i18n.test.ts",
+      "bytes": 12003,
+      "mode": "100644",
+      "git_blob_sha1": "e4be80274b147413a809fc45c31adc9d5b0c29d3",
+      "sha256": "8df39f7572edc2702150fac7ff59c5ffe3658c22ac619c00837b6b94a5487d5c"
+    },
+    {
+      "path": "src/i18n/index.ts",
+      "bytes": 108,
+      "mode": "100644",
+      "git_blob_sha1": "17758f34a296d0624a793fbcd8580412191535d8",
+      "sha256": "4872c11d90bef0b420784b6ab8e78f96cf86f21c81b2fc4adb9ee7f289e8db31"
+    },
+    {
+      "path": "src/i18n/manager.ts",
+      "bytes": 3274,
+      "mode": "100644",
+      "git_blob_sha1": "b8e2889215d2c697118ad0761e886509656e009b",
+      "sha256": "67ca5d7a8a4a05bea9abc8f535028bcf54f24c874d8c59318e4ca2f68759e74d"
+    },
+    {
+      "path": "src/i18n/seo.ts",
+      "bytes": 11302,
+      "mode": "100644",
+      "git_blob_sha1": "85c46b51413e39cc73bccacf215037bd75b1f335",
+      "sha256": "075952a1af621f1a020710710a1b824cd2dd1df0cc65f2771a7bdbcde53cb071"
+    },
+    {
+      "path": "src/i18n/translations.ts",
+      "bytes": 40447,
+      "mode": "100644",
+      "git_blob_sha1": "dda3629373f0e3dcaf5bbba3b35143ba494535c1",
+      "sha256": "d2d20abcd6b4916ef2f9fb786ddc3c9fc18c85a94281c130b73aeb5796c316cf"
+    },
+    {
+      "path": "src/main.ts",
+      "bytes": 6693,
+      "mode": "100644",
+      "git_blob_sha1": "65811e58c8fdf12313c776a71d49bafaa65c49c4",
+      "sha256": "7ac0e7774c52da256c8cf46a8df268242ae7a1a3f2a0b3aeacec4cdfae6d2f7c"
+    },
+    {
+      "path": "src/population/loader.test.ts",
+      "bytes": 1964,
+      "mode": "100644",
+      "git_blob_sha1": "f04493ae9fe077e1e947399ffbcc300de188372c",
+      "sha256": "68f01faf739674d9dfda806eb444bcd95f50a40fffc7b43d8f6446d41e7bbc00"
+    },
+    {
+      "path": "src/population/loader.ts",
+      "bytes": 11592,
+      "mode": "100644",
+      "git_blob_sha1": "0f549037c9646ccea643ddf1f055d336ca9be11e",
+      "sha256": "989eae247721e242ad6e8365f7c60fc823e69e507faa3044eae0bcfe54fbad0e"
+    },
+    {
+      "path": "src/population/spatialIndex.test.ts",
+      "bytes": 4839,
+      "mode": "100644",
+      "git_blob_sha1": "9b232ef705897e74f590b3d96054aedd70023672",
+      "sha256": "b6670b26154e246c689c430cb9ef5786eba995b50b996067db1106ab727fb698"
+    },
+    {
+      "path": "src/population/spatialIndex.ts",
+      "bytes": 13201,
+      "mode": "100644",
+      "git_blob_sha1": "09efc2eec4a81ad05f1bf9cd901d989672caf2bc",
+      "sha256": "d5022b4a96b5c8dc01de9ac705766837d89bb2f1dead2be7a3f4a8802425d3ba"
+    },
+    {
+      "path": "src/population/visitorGeo.ts",
+      "bytes": 2071,
+      "mode": "100644",
+      "git_blob_sha1": "b9d89028792f9c22c7363137ab5f637615fe36a3",
+      "sha256": "f396b1eb4c9d034518007ab60f8b65b10846ab85829f821bbb47d6774e8c0645"
+    },
+    {
+      "path": "src/prayer/calculator.test.ts",
+      "bytes": 2696,
+      "mode": "100644",
+      "git_blob_sha1": "394503010006807ef2916f355124f3085399b94b",
+      "sha256": "6a9d7cedaa9e17fc38a628a3249a653bd302f547b2d48436e8af612a916d5bda"
+    },
+    {
+      "path": "src/prayer/calculator.ts",
+      "bytes": 6045,
+      "mode": "100644",
+      "git_blob_sha1": "c56b11bfd97d927a5261e6d2bbc5c22907aac52b",
+      "sha256": "368a5d1388b882b09f3526a5513e778ec578912e24ff788ac792016de1a0435b"
+    },
+    {
+      "path": "src/prayer/contours.test.ts",
+      "bytes": 3664,
+      "mode": "100644",
+      "git_blob_sha1": "0c1587ece0bd39b7cee49795b445dd2c5b2f251b",
+      "sha256": "73e089b79da1dff01b6d41d4f90cd504707108792ef54689c84ecc068b3b0528"
+    },
+    {
+      "path": "src/prayer/contours.ts",
+      "bytes": 7956,
+      "mode": "100644",
+      "git_blob_sha1": "fbeddd261ec14f69be1cddcfd839eb857a6f157d",
+      "sha256": "326796a8e3e2fb2e62f6948d848f8b12892cdeebc1ac8fb78416bf92101328a4"
+    },
+    {
+      "path": "src/prayer/conventions.ts",
+      "bytes": 2029,
+      "mode": "100644",
+      "git_blob_sha1": "c4e60a958be5a6fc6ceff6770d4c751576d4d042",
+      "sha256": "593fe347d94c9bfd70e3a621c1b142cc97a1e9eb392003263c4daae43b135d5a"
+    },
+    {
+      "path": "src/server.test.ts",
+      "bytes": 3759,
+      "mode": "100644",
+      "git_blob_sha1": "10751254676c73479dda65a3bcab9ffd31666d82",
+      "sha256": "da0a77c646f722ae7ea17e4235cbae31e8866c4405c40a223890abdcb89f3a60"
+    },
+    {
+      "path": "src/server.ts",
+      "bytes": 7646,
+      "mode": "100644",
+      "git_blob_sha1": "0bad24e5b7b7614c797169cc6c942bfa126bb858",
+      "sha256": "77891c9228bcedace8948b3205e6dc6654195041b82c1dce1fb95c9ee8001d0c"
+    },
+    {
+      "path": "src/simulation/clock.ts",
+      "bytes": 1923,
+      "mode": "100644",
+      "git_blob_sha1": "db8048f71d477dcb68ec7a39494f300d51bc3247",
+      "sha256": "5fbed6880733feb9d759a3f29665837239d812d23dcbbbc15d494bd3241dc2f0"
+    },
+    {
+      "path": "src/simulation/continuity.test.ts",
+      "bytes": 2921,
+      "mode": "100644",
+      "git_blob_sha1": "e208b610b883be873f9660c95f1bdb941326bc91",
+      "sha256": "db6cf5d21320f80190d3bdc4fc8b24932a09299b1e6ba65cc1a76d6c0f5284d3"
+    },
+    {
+      "path": "src/simulation/continuity.ts",
+      "bytes": 5214,
+      "mode": "100644",
+      "git_blob_sha1": "9140540168d17d89e96dfc3a40ec37f85af58f05",
+      "sha256": "fdf9302f95126d70737b262334b845f98f006493119bcaa9fee7c292bc14ca46"
+    },
+    {
+      "path": "src/simulation/eventEngine.test.ts",
+      "bytes": 2487,
+      "mode": "100644",
+      "git_blob_sha1": "b8474f863a6803ea5d4bc291bf38e08640b7de41",
+      "sha256": "bf3884bc455527280be394f0fce176c7270a30d3145d7a38233eea97662edca1"
+    },
+    {
+      "path": "src/simulation/eventEngine.ts",
+      "bytes": 3725,
+      "mode": "100644",
+      "git_blob_sha1": "4f63718832505b3762b4c29a4fdfad4750fde571",
+      "sha256": "580c87e6b9ffcec2fc6d6dcd6acf38ca42cf0ffcbaf8548bb7d9c72b5c6b725c"
+    },
+    {
+      "path": "src/simulation/narrative.ts",
+      "bytes": 1857,
+      "mode": "100644",
+      "git_blob_sha1": "749fdbfe52c4406cb1bcdb69f8c58903813da7d3",
+      "sha256": "aca6cdc08e756ee04b3293bda284cbac032247888934de09b772780909004439"
+    },
+    {
+      "path": "src/smoke.test.ts",
+      "bytes": 303,
+      "mode": "100644",
+      "git_blob_sha1": "ca832c98e3520753182cf305201ca72f966cbcee",
+      "sha256": "c812c266b92c68fbb997c6c9a2a8896433c4ed06a14b2ca8e1ac198976b7d8aa"
+    },
+    {
+      "path": "src/styles/main.css",
+      "bytes": 38259,
+      "mode": "100644",
+      "git_blob_sha1": "97729a623134545f3d43589a75c7cd1314948fdb",
+      "sha256": "48e74882018cee5a47d6090e4d8afa9f07eef06bd533d88e6ff611f93ff0f200"
+    },
+    {
+      "path": "src/ui/credits.ts",
+      "bytes": 10707,
+      "mode": "100644",
+      "git_blob_sha1": "7c7787eeb398d92c7895658d048b0daa9ac1c6d6",
+      "sha256": "c50d118b8f03054b68f2528333755b3e51974a90b4fa57ec432ca5c1d500af38"
+    },
+    {
+      "path": "src/ui/hud.ts",
+      "bytes": 47695,
+      "mode": "100644",
+      "git_blob_sha1": "114da285c5a76e778beb67d34a3f0837175f4d54",
+      "sha256": "9bc2af077304b7ba10a6d3d3d3796c072f56838b678dfece690389efb3dd94e9"
+    },
+    {
+      "path": "src/ui/inspector.ts",
+      "bytes": 9233,
+      "mode": "100644",
+      "git_blob_sha1": "1094926a0a0cb5d619b5bfe0e522d453d1af22ff",
+      "sha256": "92c47e6bf2a31a3a56bf4844315d6225d7cbda304b59afad5a283071d4602c26"
+    },
+    {
+      "path": "src/ui/timeline.ts",
+      "bytes": 10347,
+      "mode": "100644",
+      "git_blob_sha1": "886ac2234e40f55335b42462c50b9175d39c849b",
+      "sha256": "2b45ab3ca1dadf51cf777306b762c492efa6f60355a1b0c88a05dc6d1c72f0df"
+    },
+    {
+      "path": "src/ui/urlState.ts",
+      "bytes": 2721,
+      "mode": "100644",
+      "git_blob_sha1": "d833fc5666f01aa5529ba9304ac97d679105d856",
+      "sha256": "f0aa4cc53d9dbf0b8285607bd1ee041f79ed16db4756db88fbbcf0b8b9b3fd97"
+    },
+    {
+      "path": "tasks/plan.md",
+      "bytes": 8836,
+      "mode": "100644",
+      "git_blob_sha1": "79da7287a235a6a020874dc264dfb1b1d563b053",
+      "sha256": "ae8c2d12c87459b0ec4a3c195860f0d0a408903de097903f6fe0ada1a7ca22d5"
+    },
+    {
+      "path": "tasks/todo.md",
+      "bytes": 15208,
+      "mode": "100644",
+      "git_blob_sha1": "e4c07a4cfa7d34af76a6de4c80d101b8a216e0db",
+      "sha256": "d0c683e01daf6e517db6c394e360d026f01f7576b3aea29c4b485041cd5226c2"
+    },
+    {
+      "path": "tsconfig.json",
+      "bytes": 476,
+      "mode": "100644",
+      "git_blob_sha1": "cf20c511d99f6a012645c515b04811733f17dd9b",
+      "sha256": "0c9aab5dff27d9c9e42e02f896b67e1ab180d75c9cc2312dc2dead209840c1b0"
+    },
+    {
+      "path": "vite.config.ts",
+      "bytes": 226,
+      "mode": "100644",
+      "git_blob_sha1": "2643e8c115334114a71a0ca34eab97cb11a8b31f",
+      "sha256": "80326a5ca2ab38539ef914fe2f1e874ebfe72e5ed6e576e78c010926efdfd786"
+    },
+    {
+      "path": "vitest.config.ts",
+      "bytes": 140,
+      "mode": "100644",
+      "git_blob_sha1": "014f97ef76db415433ddcfd6c104e9ab6e099697",
+      "sha256": "dfe9c30331c753f6b0b79c74c42fa1b4f8a04bb4cd849f57270cf2824bf504c2"
+    },
+    {
+      "path": "wrangler.jsonc",
+      "bytes": 578,
+      "mode": "100644",
+      "git_blob_sha1": "50437844d8da081e3792a4c487b3c45b59ca8089",
+      "sha256": "418fa48d3ff281972c81ca1688f857b29f02c47bd8e6f4f9bd313eeec1f34cd8"
+    }
+  ],
+  "tree_match": true
+}

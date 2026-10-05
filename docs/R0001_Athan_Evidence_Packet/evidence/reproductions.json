@@ -1,0 +1,186 @@
+{
+  "winter": {
+    "declination": -23.437308973625385,
+    "altitudeRangeOneMinuteSampling": [
+      -43.78776339779994,
+      -3.087149073961468
+    ],
+    "times": {
+      "fajr": "2026-12-21T05:28:27.090Z",
+      "sunrise": "2026-12-21T10:42:14.221Z",
+      "dhuhr": "2026-12-21T10:43:14.221Z",
+      "asr": "2026-12-21T11:14:00.451Z",
+      "maghrib": "2026-12-21T10:42:14.221Z",
+      "isha": "2026-12-21T15:43:44.752Z"
+    },
+    "atSunrise": -3.087142043008425,
+    "atAsr": -3.2630276466158055,
+    "atMaghrib": -3.087142043008425,
+    "noonShadow": -18.54052101101338,
+    "activeAtMaghrib": [
+      {
+        "settlementIndex": 0,
+        "prayer": "maghrib",
+        "progress": 0
+      }
+    ]
+  },
+  "summer": {
+    "declination": 23.438051663157562,
+    "altitudeRangeOneMinuteSampling": [
+      3.0868879925973283,
+      43.78809640846267
+    ],
+    "times": {
+      "fajr": "2026-06-20T22:45:59.056Z",
+      "sunrise": "2026-06-20T22:45:59.056Z",
+      "dhuhr": "2026-06-21T10:46:59.056Z",
+      "asr": "2026-06-21T15:57:44.578Z",
+      "maghrib": "2026-06-21T22:45:59.056Z",
+      "isha": "2026-06-21T22:45:59.056Z"
+    },
+    "atSunrise": 3.0875862524620397,
+    "atAsr": 26.081021459188623,
+    "atMaghrib": 3.0868885292951664,
+    "noonShadow": 1.0432257570208778,
+    "activeAtMaghrib": [
+      {
+        "settlementIndex": 0,
+        "prayer": "maghrib",
+        "progress": 0
+      }
+    ]
+  },
+  "angleBased": {
+    "MiddleOfTheNight": {
+      "fajr": "2026-06-21T00:02:20.128Z",
+      "isha": "2026-06-22T00:02:20.128Z"
+    },
+    "SeventhOfTheNight": {
+      "fajr": "2026-06-21T02:40:03.980Z",
+      "isha": "2026-06-21T21:24:36.276Z"
+    },
+    "AngleBased": {
+      "fajr": "2026-06-21T00:02:20.128Z",
+      "isha": "2026-06-22T00:02:20.128Z"
+    }
+  },
+  "fronts": {
+    "time": "2026-03-20T12:00:00.000Z",
+    "subsolar": {
+      "latitude": -0.04329791416247382,
+      "longitude": 1.8582477292891229
+    },
+    "fajr": {
+      "count": 15,
+      "sample": {
+        "latitude": 0.01337979062316659,
+        "longitude": 109.8582433613902,
+        "H": 107.9999956321011,
+        "altitude": -18.000000440162665,
+        "dhDegreesPerMinute": -0.25005132583994794
+      },
+      "allRising": false,
+      "allFalling": true
+    },
+    "sunrise": {
+      "count": 15,
+      "sample": {
+        "latitude": 0.0006294684768318563,
+        "longitude": 92.69124750575241,
+        "H": 90.83299977646334,
+        "altitude": -0.8330000142800336,
+        "dhDegreesPerMinute": -0.2500513258398608
+      },
+      "allRising": false,
+      "allFalling": true
+    },
+    "asr": {
+      "count": 19,
+      "sample": {
+        "latitude": 0,
+        "longitude": -43.16337619932024,
+        "H": -45.02162392860936,
+        "altitude": 44.978359723812325,
+        "dhDegreesPerMinute": 0.2500514618296492
+      },
+      "allRising": true,
+      "allFalling": false
+    },
+    "maghrib": {
+      "count": 15,
+      "sample": {
+        "latitude": 0.0006294684906591817,
+        "longitude": -88.97475203046645,
+        "H": -90.83299975975558,
+        "altitude": -0.8329999975723279,
+        "dhDegreesPerMinute": 0.250051325839846
+      },
+      "allRising": true,
+      "allFalling": false
+    },
+    "isha": {
+      "count": 15,
+      "sample": {
+        "latitude": 0.01265908346512622,
+        "longitude": -105.14174729508086,
+        "H": -106.99999502436998,
+        "altitude": -16.999999598546825,
+        "dhDegreesPerMinute": 0.25005132583963885
+      },
+      "allRising": true,
+      "allFalling": false
+    }
+  },
+  "fixedIsha": {
+    "maghrib": "2026-10-04T15:05:59.377Z",
+    "isha": "2026-10-04T16:35:59.377Z",
+    "actualSolarAltitudeAtIsha": -21.800816409959133,
+    "frontAltitudeUsed": -18
+  },
+  "tomorrow": {
+    "date": "2026-10-04T22:00:00Z",
+    "nextAdvertised": "2026-10-05T01:56:52.492Z",
+    "recomputedNextFajr": "2026-10-05T01:57:09.834Z",
+    "differenceSeconds": -17.342
+  },
+  "shader": {
+    "flatSurfaceSolarAltitude": -3.087263,
+    "sunDot": -0.05385683436550365,
+    "dayFactor": 0.07136898666699115,
+    "rawDiffuse": 0.03,
+    "dayAlbedoCoefficient": 0.0021410696000097344,
+    "widthDegrees": 9.17713147157167
+  },
+  "population": {
+    "shape": "array",
+    "count": 15000
+  },
+  "continuity": {
+    "settlementCount": 15000,
+    "dateString": "2026-10-04",
+    "convention": "MuslimWorldLeague",
+    "madhab": "Shafi",
+    "adhanDurationMinutes": 4,
+    "coveragePercent": 100,
+    "coveredSeconds": 86400,
+    "longestGapSeconds": 0,
+    "peakConcurrentAdhans": 842,
+    "minConcurrentAdhans": 0,
+    "actualMinOfBins": 40
+  },
+  "adjacentUtcDay": {
+    "fixture": {
+      "name": "Tokyo fixture",
+      "nameAr": "",
+      "latitude": 35.68,
+      "longitude": 139.76,
+      "countryCode": "JP",
+      "population": 1,
+      "timezone": "Asia/Tokyo"
+    },
+    "requestedDay": "2026-10-05",
+    "fajr": "2026-10-04T19:12:01.579Z",
+    "activeAtFajr": []
+  }
+}

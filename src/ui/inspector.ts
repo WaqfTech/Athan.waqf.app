@@ -1,17 +1,95 @@
 // Astronomical settlement and coordinates prayer inspector panel
 
 import { Settlement } from '../population/loader';
-import { calculatePrayerTimes, PrayerTimesSchedule } from '../prayer/calculator';
-import { CalculationConventionName, Madhab } from '../prayer/conventions';
+import { calculatePrayerTimes, PrayerTimesSchedule, PrayerEntry } from '../prayer/calculator';
+import {
+  CalculationConventionName,
+  Madhab,
+  HighLatitudeRule,
+} from '../prayer/conventions';
+import { getSolarAltitude } from '../astronomy/solar';
+import { AppConfig, AppStore } from './state';
 import { i18n } from '../i18n/manager';
+import { Translations } from '../i18n/translations';
 
 export interface InspectorPanel {
   element: HTMLElement;
   inspectSettlement: (settlement: Settlement, currentDate: Date) => void;
   inspectCoordinates: (lat: number, lon: number, currentDate: Date) => void;
   updateTime: (currentDate: Date) => void;
+  updateConfig: (config: AppConfig) => void;
   hide: () => void;
   dispose: () => void;
+}
+
+const formatterCache = new Map<string, Intl.DateTimeFormat>();
+
+function getDateTimeFormatter(timezone: string): Intl.DateTimeFormat {
+  let fmt = formatterCache.get(timezone);
+  if (!fmt) {
+    fmt = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone,
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    });
+    formatterCache.set(timezone, fmt);
+  }
+  return fmt;
+}
+
+export function resolveObserverCivilDate(
+  date: Date,
+  longitude: number,
+  timezone?: string,
+): Date {
+  if (timezone) {
+    try {
+      const formatter = getDateTimeFormatter(timezone);
+      const parts = formatter.formatToParts(date);
+      const y = parseInt(parts.find((p) => p.type === 'year')?.value || '', 10);
+      const m = parseInt(parts.find((p) => p.type === 'month')?.value || '', 10) - 1;
+      const d = parseInt(parts.find((p) => p.type === 'day')?.value || '', 10);
+      if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+        return new Date(Date.UTC(y, m, d, 12, 0, 0));
+      }
+    } catch {
+      // Fall through to solar longitude offset
+    }
+  }
+
+  const offsetMs = Math.round((longitude / 15) * 3600000);
+  const localTime = new Date(date.getTime() + offsetMs);
+  return new Date(
+    Date.UTC(
+      localTime.getUTCFullYear(),
+      localTime.getUTCMonth(),
+      localTime.getUTCDate(),
+      12,
+      0,
+      0,
+    ),
+  );
+}
+
+export function getInspectorSchedule(
+  latitude: number,
+  longitude: number,
+  date: Date,
+  options: {
+    convention?: CalculationConventionName;
+    madhab?: Madhab;
+    highLatitudeRule?: HighLatitudeRule;
+    timezone?: string;
+  } = {},
+): PrayerTimesSchedule {
+  const localCivilDate = resolveObserverCivilDate(date, longitude, options.timezone);
+  return calculatePrayerTimes(latitude, longitude, localCivilDate, {
+    convention: options.convention,
+    madhab: options.madhab,
+    highLatitudeRule: options.highLatitudeRule,
+    now: date,
+  });
 }
 
 function formatTime(date: Date, timezone?: string): string {
@@ -26,6 +104,45 @@ function formatTime(date: Date, timezone?: string): string {
   } catch {
     return date.toISOString().slice(11, 19);
   }
+}
+
+function formatPrayerTime(entry: PrayerEntry, timezone?: string): string {
+  if (!entry.date) {
+    return '--:--:--';
+  }
+  return formatTime(entry.date, timezone);
+}
+
+export function renderProvenanceBadge(
+  entry: PrayerEntry,
+  trans: Translations = i18n.getTranslations(),
+): string {
+  const prov = entry.provenance || 'astronomicalSign';
+  let badgeVariant = 'astro';
+  let badgeInfo = trans.inspector.provenance.astro;
+
+  if (prov === 'fixedInterval') {
+    badgeVariant = 'fixed';
+    badgeInfo = trans.inspector.provenance.fixed;
+  } else if (prov === 'highLatitudeAdjustment') {
+    if (entry.ruleApplied === 'AngleBased') {
+      badgeVariant = 'high-lat';
+      badgeInfo = trans.inspector.provenance.angle;
+    } else {
+      badgeVariant = 'high-lat';
+      badgeInfo = trans.inspector.provenance.highLat;
+    }
+  } else if (prov === 'unresolved') {
+    badgeVariant = 'unresolved';
+    badgeInfo = trans.inspector.provenance.unresolved;
+  }
+
+  const label = badgeInfo.label;
+  const title = entry.note || badgeInfo.title || badgeInfo.desc;
+  const provClass = `prayer-provenance-${prov}`;
+  const badgeClass = `badge-${badgeVariant}`;
+
+  return `<span class="prayer-provenance-badge ${provClass} ${badgeClass}" title="${title}" tabindex="0">${label}</span>`;
 }
 
 function formatCountdown(ms: number | null): string {
@@ -50,6 +167,8 @@ function calculateQibla(lat: number, lon: number): number {
 export function createInspectorPanel(options: {
   convention?: CalculationConventionName;
   madhab?: Madhab;
+  highLatitudeRule?: HighLatitudeRule;
+  store?: AppStore;
   onOpen?: () => void;
   onClose?: () => void;
 } = {}): InspectorPanel {
@@ -60,8 +179,30 @@ export function createInspectorPanel(options: {
   let currentSettlement: Settlement | null = null;
   let currentCoords: { lat: number; lon: number } | null = null;
   let lastRenderDate: Date = new Date();
-  const convention = options.convention || 'UmmAlQura';
-  const madhab = options.madhab || 'Shafi';
+
+  let convention: CalculationConventionName = options.convention || 'UmmAlQura';
+  let madhab: Madhab = options.madhab || 'Shafi';
+  let highLatitudeRule: HighLatitudeRule = options.highLatitudeRule || 'MiddleOfTheNight';
+
+  const updateConfig = (config: AppConfig): void => {
+    convention = config.convention;
+    madhab = config.madhab;
+    highLatitudeRule = config.highLatitudeRule;
+    if (container.style.display !== 'none') {
+      render(lastRenderDate);
+    }
+  };
+
+  let storeUnsub: (() => void) | null = null;
+  if (options.store) {
+    const initialConfig = options.store.getConfig();
+    convention = initialConfig.convention;
+    madhab = initialConfig.madhab;
+    highLatitudeRule = initialConfig.highLatitudeRule;
+    storeUnsub = options.store.subscribeConfig((config) => {
+      updateConfig(config);
+    });
+  }
 
   const render = (date: Date): void => {
     lastRenderDate = date;
@@ -69,7 +210,7 @@ export function createInspectorPanel(options: {
 
     let lat = 0;
     let lon = 0;
-    let nameEn = 'Geographic Point';
+    let nameEn = trans.inspector.geographicPoint;
     let nameAr = '';
     let countryCode = '';
     let tz: string | undefined = undefined;
@@ -89,9 +230,11 @@ export function createInspectorPanel(options: {
       return;
     }
 
-    const sched: PrayerTimesSchedule = calculatePrayerTimes(lat, lon, date, {
+    const sched: PrayerTimesSchedule = getInspectorSchedule(lat, lon, date, {
       convention,
       madhab,
+      highLatitudeRule,
+      timezone: tz,
     });
 
     const localTime = formatTime(date, tz);
@@ -100,6 +243,10 @@ export function createInspectorPanel(options: {
     const qiblaText = atKaaba ? trans.inspector.atKaaba : `${qiblaBearing}° ${trans.inspector.fromNorth}`;
     const latStr = lat >= 0 ? `${lat.toFixed(2)}°N` : `${(-lat).toFixed(2)}°S`;
     const lonStr = lon >= 0 ? `${lon.toFixed(2)}°E` : `${(-lon).toFixed(2)}°W`;
+
+    // Compute solar altitude
+    const solarAlt = getSolarAltitude(lat, lon, date);
+    const solarAltText = `${solarAlt >= 0 ? '+' : ''}${solarAlt.toFixed(1)}°`;
 
     // Progress bar estimation: 0% to 100%
     const countdownSec = (sched.countdownMs || 0) / 1000;
@@ -127,6 +274,10 @@ export function createInspectorPanel(options: {
           <span class="telemetry-label">${trans.inspector.qiblaBearing}</span>
           <span class="telemetry-value">${qiblaText}</span>
         </div>
+        <div class="telemetry-cell">
+          <span class="telemetry-label">${trans.inspector.solarAltitude}</span>
+          <span class="telemetry-value">${solarAltText}</span>
+        </div>
       </div>
 
       <div class="inspector-next-capsule">
@@ -145,42 +296,60 @@ export function createInspectorPanel(options: {
             <span class="prayer-indicator-dot" style="background-color: var(--color-fajr);"></span>
             <span>${trans.prayers.fajr}</span>
           </span>
-          <span>${formatTime(sched.fajr, tz)}</span>
+          <span class="prayer-time-group" style="display: flex; align-items: center; gap: 6px;">
+            ${renderProvenanceBadge(sched.fajr, trans)}
+            <span>${formatPrayerTime(sched.fajr, tz)}</span>
+          </span>
         </div>
         <div class="inspector-prayer-row" style="--prayer-color: var(--color-sunrise);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-sunrise);"></span>
             <span>${trans.prayers.sunrise}</span>
           </span>
-          <span>${formatTime(sched.sunrise, tz)}</span>
+          <span class="prayer-time-group" style="display: flex; align-items: center; gap: 6px;">
+            ${renderProvenanceBadge(sched.sunrise, trans)}
+            <span>${formatPrayerTime(sched.sunrise, tz)}</span>
+          </span>
         </div>
         <div class="inspector-prayer-row ${sched.currentPrayer === 'dhuhr' ? 'active' : ''}" style="--prayer-color: var(--color-dhuhr);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-dhuhr);"></span>
             <span>${trans.prayers.dhuhr}</span>
           </span>
-          <span>${formatTime(sched.dhuhr, tz)}</span>
+          <span class="prayer-time-group" style="display: flex; align-items: center; gap: 6px;">
+            ${renderProvenanceBadge(sched.dhuhr, trans)}
+            <span>${formatPrayerTime(sched.dhuhr, tz)}</span>
+          </span>
         </div>
         <div class="inspector-prayer-row ${sched.currentPrayer === 'asr' ? 'active' : ''}" style="--prayer-color: var(--color-asr);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-asr);"></span>
             <span>${trans.prayers.asr}</span>
           </span>
-          <span>${formatTime(sched.asr, tz)}</span>
+          <span class="prayer-time-group" style="display: flex; align-items: center; gap: 6px;">
+            ${renderProvenanceBadge(sched.asr, trans)}
+            <span>${formatPrayerTime(sched.asr, tz)}</span>
+          </span>
         </div>
         <div class="inspector-prayer-row ${sched.currentPrayer === 'maghrib' ? 'active' : ''}" style="--prayer-color: var(--color-maghrib);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-maghrib);"></span>
             <span>${trans.prayers.maghrib}</span>
           </span>
-          <span>${formatTime(sched.maghrib, tz)}</span>
+          <span class="prayer-time-group" style="display: flex; align-items: center; gap: 6px;">
+            ${renderProvenanceBadge(sched.maghrib, trans)}
+            <span>${formatPrayerTime(sched.maghrib, tz)}</span>
+          </span>
         </div>
         <div class="inspector-prayer-row ${sched.currentPrayer === 'isha' ? 'active' : ''}" style="--prayer-color: var(--color-isha);">
           <span class="prayer-name-tag">
             <span class="prayer-indicator-dot" style="background-color: var(--color-isha);"></span>
             <span>${trans.prayers.isha}</span>
           </span>
-          <span>${formatTime(sched.isha, tz)}</span>
+          <span class="prayer-time-group" style="display: flex; align-items: center; gap: 6px;">
+            ${renderProvenanceBadge(sched.isha, trans)}
+            <span>${formatPrayerTime(sched.isha, tz)}</span>
+          </span>
         </div>
       </div>
     `;
@@ -229,6 +398,7 @@ export function createInspectorPanel(options: {
   };
 
   const dispose = (): void => {
+    if (storeUnsub) storeUnsub();
     unsubscribe();
     container.remove();
   };
@@ -238,6 +408,7 @@ export function createInspectorPanel(options: {
     inspectSettlement,
     inspectCoordinates,
     updateTime,
+    updateConfig,
     hide,
     dispose,
   };

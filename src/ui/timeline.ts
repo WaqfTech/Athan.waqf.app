@@ -4,17 +4,32 @@ import { ContinuityStats } from '../simulation/continuity';
 import { SimulationClock } from '../simulation/clock';
 import { i18n } from '../i18n/manager';
 
+export interface TimelineCallbacks {
+  onScrub?: (date: Date) => void;
+  onDayBoundary?: (date: Date) => void;
+}
+
 export interface TimelineUI {
   element: HTMLElement;
   updateStats: (stats: ContinuityStats) => void;
   updatePlayhead: (date: Date) => void;
+  setDate?: (date: Date) => void;
   dispose: () => void;
 }
 
 export function createTimelineUI(
   clock: SimulationClock,
-  onScrub?: (date: Date) => void,
+  onScrubOrCallbacks?: ((date: Date) => void) | TimelineCallbacks,
+  optionalDayBoundary?: (date: Date) => void,
 ): TimelineUI {
+  const onScrub = typeof onScrubOrCallbacks === 'function' ? onScrubOrCallbacks : onScrubOrCallbacks?.onScrub;
+  const onDayBoundary =
+    typeof onScrubOrCallbacks === 'object' && onScrubOrCallbacks !== null
+      ? onScrubOrCallbacks.onDayBoundary
+      : optionalDayBoundary;
+
+  let lastDateString = clock.getTime().toISOString().slice(0, 10);
+
   const container = document.createElement('section');
   container.className = 'timeline-container hud-panel';
   container.setAttribute('aria-label', '24-hour global adhan timeline');
@@ -28,7 +43,7 @@ export function createTimelineUI(
   titleGroup.className = 'timeline-title-group';
   titleGroup.innerHTML = `
     <span class="timeline-title" id="timeline-title">${trans.timeline.title}</span>
-    <span class="timeline-subtitle" id="timeline-subtitle">${trans.timeline.subtitle}</span>
+    <span class="timeline-subtitle" id="timeline-subtitle" title="${trans.timeline.modelDisclaimer}">${trans.timeline.subtitle}</span>
   `;
 
   const statsStrip = document.createElement('div');
@@ -163,6 +178,13 @@ export function createTimelineUI(
 
   const updateStats = (stats: ContinuityStats): void => {
     currentStats = stats;
+    const subtitleEl = container.querySelector('#timeline-subtitle');
+    if (subtitleEl) {
+      const countFormatted = stats.settlementCount.toLocaleString('en-US');
+      subtitleEl.textContent = `${trans.timeline.subtitle} (${countFormatted} ${trans.timeline.cities} · ${stats.adhanDurationMinutes}m)`;
+      subtitleEl.setAttribute('title', trans.timeline.modelDisclaimer);
+    }
+
     const covEl = container.querySelector('#stat-coverage');
     if (covEl) covEl.textContent = `${stats.coveragePercent}%`;
 
@@ -180,7 +202,15 @@ export function createTimelineUI(
     const titleEl = container.querySelector('#timeline-title');
     if (titleEl) titleEl.textContent = trans.timeline.title;
     const subtitleEl = container.querySelector('#timeline-subtitle');
-    if (subtitleEl) subtitleEl.textContent = trans.timeline.subtitle;
+    if (subtitleEl) {
+      if (currentStats) {
+        const countFormatted = currentStats.settlementCount.toLocaleString('en-US');
+        subtitleEl.textContent = `${trans.timeline.subtitle} (${countFormatted} ${trans.timeline.cities} · ${currentStats.adhanDurationMinutes}m)`;
+      } else {
+        subtitleEl.textContent = trans.timeline.subtitle;
+      }
+      subtitleEl.setAttribute('title', trans.timeline.modelDisclaimer);
+    }
 
     const covLabel = container.querySelector('#stat-cov-label');
     if (covLabel) covLabel.textContent = trans.timeline.coverage;
@@ -196,6 +226,14 @@ export function createTimelineUI(
   });
 
   const updatePlayhead = (date: Date): void => {
+    const curDateString = date.toISOString().slice(0, 10);
+    if (curDateString !== lastDateString) {
+      lastDateString = curDateString;
+      if (onDayBoundary) {
+        onDayBoundary(date);
+      }
+    }
+
     const hours = date.getUTCHours();
     const minutes = date.getUTCMinutes();
     const seconds = date.getUTCSeconds();
@@ -305,6 +343,7 @@ export function createTimelineUI(
     element: container,
     updateStats,
     updatePlayhead,
+    setDate: updatePlayhead,
     dispose,
   };
 }

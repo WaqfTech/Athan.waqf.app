@@ -42,7 +42,7 @@
   --font-size-lg: 18px;
 
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Arabic", "Geeza Pro", "Amiri", "Tahoma", Roboto, sans-serif;
 
   /* Radius Tokens Scale (allowed: 0, 2, 6, 10, 14, 20, 9999px) */
   --radius-none: 0px;
@@ -86,6 +86,18 @@ html, body {
   color: var(--color-text-primary);
   font-family: var(--font-sans);
   user-select: none;
+}
+
+/* RTL Typography Enhancements */
+[dir="rtl"], [lang="ar"], [lang="ur"], [lang="fa"] {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans Arabic", "Geeza Pro", "Amiri", "Tahoma", sans-serif;
+}
+
+[dir="rtl"] .brand-title,
+[dir="rtl"] .brand-subtitle,
+[dir="rtl"] .dock-label,
+[dir="rtl"] .telemetry-label {
+  letter-spacing: normal;
 }
 
 #app {
@@ -878,6 +890,53 @@ html, body {
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
 
+/* Prayer Provenance Badges */
+.prayer-provenance-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding-block: 1px;
+  padding-inline: 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  line-height: 1.4;
+  text-transform: uppercase;
+  cursor: help;
+  white-space: nowrap;
+}
+
+.badge-astro,
+.prayer-provenance-astronomicalSign {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.badge-fixed,
+.prayer-provenance-fixedInterval {
+  background: rgba(168, 85, 247, 0.12);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.badge-high-lat,
+.prayer-provenance-highLatitudeAdjustment {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.badge-unresolved,
+.prayer-provenance-unresolved {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
 /* 4. 24-Hour Continuity Ribbon */
 .timeline-container {
   width: 100%;
@@ -958,6 +1017,7 @@ html, body {
   cursor: ew-resize;
   overflow: visible;
   margin-block-start: var(--space-md);
+  direction: ltr; /* LTR coordinate isolation for physical canvas and scrub playhead */
 }
 
 body.is-timeline-scrubbing,
@@ -1365,6 +1425,67 @@ body.is-timeline-scrubbing * {
   color: var(--color-text-secondary);
   font-size: var(--font-size-xs);
   line-height: 1.4;
+}
+
+.layers-legend-container {
+  padding-block-start: var(--space-sm);
+  border-block-start: 1px solid var(--color-glass-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.legend-header {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.layers-legend-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.3;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-dot.dot-ring {
+  background: transparent;
+  border: 1.5px solid var(--color-accent);
+}
+
+.legend-dot.dot-arc {
+  background: var(--color-accent-amber);
+  height: 2px;
+  border-radius: 1px;
+}
+
+.legend-model-footnote {
+  font-size: 10px;
+  color: var(--color-text-dim);
+  font-family: var(--font-mono);
+  line-height: 1.4;
+  padding-block-start: var(--space-xs);
+  border-block-start: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
 /* First-visit hint */

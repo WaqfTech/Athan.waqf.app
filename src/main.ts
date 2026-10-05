@@ -9,7 +9,13 @@ import { computeGlobalAdhanContinuity } from './simulation/continuity';
 import { createNarrativeDirector, NarrativeDirector } from './simulation/narrative';
 import type { PrayerFrontKey } from './globe/fronts';
 import { parseUrlState, updateUrlState } from './ui/urlState';
-import { CALCULATION_CONVENTIONS, CalculationConventionName } from './prayer/conventions';
+import {
+  CALCULATION_CONVENTIONS,
+  CalculationConventionName,
+  Madhab,
+  HighLatitudeRule,
+} from './prayer/conventions';
+import { createAppStore, AppStore } from './ui/state';
 import { i18n, detectLocale } from './i18n';
 
 export interface AppInstance {
@@ -17,6 +23,7 @@ export interface AppInstance {
   clock?: SimulationClock;
   scene?: GlobeScene;
   hud?: HudOverlay;
+  store?: AppStore;
   narrativeDirector?: NarrativeDirector;
   dispose?: () => void;
 }
@@ -36,18 +43,56 @@ export function initializeApp(): AppInstance {
   const urlState = parseUrlState();
   const initialTime = urlState.time || new Date();
   const initialConvention = (urlState.convention as CalculationConventionName) || 'UmmAlQura';
+  const initialMadhab: Madhab = urlState.madhab || 'Shafi';
+  const initialRule: HighLatitudeRule =
+    urlState.highLatitudeRule || urlState.rule || 'MiddleOfTheNight';
   const initialStyle = urlState.style || 'satellite';
+
+  // Central reactive state store
+  const store = createAppStore(
+    {
+      convention: initialConvention,
+      madhab: initialMadhab,
+      highLatitudeRule: initialRule,
+      mapStyle: initialStyle,
+      adhanDurationMinutes: 4,
+    },
+    initialTime,
+  );
 
   const clock = new SimulationClock(initialTime);
 
   let eventEngine: AdhanEventEngine | null = null;
   let settlementsList: Settlement[] = [];
   let isNarrativeActive = false;
+  let lastDateDayString = initialTime.toISOString().slice(0, 10);
+
+  const recomputeStatsForDate = (date: Date): void => {
+    if (settlementsList.length > 0) {
+      const cfg = store.getConfig();
+      const stats = computeGlobalAdhanContinuity(settlementsList, date, {
+        convention: cfg.convention,
+        madhab: cfg.madhab,
+        highLatitudeRule: cfg.highLatitudeRule,
+      });
+      hud.updateStats(stats);
+    }
+  };
 
   const globeScene = createGlobeScene(canvas, {
     initialStyle,
     onSelectSettlement: (settlement) => {
       hud.inspector.inspectSettlement(settlement, clock.getTime());
+      store.setLocation({
+        type: 'settlement',
+        settlement,
+        latitude: settlement.latitude,
+        longitude: settlement.longitude,
+        nameEn: settlement.name,
+        nameAr: settlement.nameAr,
+        countryCode: settlement.countryCode,
+        timezone: settlement.timezone,
+      });
       updateUrlState({
         lat: settlement.latitude,
         lon: settlement.longitude,
@@ -56,6 +101,12 @@ export function initializeApp(): AppInstance {
     },
     onSelectCoordinates: (lat, lon) => {
       hud.inspector.inspectCoordinates(lat, lon, clock.getTime());
+      store.setLocation({
+        type: 'coordinates',
+        latitude: lat,
+        longitude: lon,
+        nameEn: `Lat ${lat.toFixed(2)}°, Lon ${lon.toFixed(2)}°`,
+      });
       updateUrlState({
         lat,
         lon,
@@ -73,15 +124,18 @@ export function initializeApp(): AppInstance {
   });
 
   const hud = createHudOverlay(clock, globeScene, {
+    store,
     onConventionChange: (convName) => {
-      if (eventEngine) {
-        eventEngine.setConvention(convName);
-        const stats = computeGlobalAdhanContinuity(settlementsList, clock.getTime(), {
-          convention: convName,
-        });
-        hud.updateStats(stats);
-      }
-      updateUrlState({ convention: convName });
+      store.updateConfig({ convention: convName });
+    },
+    onMadhabChange: (madhab) => {
+      store.updateConfig({ madhab });
+    },
+    onHighLatitudeRuleChange: (rule) => {
+      store.updateConfig({ highLatitudeRule: rule });
+    },
+    onDayBoundary: (date) => {
+      recomputeStatsForDate(date);
     },
     onFollowAdhan: () => {
       isNarrativeActive = !isNarrativeActive;
@@ -92,6 +146,16 @@ export function initializeApp(): AppInstance {
       globeScene.cameraRig.focusCoordinates(settlement.latitude, settlement.longitude, 14, true);
       hud.inspector.inspectSettlement(settlement, clock.getTime());
       globeScene.qiblaArcs.setInspectedCity(settlement.latitude, settlement.longitude);
+      store.setLocation({
+        type: 'settlement',
+        settlement,
+        latitude: settlement.latitude,
+        longitude: settlement.longitude,
+        nameEn: settlement.name,
+        nameAr: settlement.nameAr,
+        countryCode: settlement.countryCode,
+        timezone: settlement.timezone,
+      });
       updateUrlState({
         lat: settlement.latitude,
         lon: settlement.longitude,
@@ -99,8 +163,49 @@ export function initializeApp(): AppInstance {
       });
     },
     onStyleChange: (style) => {
-      updateUrlState({ style });
+      store.updateConfig({ mapStyle: style });
     },
+  });
+
+  let lastPrayerConfig = {
+    convention: store.getConfig().convention,
+    madhab: store.getConfig().madhab,
+    highLatitudeRule: store.getConfig().highLatitudeRule,
+  };
+
+  // Store configuration changes propagate immediately to all components
+  store.subscribeConfig((cfg) => {
+    const prayerConfigChanged =
+      cfg.convention !== lastPrayerConfig.convention ||
+      cfg.madhab !== lastPrayerConfig.madhab ||
+      cfg.highLatitudeRule !== lastPrayerConfig.highLatitudeRule;
+
+    if (prayerConfigChanged) {
+      lastPrayerConfig = {
+        convention: cfg.convention,
+        madhab: cfg.madhab,
+        highLatitudeRule: cfg.highLatitudeRule,
+      };
+      if (eventEngine) {
+        eventEngine.setConvention(cfg.convention);
+        eventEngine.setMadhab(cfg.madhab);
+        eventEngine.setHighLatitudeRule(cfg.highLatitudeRule);
+        recomputeStatsForDate(clock.getTime());
+      }
+      globeScene.setConvention(CALCULATION_CONVENTIONS[cfg.convention]);
+      globeScene.setMadhab(cfg.madhab);
+    }
+
+    if (cfg.mapStyle !== globeScene.getMapStyle()) {
+      globeScene.setMapStyle(cfg.mapStyle);
+    }
+
+    updateUrlState({
+      convention: cfg.convention,
+      madhab: cfg.madhab,
+      highLatitudeRule: cfg.highLatitudeRule,
+      style: cfg.mapStyle,
+    });
   });
 
   i18n.onLocaleChange((locale) => {
@@ -137,6 +242,7 @@ export function initializeApp(): AppInstance {
   }
 
   globeScene.setConvention(CALCULATION_CONVENTIONS[initialConvention]);
+  globeScene.setMadhab(initialMadhab);
   globeScene.setTime(initialTime);
 
   // Load settlements dataset asynchronously
@@ -146,14 +252,20 @@ export function initializeApp(): AppInstance {
       globeScene.setSettlements(settlements);
       hud.setSettlements(settlements);
 
+      const cfg = store.getConfig();
       eventEngine = new AdhanEventEngine(settlements, {
-        convention: initialConvention,
-        adhanDurationMinutes: 4,
+        convention: cfg.convention,
+        madhab: cfg.madhab,
+        highLatitudeRule: cfg.highLatitudeRule,
+        adhanDurationMinutes: cfg.adhanDurationMinutes,
+        maxCacheSize: 60000,
       });
 
       // Calculate initial 24h continuity metrics
       const stats = computeGlobalAdhanContinuity(settlements, clock.getTime(), {
-        convention: initialConvention,
+        convention: cfg.convention,
+        madhab: cfg.madhab,
+        highLatitudeRule: cfg.highLatitudeRule,
       });
       hud.updateStats(stats);
     })
@@ -175,6 +287,13 @@ export function initializeApp(): AppInstance {
     const currentTime = clock.tick(deltaSeconds);
     globeScene.setTime(currentTime);
     hud.updateTime(currentTime);
+
+    // Date boundary detection during simulation playback
+    const curDayString = currentTime.toISOString().slice(0, 10);
+    if (curDayString !== lastDateDayString) {
+      lastDateDayString = curDayString;
+      recomputeStatsForDate(currentTime);
+    }
 
     if (eventEngine && settlementsList.length > 0) {
       const activeEvents = eventEngine.getActiveEvents(currentTime);
@@ -204,6 +323,7 @@ export function initializeApp(): AppInstance {
     clock,
     scene: globeScene,
     hud,
+    store,
     narrativeDirector,
     dispose,
   };

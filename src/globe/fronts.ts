@@ -9,9 +9,20 @@ import { generateGlobalPrayerFronts } from '../prayer/contours';
 import { CalculationParameters, Madhab, CALCULATION_CONVENTIONS } from '../prayer/conventions';
 import { EARTH_RADIUS } from './earth';
 
-export type PrayerFrontKey = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha' | 'terminator';
+export type PrayerFrontKey =
+  | 'fajr'
+  | 'sunrise'
+  | 'dhuhr'
+  | 'asr'
+  | 'maghrib'
+  | 'isha'
+  | 'terminator';
 
-export const PRAYER_COLORS: Record<PrayerFrontKey, number> = {
+export type TerminatorFrontKey = 'geometricTerminator' | 'apparentTerminator';
+
+export type AllFrontKey = PrayerFrontKey | TerminatorFrontKey;
+
+export const PRAYER_COLORS: Record<AllFrontKey, number> = {
   fajr: 0x38bdf8, // Cyan / Dawn twilight
   sunrise: 0x34d399, // Emerald / Sunrise (distinct from Dhuhr yellow)
   dhuhr: 0xfacc15, // Golden yellow / Solar noon
@@ -19,6 +30,8 @@ export const PRAYER_COLORS: Record<PrayerFrontKey, number> = {
   maghrib: 0xec4899, // Hot pink / Sunset (distinct from Asr orange)
   isha: 0xa855f7, // Vivid violet-purple / Nightfall twilight
   terminator: 0xe2e8f0, // Crisp silver-white / Day-night solar boundary
+  geometricTerminator: 0x94a3b8, // Slate / Geometric center horizon (0.0 deg)
+  apparentTerminator: 0xe2e8f0, // Crisp silver-white / Apparent horizon (-0.833 deg)
 };
 
 export interface FrontLineObject {
@@ -31,13 +44,14 @@ export interface FrontLineObject {
 
 export interface PrayerFrontsLayer {
   group: THREE.Group;
-  setVisibility: (key: PrayerFrontKey, visible: boolean) => void;
+  setVisibility: (key: AllFrontKey, visible: boolean) => void;
   setAllVisibility: (visible: boolean) => void;
   setResolution: (width: number, height: number) => void;
   update: (
     subsolar: SubsolarCoordinates,
     convention?: CalculationParameters,
     madhab?: Madhab,
+    date?: Date,
   ) => void;
   dispose: () => void;
 }
@@ -51,7 +65,7 @@ export function createPrayerFrontsLayer(): PrayerFrontsLayer {
 
   const overlayRadius = EARTH_RADIUS * 1.004; // Slight elevation to avoid z-fighting
 
-  const frontKeys: PrayerFrontKey[] = [
+  const frontKeys: AllFrontKey[] = [
     'fajr',
     'sunrise',
     'dhuhr',
@@ -59,9 +73,11 @@ export function createPrayerFrontsLayer(): PrayerFrontsLayer {
     'maghrib',
     'isha',
     'terminator',
+    'geometricTerminator',
+    'apparentTerminator',
   ];
 
-  const linesMap = new Map<PrayerFrontKey, FrontLineObject>();
+  const linesMap = new Map<AllFrontKey, FrontLineObject>();
   const resolution = new THREE.Vector2(window.innerWidth, window.innerHeight);
 
   // Each front is a crisp opaque core line (exact palette colour, no tone mapping)
@@ -101,10 +117,10 @@ export function createPrayerFrontsLayer(): PrayerFrontsLayer {
     linesMap.set(key, { core, glow, geometry, coreMaterial, glowMaterial });
   }
 
-  const userVisible = new Map<PrayerFrontKey, boolean>(frontKeys.map((k) => [k, true]));
-  const hasGeometry = new Map<PrayerFrontKey, boolean>(frontKeys.map((k) => [k, false]));
+  const userVisible = new Map<AllFrontKey, boolean>(frontKeys.map((k) => [k, true]));
+  const hasGeometry = new Map<AllFrontKey, boolean>(frontKeys.map((k) => [k, false]));
 
-  const applyVisibility = (key: PrayerFrontKey): void => {
+  const applyVisibility = (key: AllFrontKey): void => {
     const obj = linesMap.get(key);
     if (!obj) return;
     const show = Boolean(userVisible.get(key)) && Boolean(hasGeometry.get(key));
@@ -112,7 +128,7 @@ export function createPrayerFrontsLayer(): PrayerFrontsLayer {
     obj.glow.visible = show;
   };
 
-  const setVisibility = (key: PrayerFrontKey, visible: boolean): void => {
+  const setVisibility = (key: AllFrontKey, visible: boolean): void => {
     userVisible.set(key, visible);
     applyVisibility(key);
   };
@@ -129,8 +145,9 @@ export function createPrayerFrontsLayer(): PrayerFrontsLayer {
     subsolar: SubsolarCoordinates,
     convention: CalculationParameters = CALCULATION_CONVENTIONS.UmmAlQura,
     madhab: Madhab = 'Shafi',
+    date?: Date,
   ): void => {
-    const fronts = generateGlobalPrayerFronts(subsolar, convention, madhab, overlayRadius);
+    const fronts = generateGlobalPrayerFronts(subsolar, convention, madhab, overlayRadius, date);
 
     for (const key of frontKeys) {
       const obj = linesMap.get(key);
