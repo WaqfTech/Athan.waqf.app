@@ -269,4 +269,29 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
     expect(getTranslations('ar').controls.shareMessage).toContain('شاهد حركة مواقيت الصلاة');
     expect(getTranslations('en').controls.shareMessage).toContain('Watch prayer times');
   });
+
+  it('defines complete and accurate credits across all 10 supported locales', () => {
+    const locales = Object.keys(SUPPORTED_LOCALES) as SupportedLocale[];
+    for (const loc of locales) {
+      const trans = getTranslations(loc);
+      expect(trans.controls.credits).toBeDefined();
+      expect(trans.controls.credits.length).toBeGreaterThan(0);
+
+      const c = trans.credits;
+      expect(c.title).toBeDefined();
+      expect(c.acknowledgments).toBeDefined();
+      expect(c.contributorName).toBe('Muddaththir ‘Ismāʻīl bin Dāniyāl al-Amrīkī');
+      expect(c.contributorHandle).toBe('@theIslampill');
+      expect(c.contributorArabicName).toBe('مدثر إسماعيل بن دانيال');
+      expect(c.contributorRole.length).toBeGreaterThan(10);
+      expect(c.projectBy).toContain('WaqfTech.org');
+      expect(c.waqfDescription.length).toBeGreaterThan(15);
+      expect(c.licenseTitle).toContain('Waqf-DPL 1.0');
+      expect(c.stackTitle.length).toBeGreaterThan(0);
+      expect(c.stack3d).toContain('Three.js');
+      expect(c.stackAstronomy).toContain('NOAA');
+      expect(c.stackEdge).toContain('Cloudflare Workers');
+      expect(c.close.length).toBeGreaterThan(0);
+    }
+  });
 });

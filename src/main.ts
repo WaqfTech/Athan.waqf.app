@@ -116,7 +116,10 @@ export function initializeApp(): AppInstance {
 
   if (typeof window !== 'undefined') {
     const currentLoc = i18n.getLocale();
-    const expectedPath = currentLoc === 'en' ? '/' : `/${currentLoc}`;
+    const isCredits = window.location.pathname === '/credits' || window.location.pathname.endsWith('/credits');
+    const expectedPath = currentLoc === 'en'
+      ? (isCredits ? '/credits' : '/')
+      : (isCredits ? `/${currentLoc}/credits` : `/${currentLoc}`);
     const params = new URLSearchParams(window.location.search);
     if (
       params.has('lang') ||
@@ -124,6 +127,10 @@ export function initializeApp(): AppInstance {
         (currentLoc !== 'en' || window.location.pathname === '/en'))
     ) {
       updateUrlState({ lang: currentLoc });
+    }
+
+    if (isCredits) {
+      hud.creditsModal.open();
     }
 
     window.addEventListener('popstate', handlePopstate);
