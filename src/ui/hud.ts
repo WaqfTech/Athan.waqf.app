@@ -644,12 +644,20 @@ export function createHudOverlay(
     const url = new URL(window.location.href);
     // A live view should stay live for whoever opens the link
     if (clock.isLive()) url.searchParams.delete('t');
+    const shareTitle = t.brand.title;
+    const shareText = t.controls.shareMessage;
+    const fullText = `${shareText}\n${url.toString()}`;
+
     if (typeof navigator.share === 'function') {
-      navigator.share({ title: t.brand.title, url: url.toString() }).catch(() => {
+      navigator.share({
+        title: shareTitle,
+        text: shareText,
+        url: url.toString(),
+      }).catch(() => {
         // User dismissed the share sheet; nothing to do.
       });
     } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(url.toString()).then(
+      navigator.clipboard.writeText(fullText).then(
         () => showToast(t.controls.linkCopied),
         () => {
           // Clipboard blocked by the browser; leave the URL bar as the fallback.
