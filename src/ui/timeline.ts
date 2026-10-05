@@ -240,6 +240,9 @@ export function createTimelineUI(
 
   const onMouseDown = (e: MouseEvent): void => {
     isDragging = true;
+    if (typeof document !== 'undefined') {
+      document.body.classList.add('is-timeline-scrubbing');
+    }
     handleScrub(e.clientX);
   };
 
@@ -250,7 +253,12 @@ export function createTimelineUI(
   };
 
   const onMouseUp = (): void => {
-    isDragging = false;
+    if (isDragging) {
+      isDragging = false;
+      if (typeof document !== 'undefined') {
+        document.body.classList.remove('is-timeline-scrubbing');
+      }
+    }
   };
 
   trackWrapper.addEventListener('mousedown', onMouseDown);
@@ -283,6 +291,9 @@ export function createTimelineUI(
 
   const dispose = (): void => {
     unsubscribe();
+    if (typeof document !== 'undefined') {
+      document.body.classList.remove('is-timeline-scrubbing');
+    }
     trackWrapper.removeEventListener('mousedown', onMouseDown);
     window.removeEventListener('mousemove', onMouseMove);
     window.removeEventListener('mouseup', onMouseUp);
