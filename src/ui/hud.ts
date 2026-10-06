@@ -17,6 +17,7 @@ import { fetchVisitorLocation, VisitorLocation } from '../population/visitorGeo'
 import { i18n, SUPPORTED_LOCALES, SupportedLocale } from '../i18n';
 import { Translations } from '../i18n/translations';
 import { AppStore } from './state';
+import { AdhanEventEngine } from '../simulation/eventEngine';
 
 const CONVENTION_I18N_KEYS: Record<CalculationConventionName, keyof Translations['controls']> = {
   MuslimWorldLeague: 'convMuslimWorldLeague',
@@ -66,6 +67,8 @@ export interface HudOverlay {
   creditsModal: CreditsModal;
   updateStats: (stats: ContinuityStats) => void;
   updateTime: (date: Date) => void;
+  updateLastThirdCount: (count: number) => void;
+  setEventEngine: (engine: AdhanEventEngine) => void;
   setSettlements: (settlements: Settlement[]) => void;
   /** Shows the Follow Adhan caption for the current target, or hides it when prayer is null. */
   setNowPlaying: (prayer: PrayerFrontKey | null, city?: string) => void;
@@ -124,6 +127,7 @@ export function createHudOverlay(
     onStyleChange?: (style: 'roadmap' | 'satellite') => void;
     onSelectCity?: (settlement: Settlement) => void;
     onDayBoundary?: (date: Date) => void;
+    onScrub?: (date: Date) => void;
     store?: AppStore;
   } = {},
 ): HudOverlay {
@@ -137,6 +141,7 @@ export function createHudOverlay(
   }
 
   let allSettlements: Settlement[] = [];
+  let eventEngine: AdhanEventEngine | null = null;
   const bottomStack = document.createElement('div');
   bottomStack.className = 'hud-bottom-stack';
 
@@ -1319,6 +1324,13 @@ export function createHudOverlay(
       if (callbacks.store) {
         callbacks.store.setDate(date);
       }
+      if (eventEngine) {
+        const count = eventEngine.countSettlementsInLastThird(date);
+        timeline.updateLastThirdCount(count);
+      }
+      if (callbacks.onScrub) {
+        callbacks.onScrub(date);
+      }
     },
     onDayBoundary: (date) => {
       if (callbacks.onDayBoundary) {
@@ -1511,6 +1523,11 @@ export function createHudOverlay(
     timeline.updatePlayhead(date);
     inspector.updateTime(date);
 
+    if (eventEngine) {
+      const count = eventEngine.countSettlementsInLastThird(date);
+      timeline.updateLastThirdCount(count);
+    }
+
     const utcEl = root.querySelector('#live-utc-ticker');
     if (utcEl) {
       const hh = String(date.getUTCHours()).padStart(2, '0');
@@ -1520,6 +1537,14 @@ export function createHudOverlay(
     }
   };
 
+  const updateLastThirdCount = (count: number): void => {
+    timeline.updateLastThirdCount(count);
+  };
+
+  const setEventEngine = (engine: AdhanEventEngine): void => {
+    eventEngine = engine;
+  };
+
   const setSettlements = (settlements: Settlement[]): void => {
     allSettlements = settlements;
     spatialIndex = new SettlementSpatialIndex(settlements);
@@ -1527,6 +1552,7 @@ export function createHudOverlay(
   };
 
   const dispose = (): void => {
+    eventEngine = null;
     unsubscribeLocale();
     unsubscribeClock();
     creditsModal.dispose();
@@ -1551,6 +1577,8 @@ export function createHudOverlay(
     creditsModal,
     updateStats,
     updateTime,
+    updateLastThirdCount,
+    setEventEngine,
     setSettlements,
     setNowPlaying,
     dispose,

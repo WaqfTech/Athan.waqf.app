@@ -1,175 +1,80 @@
-# Build Plan: Adhan Earth (athan.waqf.app)
+# Implementation Plan: Islamic Night Division and Last Third of the Night
 
 ## Overview
 
-Adhan Earth is an interactive 3D planetary observatory built with Three.js and TypeScript. It presents Earth in space with true solar illumination, day and night shading, continuous prayer twilight fronts, and thousands of illuminated settlements. Visitors can rotate the globe, scrub time, watch prayer fronts migrate westward, inspect local prayer times for any coordinate, and quantitatively evaluate whether the adhan is continuously active across the planet. The application builds as a fully static bundle ready for free hosting on GitHub Pages with zero server requirements.
+This plan defines the architectural additions required to calculate and display the Islamic
+night (الليل الشرعي) and the last third of the night (الثلث الأخير من الليل). In Islamic fiqh,
+the night begins at Maghrib athan (sunset) and concludes at Fajr athan (true dawn). The night
+duration is divided into three equal portions. The last third begins at two-thirds of the night
+span (or one-third before Fajr) and ends at Fajr athan. The implementation adds astronomical
+calculations, multi-lingual translations, inspector displays, and real-time global counts.
 
 ## Architecture Decisions
 
-Decision: Three.js for core 3D scene with vanilla TypeScript UI overlay.
-Decision type: design choice.
-Evidence: Three.js delivers 60 FPS animation loops, custom GLSL shaders, and GPU-instanced points without React virtual DOM overhead. The HUD consists of lightweight DOM panels styled with modern CSS logical properties.
-
-Decision: Self-contained astronomical solar position engine.
-Decision type: design choice.
-Evidence: NOAA and Meeus astronomical algorithms calculate solar declination and Greenwich Hour Angle within 0.01 degree accuracy. Running this locally eliminates network latency, works offline, and enables arbitrary time scrubbing.
-
-Decision: Analytical contour derivation for prayer fronts.
+Decision: Standardize Islamic night duration as the interval from Maghrib athan to next Fajr athan.
 Decision type: fact.
-Evidence: Fajr, sunrise, sunset, and Isha form small circles of constant solar altitude centered at the subsolar point. Dhuhr corresponds to the solar noon meridian. Asr depends on shadow length, which varies by latitude; computing the hour angle per latitude slice derives the exact non-circular front.
+Evidence: Classical Islamic jurisprudence unanimously defines the legal night (الليل الشرعي) as
+the duration between sunset (غروب الشمس / أذان المغرب) and true dawn (طلوع الفجر الصادق / أذان الفجر).
+Dividing this interval into three equal parts establishes the exact start of the last third.
 
-Decision: Compact tiered settlement dataset.
-Decision type: optimization.
-Evidence: An initial payload of roughly 15,000 to 25,000 settlements (under 400 KB compressed) delivers instantaneous initial load. An optional extended dataset can be fetched on demand for deep continuity proofs.
-
-Decision: Pure client-side static hosting on GitHub Pages.
+Decision: Support both current observer night and upcoming night in the prayer calculator.
 Decision type: design choice.
-Evidence: All ephemeris and prayer calculations execute in the browser. Geolocation uses standard browser APIs with manual search fallback. State serializes to URL query parameters for reproducible link sharing.
+Evidence: An observer inspecting a location during daylight needs to see the upcoming night schedule,
+while an observer checking during the night needs to know whether the current instant falls inside
+the last third of the night. Multi-day lookahead and lookbehind resolve this without discontinuities.
 
-## Mathematical and Physical Models
+Decision: Add dedicated last third of the night telemetry to the inspector panel.
+Decision type: design choice.
+Evidence: Users inspecting any of the 15,000 settlements or arbitrary coordinates need to see the
+exact start time, end time, total night duration, active status badge, and countdown.
 
-Solar position:
-At any UTC timestamp t, compute Julian Day, solar mean anomaly, ecliptic coordinates, and equation of time. This yields the subsolar point with latitude equal to solar declination and longitude equal to negative Greenwich Hour Angle.
+Decision: Implement a high-performance global counter for settlements in the last third.
+Decision type: optimization.
+Evidence: Iterating through 15,000 settlements during simulation ticks must execute in under 2ms.
+Leveraging cached civil dates and longitude offsets enables sub-millisecond evaluation.
 
-Solar elevation angle:
-At any latitude phi and longitude lambda, solar elevation h satisfies sin(h) = sin(phi) * sin(declination) + cos(phi) * cos(declination) * cos(lambda - lambda_sun).
+## Task List
 
-Prayer twilight circles:
-Fajr front: locus where h = -18 degrees (or selected convention angle) on the dawn side.
-Sunrise and sunset: locus where h = -0.833 degrees (accounting for refraction and solar radius).
-Isha front: locus where h = -17 or -18 degrees on the dusk side.
-These loci are spherical circles with angular radius theta = 90 - h from the subsolar point.
+Phase 1: Foundation and Calculation Engine
+- Task 1: Core Islamic night astronomical calculation engine
+- Task 2: Multi-lingual internationalization and terminology
 
-Dhuhr front:
-The meridian line where local solar time is 12:00 (local noon), spanning from pole to pole through the subsolar longitude.
+Checkpoint: Foundation
+- All unit tests pass
+- TypeScript compiles cleanly with zero errors
 
-Asr shadow curve:
-Noon shadow length ratio is S0 = tan(|phi - declination|).
-Asr begins when shadow length is S0 + 1 (Shafi, Maliki, Hanbali) or S0 + 2 (Hanafi).
-The required solar altitude is h_asr = atan(1 / (S0 + n)).
-The afternoon hour angle satisfies cos(H) = (sin(h_asr) - sin(phi) * sin(declination)) / (cos(phi) * cos(declination)).
-The front longitude at latitude phi is lambda = lambda_sun - H.
+Phase 2: User Interface and Inspection
+- Task 3: Inspector panel night schedule and status display
+- Task 4: Global settlements last third counter in event engine
 
-Adhan continuity metric:
-Given N settlements, each prayer event at time T produces an active window [T, T + duration], where duration defaults to 4 minutes. The union of all active intervals across 24 hours determines global coverage percentage and longest gap.
+Checkpoint: Core Features
+- Inspector displays night times accurately for all cities
+- Global settlement counter operates efficiently during simulation
 
-## Project Structure
+Phase 3: Telemetry, Integration and Verification
+- Task 5: HUD and timeline live telemetry integration
+- Task 6: Comprehensive verification and regression suite
 
-```text
-athan.waqf.app/
-├── index.html
-├── package.json
-├── pnpm-lock.yaml
-├── tsconfig.json
-├── vite.config.ts
-├── vitest.config.ts
-├── public/
-│   ├── data/
-│   │   ├── cities-core.json
-│   │   └── cities-extended.bin
-│   └── textures/
-│       ├── earth-day.webp
-│       ├── earth-night.webp
-│       └── earth-clouds.webp
-├── src/
-│   ├── main.ts
-│   ├── styles/
-│   │   └── main.css
-│   ├── astronomy/
-│   │   ├── coordinates.ts
-│   │   ├── julian.ts
-│   │   ├── solar.ts
-│   │   └── solar.test.ts
-│   ├── prayer/
-│   │   ├── conventions.ts
-│   │   ├── calculator.ts
-│   │   ├── calculator.test.ts
-│   │   ├── contours.ts
-│   │   └── contours.test.ts
-│   ├── globe/
-│   │   ├── scene.ts
-│   │   ├── earth.ts
-│   │   ├── atmosphere.ts
-│   │   ├── fronts.ts
-│   │   ├── cities.ts
-│   │   └── camera.ts
-│   ├── simulation/
-│   │   ├── clock.ts
-│   │   ├── eventEngine.ts
-│   │   └── continuity.ts
-│   └── ui/
-│       ├── hud.ts
-│       ├── timeline.ts
-│       ├── inspector.ts
-│       └── urlState.ts
-└── tasks/
-    ├── plan.md
-    └── todo.md
-```
-
-## Phases and Tasks
-
-Phase 1: Project Setup and Astronomical Earth Foundation
-Task 1: Project scaffold with Vite, TypeScript, pnpm, and Vitest.
-Task 2: Astronomical solar engine and coordinate transforms.
-Task 3: Three.js globe scene with day and night terminator shader.
-
-Phase 2: Prayer Calculations and Global Moving Fronts
-Task 4: Local prayer calculation engine with selectable conventions.
-Task 5: Global continuous prayer contour geometry generator.
-Task 6: Three.js glowing prayer front layer rendering.
-
-Phase 3: Settlements and Adhan Pulse Engine
-Task 7: Settlement dataset pipeline and compact loader.
-Task 8: GPU instanced city point cloud with dynamic pulse attributes.
-Task 9: Real-time adhan event scheduler and pulse animator.
-
-Phase 4: Continuity Strip and Geoscape Controls
-Task 10: 24-hour global continuity calculation and timeline ribbon.
-Task 11: HUD controls, playback scrubbers, and layer toggles.
-Task 12: Settlement inspector panel and shareable URL state sync.
-
-Phase 5: Narrative Tour and Production Static Build
-Task 13: Follow the Adhan auto-tracking camera mode.
-Task 14: Atmospheric scattering, bloom polish, and mobile layout.
-Task 15: Production static build verification and GitHub Pages readiness.
-
-## Verification Strategy
-
-Automated test suites:
-Vitest runs unit tests for Julian date conversion, solar declination, equation of time, prayer time calculations against reference tables (Makkah, London, Cairo, Jakarta), and continuity math.
-
-Type checks and linting:
-TypeScript strict mode compiler checks all modules without error. Code style follows project standards.
-
-Browser manual verification:
-Verify 60 FPS rotation, drag controls, zoom limits, time acceleration (1x, 60x, 300x), accurate day and night division, accurate sunset alignment with Maghrib front, settlement click inspection, and timeline scrubbing.
+Checkpoint: Complete
+- All acceptance criteria verified
+- All 35+ test files pass in Vitest
+- Production build succeeds
 
 ## Risks and Mitigations
 
-Risk: Rendering thousands of pulsating points may degrade framerate on mobile devices.
-Impact: Medium.
-Mitigation: Use GPU InstancedMesh with per-instance attributes and float buffers, avoiding CPU object updates during animation loops.
+- High latitudes and polar regions:
+  Impact: Medium.
+  Mitigation: Use high-latitude adjustment fallbacks or flag unresolved state gracefully.
 
-Risk: High latitude summer seasons where sun does not reach Fajr or Isha angles.
-Impact: Medium.
-Mitigation: Support standard fiqh approximation methods (middle of night, one-seventh of night, nearest latitude angle) and handle contour discontinuities gracefully.
+- Performance overhead across 15,000 settlements:
+  Impact: High.
+  Mitigation: Reuse cached civil dates, avoid per-tick allocations, and use candidate filters.
 
-Risk: Large city dataset size delaying page initial load.
-Impact: Medium.
-Mitigation: Ship a compact 15,000 city core index (under 400 KB) for immediate rendering. Stream additional settlements asynchronously if the user selects high-density mode.
+- Timezone midnight crossing:
+  Impact: Medium.
+  Mitigation: Anchor night to UTC timestamps and convert to observer local time via Intl.
 
 ## Open Questions
 
-Question 1: Dataset density.
-Option A: Start with top 15,000 cities by population (fastest load, under 400 KB).
-Option B: Ship full 130,000 settlements in a packed binary format (roughly 3 MB).
-Option C: Start with 15,000 cities and lazy-load the remaining settlements when continuity analysis mode opens.
-
-Question 2: Adhan audio.
-Option A: Visual only (silent space observatory, cleanest experience).
-Option B: Optional subtle spatial audio chime or short takbeer when clicking an active settlement.
-
-Question 3: Visual theme.
-Option A: Realistic photorealistic Earth (NASA Blue Marble textures, realistic clouds, subtle atmospheric blue glow).
-Option B: Stylized deep navy tactical Geoscape aesthetic with neon vector contours and glowing cybernetic markers.
+- Should the last third of the night also render as a toggleable 3D contour line on the globe?
+- Should the timeline canvas include a visual shaded band for night thirds across 24 hours?

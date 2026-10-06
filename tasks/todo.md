@@ -1,374 +1,181 @@
-# Task List: Adhan Earth
+# Task List: Islamic Night Division and Last Third of the Night
 
-## Task 1: Project scaffold and toolchain setup
+## Task 1: Core Islamic night astronomical calculation engine
 
-Description: Initialize the project directory with Vite, TypeScript, pnpm, and Vitest. Configure build scripts, tsconfig with strict typing, and basic HTML entry point with canvas container.
+Description: Implement pure TypeScript astronomical functions to calculate the Islamic night
+interval from Maghrib athan to the following Fajr athan. Compute the total night duration,
+Islamic midnight (half of the night), the start of the last third (Fajr minus one third of the
+night), and the end of the last third (Fajr athan). Extend PrayerTimesSchedule with an
+islamicNight object containing these properties, handling both current active night and upcoming
+night. Add comprehensive unit tests covering solstices, equinoxes, and high-latitude adjustments.
 
 Acceptance criteria:
-- [x] Vite dev server runs cleanly on local port.
-- [x] Vitest test runner executes and passes a smoke test.
-- [x] TypeScript compiles with zero errors under strict mode.
+- [ ] Calculate night duration as exact difference between next Fajr and preceding Maghrib.
+- [ ] Compute start of the last third as Maghrib plus two thirds of night duration (or Fajr minus one third).
+- [ ] Compute end of the last third as Fajr athan timestamp.
+- [ ] Identify whether an arbitrary timestamp falls within the last third of the night.
+- [ ] Integrate islamicNight structure into PrayerTimesSchedule and calculator output.
 
 Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Open browser at local port to confirm clean blank canvas page.
+- [ ] Tests pass: pnpm test src/prayer/calculator.test.ts
+- [ ] Build succeeds: pnpm build
+- [ ] Manual check: Verify Makkah and London night third calculations against astronomical tables.
 
 Dependencies: None
 
 Files likely touched:
-- `package.json`
-- `tsconfig.json`
-- `vite.config.ts`
-- `vitest.config.ts`
-- `index.html`
-- `src/main.ts`
-
-Estimated scope: Small (1-3 files)
-
-## Task 2: Astronomical solar calculation engine
-
-Description: Build pure TypeScript astronomy functions to compute Julian date, solar declination, Greenwich Hour Angle, and subsolar latitude and longitude for any given UTC timestamp. Add spherical trigonometry utilities to convert between spherical coordinates and Cartesian 3D vectors.
-
-Acceptance criteria:
-- [x] Calculate solar declination and GHA matching reference NOAA ephemeris within 0.05 degrees.
-- [x] Transform latitude and longitude coordinates into normalized 3D unit vectors on a sphere.
-- [x] Thorough unit tests cover solstices, equinoxes, and known solar positions.
-
-Verification:
-- [x] Tests pass: pnpm test src/astronomy/solar.test.ts
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Inspect calculated subsolar point for current timestamp against astronomical almanac.
-
-Dependencies: Task 1
-
-Files likely touched:
-- `src/astronomy/julian.ts`
-- `src/astronomy/solar.ts`
-- `src/astronomy/coordinates.ts`
-- `src/astronomy/solar.test.ts`
-
-Estimated scope: Medium (3-4 files)
-
-## Task 3: Three.js globe with day and night terminator shader
-
-Description: Construct the 3D Earth scene in Three.js with texture mapping, orbit controls, and a custom day and night shader driven by the calculated Sun vector. The terminator line emerges naturally from physical lighting rather than an artificial split.
-
-Acceptance criteria:
-- [x] Render 3D Earth sphere with day texture on sunlit side and city lights texture on night side.
-- [x] Position directional light and shader uniforms matching the astronomical Sun vector.
-- [x] OrbitControls allow smooth rotation, pitch, and zoom with sensible distance boundaries.
-
-Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Verify Earth illumination matches real-world daylight boundaries for current time.
-
-Dependencies: Task 2
-
-Files likely touched:
-- `src/globe/scene.ts`
-- `src/globe/earth.ts`
-- `src/globe/camera.ts`
-- `src/styles/main.css`
-
-Estimated scope: Medium (3-4 files)
-
-## Checkpoint: Astronomical Earth Foundation
-- [x] All tests pass
-- [x] Application builds without errors
-- [x] 3D Earth renders with real solar illumination and orbit controls
-
-## Task 4: Local prayer time calculation engine
-
-Description: Write the fiqh prayer calculation module supporting standard conventions (Muslim World League, Umm Al-Qura, Egyptian General Authority, Karachi, North America). Apply exact solar altitude formulas for Fajr, Sunrise, Dhuhr, Asr (Shafi and Hanafi shadow ratios), Maghrib, and Isha.
-
-Acceptance criteria:
-- [x] Compute accurate prayer times for any coordinate and date without external network calls.
-- [x] Match reference prayer times for Makkah, Cairo, London, and Jakarta within 1 minute.
-- [x] Support both Shafi and Hanafi Asr calculations.
-
-Verification:
-- [x] Tests pass: pnpm test src/prayer/calculator.test.ts
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Compare calculated times for Makkah against official Umm Al-Qura schedule.
-
-Dependencies: Task 2
-
-Files likely touched:
-- `src/prayer/conventions.ts`
 - `src/prayer/calculator.ts`
 - `src/prayer/calculator.test.ts`
 
-Estimated scope: Small (2-3 files)
-
-## Task 5: Global continuous prayer contour geometry generator
-
-Description: Invert the prayer time problem to generate geographic contour lines for any instant. Derive small circles for Fajr and Isha depression angles, the Dhuhr meridian arc, and the latitude-dependent Asr shadow curve. Sample each curve into ordered 3D spherical vertices.
-
-Acceptance criteria:
-- [x] Fajr and Isha contours form smooth circles perpendicular to the Sun vector at their respective depression angles.
-- [x] Dhuhr front aligns with the subsolar meridian.
-- [x] Asr front calculates the correct afternoon hour angle per latitude slice based on shadow length.
-- [x] Vertices correctly elevate slightly above the Earth surface to prevent z-fighting.
-
-Verification:
-- [x] Tests pass: pnpm test src/prayer/contours.test.ts
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Verify contours match where local cities are currently entering their respective prayer times.
-
-Dependencies: Task 4
-
-Files likely touched:
-- `src/prayer/contours.ts`
-- `src/prayer/contours.test.ts`
-
-Estimated scope: Medium (2-3 files)
-
-## Task 6: Glowing 3D prayer front visualization layer
-
-Description: Render the computed prayer contours in the Three.js scene using custom shaders or fat lines. Assign distinct colors to each prayer front (Fajr cyan, Dhuhr amber, Asr orange, Maghrib crimson, Isha indigo) and add layer visibility toggles.
-
-Acceptance criteria:
-- [x] Render all 5 prayer fronts simultaneously as smooth glowing ribbons or lines on Earth.
-- [x] Fronts update smoothly in real time or during accelerated playback without stutter.
-- [x] Individual prayer layers can be toggled on or off from the UI state.
-
-Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Toggle each prayer front and observe smooth westward migration as time scrubs forward.
-
-Dependencies: Task 5
-
-Files likely touched:
-- `src/globe/fronts.ts`
-- `src/globe/scene.ts`
-
 Estimated scope: Small (2 files)
 
-## Checkpoint: Prayer Calculation and Contours
-- [x] All tests pass
-- [x] Prayer engine outputs match standard reference cities
-- [x] Moving prayer fronts display accurately on the 3D globe
+## Task 2: Multi-lingual internationalization and terminology
 
-## Task 7: Settlement dataset pipeline and compact loader
-
-Description: Prepare and bundle a curated settlement dataset of major populated places across all continents. Create a compact JSON or binary loader with an efficient spatial index for fast distance and coordinate queries.
+Description: Add localized terms for the Islamic night and its divisions across all 10 supported
+languages (Arabic, English, French, Turkish, Urdu, Persian, Bengali, Indonesian, Malay, Russian).
+Define translations for the last third of the night, night duration, start time, end time,
+active status indicators, and global counter labels. Update translation type definitions and add
+unit tests asserting presence and correctness.
 
 Acceptance criteria:
-- [x] Bundle at least 15,000 global populated places with name, latitude, longitude, and country code.
-- [x] Compressed dataset size stays under 400 KB for rapid network delivery.
-- [x] Fast lookup by coordinates or proximity query.
+- [ ] Add last third of the night terminology to Translations interface under inspector and controls.
+- [ ] Provide authentic Islamic translations in Arabic (الثلث الأخير من الليل, بداية الثلث الأخير).
+- [ ] Ensure Arabic translations use Western Arabic numerals (0-9).
+- [ ] Provide translations for all 9 other languages without missing key fallbacks.
+- [ ] Validate translation dictionaries with automated unit tests.
 
 Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Verify key cities across all continents exist in the parsed index.
+- [ ] Tests pass: pnpm test src/i18n/i18n.test.ts
+- [ ] Build succeeds: pnpm build
+- [ ] Manual check: Switch language to Arabic and English to verify displayed labels.
 
 Dependencies: Task 1
 
 Files likely touched:
-- `scripts/build-cities.go`
-- `public/data/cities-core.json`
-- `src/population/loader.ts`
-- `src/population/spatialIndex.ts`
-
-Estimated scope: Medium (3-4 files)
-
-## Task 8: GPU instanced city point cloud rendering
-
-Description: Render settlement points on the globe using Three.js InstancedMesh or custom points buffer geometry. Encode settlement coordinates, population brightness, and prayer state attributes directly into GPU buffers.
-
-Acceptance criteria:
-- [x] Render 15,000+ points on the globe surface maintaining steady 60 FPS on standard hardware.
-- [x] Points scale subtly with camera distance and population tier.
-- [x] Points support dynamic color tinting when active.
-
-Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Rotate and zoom the globe with 15,000 points active, checking framerate in browser dev tools.
-
-Dependencies: Task 7
-
-Files likely touched:
-- `src/globe/cities.ts`
-- `src/globe/scene.ts`
+- `src/i18n/translations.ts`
+- `src/i18n/i18n.test.ts`
 
 Estimated scope: Small (2 files)
 
-## Task 9: Real-time adhan event scheduler and pulse engine
+## Checkpoint: After Tasks 1-2
+- [ ] All prayer calculator and internationalization tests pass.
+- [ ] Application builds without errors.
 
-Description: Connect settlement schedules to a global event engine. When the simulated clock crosses a settlement prayer time, mark the settlement as active for a configurable duration (3 to 5 minutes) and trigger an expanding visual pulse wave on the globe.
+## Task 3: Inspector panel night schedule and status display
 
-Acceptance criteria:
-- [x] Cities accurately trigger active adhan state when the current time matches their local prayer time.
-- [x] Active cities display an expanding soft light pulse that fades over the adhan duration.
-- [x] Fast time scrubbing (60x, 300x) updates pulse waves continuously without missing events.
-
-Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Fast-forward through a 24-hour cycle and observe waves of pulses cascading westward across timezones.
-
-Dependencies: Task 4, Task 8
-
-Files likely touched:
-- `src/simulation/eventEngine.ts`
-- `src/simulation/clock.ts`
-- `src/globe/cities.ts`
-
-Estimated scope: Medium (3 files)
-
-## Checkpoint: Settlements and Adhan Events
-- [x] All tests pass
-- [x] 15,000+ settlements render with steady framerates
-- [x] Adhan pulses trigger accurately as prayer fronts sweep past cities
-
-## Task 10: 24-hour global adhan continuity calculator and timeline strip
-
-Description: Compute the mathematical continuity of the adhan across the 24-hour cycle. Display an interactive 24-hour ribbon below the globe showing active adhan density, current playhead, coverage percentage, and the longest silence gap.
+Description: Update the settlement and coordinate inspector panel to display the Islamic night
+section. Render the last third of the night with its start time, end time, total night duration,
+and a dynamic active status badge when the inspected location is currently in its last third.
+Include a countdown showing time remaining until the last third starts or ends. Ensure proper
+RTL formatting and CSS logical properties.
 
 Acceptance criteria:
-- [x] Calculate the exact union of active adhan intervals for the selected date and convention.
-- [x] Display summary statistics: total active coverage percentage and longest silent interval.
-- [x] Interactive timeline strip allows clicking or dragging to jump the planetary time instantly.
+- [ ] Inspector renders a dedicated card or row for the last third of the night.
+- [ ] Display formatted start time and end time matching the settlement local timezone.
+- [ ] Display total night duration in hours and minutes.
+- [ ] Show a distinct active badge when current time is within the last third of the night.
+- [ ] Update night countdown dynamically during simulation playback.
 
 Verification:
-- [x] Tests pass: pnpm test src/simulation/continuity.test.ts
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Drag timeline scrubber across 24 hours and observe instant synchronization with globe illumination.
+- [ ] Tests pass: pnpm test src/ui/inspector.test.ts
+- [ ] Build succeeds: pnpm build
+- [ ] Manual check: Inspect Makkah during night and day to verify time display and active badge.
 
-Dependencies: Task 9
-
-Files likely touched:
-- `src/simulation/continuity.ts`
-- `src/simulation/continuity.test.ts`
-- `src/ui/timeline.ts`
-- `src/styles/main.css`
-
-Estimated scope: Medium (3-4 files)
-
-## Task 11: Geoscape HUD controls and layer toggles
-
-Description: Build the tactical Geoscape HUD overlay. Include time controls (Live, Pause, 1x, 10x, 60x, 300x), date picker, fiqh convention selector, layer switches (Visual, Astronomical, Prayer Fronts, Population, Continuity), and adhan duration slider.
-
-Acceptance criteria:
-- [x] Clean HUD layout adhering to logical CSS properties without physical directional rules.
-- [x] Playback buttons smoothly control simulation speed and direction.
-- [x] Layer switches toggle visibility of day/night, contour lines, and settlement points.
-
-Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Test all playback speeds, reverse, forward, and layer toggles on desktop and mobile viewports.
-
-Dependencies: Task 3, Task 6, Task 10
-
-Files likely touched:
-- `src/ui/hud.ts`
-- `src/ui/controls.ts`
-- `src/styles/main.css`
-
-Estimated scope: Medium (3 files)
-
-## Task 12: Settlement inspector panel and URL state sync
-
-Description: Enable raycasting to select any city or click any coordinate on the globe. Display a detailed inspector panel showing coordinates, local time, 5 prayer times, current prayer period, and countdown to next adhan. Sync view coordinates, timestamp, and active mode to URL query parameters for sharing.
-
-Acceptance criteria:
-- [x] Clicking a city or coordinate opens the inspector with accurate local prayer schedule.
-- [x] Next adhan countdown ticks in real time.
-- [x] URL updates with lat, lon, time, and mode query parameters; loading a URL restores that exact planetary view.
-
-Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Select Makkah, copy the generated URL, open in private window, verify view restored identically.
-
-Dependencies: Task 8, Task 11
+Dependencies: Tasks 1, 2
 
 Files likely touched:
 - `src/ui/inspector.ts`
-- `src/ui/urlState.ts`
-- `src/globe/scene.ts`
+- `src/ui/inspector.test.ts`
+- `src/styles/main.css`
 
 Estimated scope: Medium (3 files)
 
-## Checkpoint: Core Geoscape and Continuity Complete
-- [x] All tests pass
-- [x] Timeline strip and HUD controls operate smoothly
-- [x] City inspection and URL state sharing work end-to-end
+## Task 4: Global settlements last third counter in event engine
 
-## Task 13: Follow the Adhan narrative camera mode
-
-Description: Build an automated cinematic camera tour that smoothly follows the leading adhan front westward. The camera rotates and interpolates between active major settlements as prayer times transition from Indonesia to the Middle East, Africa, Europe, and the Americas.
+Description: Extend AdhanEventEngine to calculate the number of settlements currently in the
+last third of the night. Optimize the calculation loop across 15,000 settlements using
+precomputed coordinate keys and cached civil dates to guarantee sub-millisecond execution.
+Add unit tests verifying calculation correctness and performance benchmarks.
 
 Acceptance criteria:
-- [x] Activating narrative mode smoothly tweens the camera to the currently active prayer front.
-- [x] Camera tracks westward along the globe as time advances.
-- [x] User manual drag smoothly disengages auto-follow mode without abrupt camera jumps.
+- [ ] Implement countSettlementsInLastThird method in AdhanEventEngine.
+- [ ] Accurately detect which settlements are in their local last third of the night at any UTC time.
+- [ ] Maintain performance under 2ms per evaluation across 15,000 settlements.
+- [ ] Add unit test verifying that global count is positive and fluctuates smoothly across 24 hours.
 
 Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Enable Follow the Adhan mode at 60x speed and watch the camera smoothly track the Fajr front around the world.
+- [ ] Tests pass: pnpm test src/simulation/eventEngine.test.ts
+- [ ] Build succeeds: pnpm build
+- [ ] Manual check: Verify execution time on 15,000 settlements during continuous animation ticks.
 
-Dependencies: Task 9, Task 12
+Dependencies: Task 1
 
 Files likely touched:
-- `src/globe/camera.ts`
-- `src/simulation/narrative.ts`
+- `src/simulation/eventEngine.ts`
+- `src/simulation/eventEngine.test.ts`
 
 Estimated scope: Small (2 files)
 
-## Task 14: Atmospheric scattering, visual polish, and mobile layout
+## Checkpoint: After Tasks 3-4
+- [ ] Inspector shows accurate night divisions for inspected settlements.
+- [ ] Event engine computes global settlements in the last third without performance regressions.
+- [ ] All test suites pass.
 
-Description: Add realistic atmospheric rim glow using a Fresnel shader, subtle starfield background, and refine UI layout for small mobile touchscreens. Ensure all UI controls scale cleanly and touch gestures support rotating and pinching Earth.
+## Task 5: HUD and timeline live telemetry integration
+
+Description: Integrate the global count of settlements in the last third of the night into the
+HUD and timeline interface. Display a live statistic chip showing the count of cities currently
+in the last third of the night, updated smoothly during simulation playback. Ensure layout is
+responsive, accessible, and styled with CSS logical properties.
 
 Acceptance criteria:
-- [x] Atmospheric glow encircles Earth limb without clipping artifacts.
-- [x] UI panels adapt to mobile screens without obstructing the globe interaction.
-- [x] Touch gestures handle rotation, pinch zoom, and city tapping smoothly.
+- [ ] Add a live telemetry stat chip displaying the count of cities in the last third.
+- [ ] Update the counter dynamically on clock tick and time scrub.
+- [ ] Provide informative tooltip explaining the calculation of the last third of the night.
+- [ ] Ensure full responsiveness on mobile and desktop viewports without visual overlap.
 
 Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Emulate mobile viewport in browser dev tools, verify touch controls and responsive layout.
+- [ ] Tests pass: pnpm test src/ui/hud.test.ts
+- [ ] Build succeeds: pnpm build
+- [ ] Manual check: Scrub timeline across 24 hours and watch the night third counter update.
 
-Dependencies: Task 3, Task 11
+Dependencies: Tasks 3, 4
 
 Files likely touched:
-- `src/globe/atmosphere.ts`
+- `src/ui/hud.ts`
+- `src/ui/timeline.ts`
 - `src/styles/main.css`
 
-Estimated scope: Small (2 files)
+Estimated scope: Medium (3 files)
 
-## Task 15: Production static build and GitHub Pages deployment configuration
+## Task 6: Comprehensive verification and regression suite
 
-Description: Configure the Vite build pipeline to produce a fast static bundle. Set up base paths, asset hashing, and local verification scripts. Confirm zero server requirements and verify bundle size.
+Description: Create end-to-end and regression tests validating the complete workflow of the
+Islamic night and last third feature. Test multi-day transitions, high-latitude edge cases,
+timezone conversions, inspector rendering, and global settlement counting across different
+fiqh conventions.
 
 Acceptance criteria:
-- [x] Production build generates static dist directory with clean index.html and compressed assets.
-- [x] Relative or base-path asset loading works correctly on GitHub Pages subpaths.
-- [x] Local preview script runs the production bundle with zero console errors.
+- [ ] End-to-end tests verify night third calculation across diverse latitudes.
+- [ ] Verify that night third times adjust properly when calculation convention or rule changes.
+- [ ] Verify zero memory leaks or cache thrashing during 24-hour simulation loops.
+- [ ] All 35+ test files pass cleanly with 100% green status.
 
 Verification:
-- [x] Tests pass: pnpm test
-- [x] Build succeeds: pnpm build
-- [x] Manual check: Run pnpm preview and verify full application functionality from the static dist output.
+- [ ] Tests pass: pnpm test
+- [ ] Build succeeds: pnpm build
+- [ ] Manual check: Run preview build with pnpm preview and inspect live interaction.
 
-Dependencies: Task 13, Task 14
+Dependencies: Tasks 1, 2, 3, 4, 5
 
 Files likely touched:
-- `vite.config.ts`
-- `package.json`
-- `README.md`
+- `tests/e2e/tier1-features.test.ts`
+- `src/smoke.test.ts`
 
-Estimated scope: Small (2-3 files)
+Estimated scope: Small (2 files)
 
-## Checkpoint: Launch Readiness
-- [x] Full test suite passes
-- [x] Static production build passes inspection
-- [x] Ready for user review and deployment
+## Checkpoint: Complete
+- [ ] All 6 tasks completed and verified.
+- [ ] All automated tests pass in Vitest.
+- [ ] Production build succeeds with zero errors.
+- [ ] Ready for review and deployment.

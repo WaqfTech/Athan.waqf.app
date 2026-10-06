@@ -154,6 +154,16 @@ function formatCountdown(ms: number | null): string {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
+export function formatDuration(ms: number | null | undefined): string {
+  if (ms === null || ms === undefined || !Number.isFinite(ms) || ms < 0) {
+    return '--h --m';
+  }
+  const totalMinutes = Math.round(ms / 60000);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+  return `${hours}h ${minutes}m`;
+}
+
 function calculateQibla(lat: number, lon: number): number {
   const mLat = (21.4225 * Math.PI) / 180;
   const mLon = (39.8262 * Math.PI) / 180;
@@ -255,6 +265,73 @@ export function createInspectorPanel(options: {
       ? (trans.prayers[sched.nextPrayer as keyof typeof trans.prayers] || sched.nextPrayer)
       : '--';
 
+    const night = sched.islamicNight;
+    let nightCardHtml = '';
+    if (night) {
+      const isCurrentlyLastThird = Boolean(night.isCurrentlyLastThird);
+      const nightStartStr = formatTime(night.lastThirdStart, tz);
+      const nightEndStr = formatTime(night.lastThirdEnd, tz);
+      const nightDurationStr = formatDuration(night.durationMs);
+      const remainingMs = isCurrentlyLastThird
+        ? Math.max(0, night.lastThirdEnd.getTime() - date.getTime())
+        : Math.max(0, night.lastThirdStart.getTime() - date.getTime());
+      const nightCountdownStr = formatCountdown(remainingMs);
+
+      nightCardHtml = `
+      <div class="inspector-night-card ${isCurrentlyLastThird ? 'active' : ''}">
+        <div class="inspector-night-header">
+          <span class="inspector-night-title">${trans.inspector.lastThird}</span>
+          ${isCurrentlyLastThird ? `<div class="inspector-night-badge active">${trans.inspector.lastThirdActive}</div>` : ''}
+        </div>
+        <div class="inspector-night-times">
+          <div class="inspector-night-time-cell">
+            <span class="inspector-night-time-label">${trans.inspector.lastThirdStart}</span>
+            <span class="inspector-night-time-value">${nightStartStr}</span>
+          </div>
+          <div class="inspector-night-time-cell">
+            <span class="inspector-night-time-label">${trans.inspector.lastThirdEnd}</span>
+            <span class="inspector-night-time-value">${nightEndStr}</span>
+          </div>
+          <div class="inspector-night-time-cell">
+            <span class="inspector-night-time-label">${trans.inspector.nightDuration}</span>
+            <span class="inspector-night-time-value">${nightDurationStr}</span>
+          </div>
+        </div>
+        <div class="inspector-night-countdown">
+          <span class="inspector-night-countdown-label">${trans.inspector.countdown}</span>
+          <span class="inspector-night-countdown-value">${nightCountdownStr}</span>
+        </div>
+      </div>
+      `;
+    } else {
+      nightCardHtml = `
+      <div class="inspector-night-card unresolved">
+        <div class="inspector-night-header">
+          <span class="inspector-night-title">${trans.inspector.lastThird}</span>
+          ${renderProvenanceBadge({ date: null, provenance: 'unresolved' }, trans)}
+        </div>
+        <div class="inspector-night-times">
+          <div class="inspector-night-time-cell">
+            <span class="inspector-night-time-label">${trans.inspector.lastThirdStart}</span>
+            <span class="inspector-night-time-value">--:--:--</span>
+          </div>
+          <div class="inspector-night-time-cell">
+            <span class="inspector-night-time-label">${trans.inspector.lastThirdEnd}</span>
+            <span class="inspector-night-time-value">--:--:--</span>
+          </div>
+          <div class="inspector-night-time-cell">
+            <span class="inspector-night-time-label">${trans.inspector.nightDuration}</span>
+            <span class="inspector-night-time-value">--h --m</span>
+          </div>
+        </div>
+        <div class="inspector-night-countdown">
+          <span class="inspector-night-countdown-label">${trans.inspector.countdown}</span>
+          <span class="inspector-night-countdown-value">--:--:--</span>
+        </div>
+      </div>
+      `;
+    }
+
     container.innerHTML = `
       <div class="inspector-header">
         <div class="inspector-title-group">
@@ -352,6 +429,8 @@ export function createInspectorPanel(options: {
           </span>
         </div>
       </div>
+
+      ${nightCardHtml}
     `;
 
     const closeBtn = container.querySelector('.inspector-close-btn');

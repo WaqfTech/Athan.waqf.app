@@ -1,8 +1,7 @@
 // Cloudflare Worker entry point for Adhan Earth edge routing & geolocation
 
 import {
-  SUPPORTED_LOCALES,
-  SupportedLocale,
+  isSupportedLocale,
   DEFAULT_LOCALE,
   buildLinkHeader,
   transformIndexHtml,
@@ -97,8 +96,8 @@ export default {
     }
 
     // Handle /:loc/credits
-    if (segments.length === 2 && segments[0] in SUPPORTED_LOCALES && segments[1] === 'credits') {
-      const loc = segments[0] as SupportedLocale;
+    if (segments.length === 2 && isSupportedLocale(segments[0]) && segments[1] === 'credits') {
+      const loc = segments[0];
       if (loc === DEFAULT_LOCALE) {
         const target = new URL('/credits', request.url);
         target.search = url.search;
@@ -130,8 +129,8 @@ export default {
       return new Response(localizedHtml, { status: 200, headers });
     }
 
-    if (segments.length === 1 && segments[0] in SUPPORTED_LOCALES) {
-      const loc = segments[0] as SupportedLocale;
+    if (segments.length === 1 && isSupportedLocale(segments[0])) {
+      const loc = segments[0];
 
       if (loc !== DEFAULT_LOCALE && url.pathname.endsWith('/')) {
         const target = new URL(`/${loc}`, request.url);

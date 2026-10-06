@@ -4,10 +4,12 @@ import {
   getInspectorSchedule,
   createInspectorPanel,
   renderProvenanceBadge,
+  formatDuration,
 } from './inspector';
 import { calculatePrayerTimes, PrayerEntry } from '../prayer/calculator';
 import { Settlement } from '../population/loader';
 import { DICTIONARIES } from '../i18n/translations';
+import { i18n } from '../i18n/manager';
 
 describe('Inspector Local Civil Date Resolution', () => {
   describe('Group 1: Observer Civil Date Resolution (resolveObserverCivilDate)', () => {
@@ -339,6 +341,258 @@ describe('Inspector Local Civil Date Resolution', () => {
 
       const htmlAr = renderProvenanceBadge(entry, DICTIONARIES.ar);
       expect(htmlAr).toContain('غائب');
+    });
+  });
+
+  describe('Group 6: Last Third of the Night Inspector Card (R3)', () => {
+    let originalDocument: typeof globalThis.document;
+
+    beforeEach(() => {
+      originalDocument = globalThis.document;
+      const createFakeElement = (tag: string) => {
+        const el: Record<string, unknown> = {
+          tagName: tag.toUpperCase(),
+          className: '',
+          style: { display: '' },
+          innerHTML: '',
+          children: [] as unknown[],
+          classList: {
+            add: (cls: string) => {
+              if (!el.className) el.className = cls;
+              else el.className += ` ${cls}`;
+            },
+            remove: (cls: string) => {
+              el.className = (el.className as string)
+                .split(' ')
+                .filter((c) => c !== cls)
+                .join(' ');
+            },
+            contains: (cls: string) => (el.className as string).split(' ').includes(cls),
+          },
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          appendChild: (child: unknown) => {
+            (el.children as unknown[]).push(child);
+            return child;
+          },
+          querySelector: () => null,
+          querySelectorAll: () => [],
+          remove: () => {},
+        };
+        return el;
+      };
+
+      globalThis.document = {
+        createElement: (tag: string) => createFakeElement(tag),
+        documentElement: { lang: 'en', dir: 'ltr' },
+      } as unknown as Document;
+    });
+
+    afterEach(() => {
+      i18n.setLocale('en');
+      globalThis.document = originalDocument;
+    });
+
+    it('1. renders Last Third card when islamicNight is present', () => {
+      const makkahSettlement: Settlement = {
+        name: 'Makkah',
+        nameAr: 'مكة المكرمة',
+        latitude: 21.42,
+        longitude: 39.83,
+        countryCode: 'SA',
+        population: 2000000,
+        timezone: 'Asia/Riyadh',
+      };
+      const panel = createInspectorPanel({ convention: 'UmmAlQura', madhab: 'Shafi' });
+      panel.inspectSettlement(makkahSettlement, new Date('2026-10-04T12:00:00Z'));
+
+      const html = panel.element.innerHTML;
+      expect(html).toContain('inspector-night-card');
+      expect(html).toContain('inspector-night-times');
+      expect(html).toContain('inspector-night-countdown');
+      expect(html).toContain(DICTIONARIES.en.inspector.lastThird);
+      expect(html).toContain(DICTIONARIES.en.inspector.lastThirdStart);
+      expect(html).toContain(DICTIONARIES.en.inspector.lastThirdEnd);
+      expect(html).toContain(DICTIONARIES.en.inspector.nightDuration);
+      expect(html).toContain(DICTIONARIES.en.inspector.countdown);
+      panel.dispose();
+    });
+
+    it('2. formats times and durations strictly with Western numerals (0-9) across locales', () => {
+      const tokyoSettlement: Settlement = {
+        name: 'Tokyo',
+        nameAr: 'طوكيو',
+        latitude: 35.68,
+        longitude: 139.76,
+        countryCode: 'JP',
+        population: 14000000,
+        timezone: 'Asia/Tokyo',
+      };
+      const testDate = new Date('2026-10-04T19:12:01.579Z');
+      const panel = createInspectorPanel({ convention: 'UmmAlQura', madhab: 'Shafi' });
+
+      // English locale check
+      panel.inspectSettlement(tokyoSettlement, testDate);
+      const htmlEn = panel.element.innerHTML;
+      expect(htmlEn).toMatch(/\b\d{2}:\d{2}:\d{2}\b/);
+      expect(htmlEn).toMatch(/\b\d+h\s*\d+m\b/);
+
+      // Verify formatDuration utility directly
+      expect(formatDuration(3600000 * 9 + 60000 * 45)).toBe('9h 45m');
+      expect(formatDuration(null)).toBe('--h --m');
+
+      // Switch to Arabic locale and verify no Eastern Arabic-Indic numerals in timestamps and durations
+      i18n.setLocale('ar');
+      panel.inspectSettlement(tokyoSettlement, testDate);
+      const htmlAr = panel.element.innerHTML;
+      expect(/[\u0660-\u0669\u06F0-\u06F9]/.test(htmlAr)).toBe(false);
+      expect(htmlAr).toMatch(/\b\d{2}:\d{2}:\d{2}\b/);
+      expect(htmlAr).toMatch(/\b\d+h\s*\d+m\b/);
+      panel.dispose();
+    });
+
+    it('3. displays active badge when current time is in the last third', () => {
+      const makkahSettlement: Settlement = {
+        name: 'Makkah',
+        nameAr: 'مكة المكرمة',
+        latitude: 21.42,
+        longitude: 39.83,
+        countryCode: 'SA',
+        population: 2000000,
+        timezone: 'Asia/Riyadh',
+      };
+      // At 2026-10-05T01:00:00Z in Makkah (04:00 local, Fajr is around 04:55 local),
+      // it is pre-dawn inside the last third
+      const instant = new Date('2026-10-05T01:00:00Z');
+      const sched = getInspectorSchedule(21.42, 39.83, instant, { timezone: 'Asia/Riyadh' });
+      expect(sched.islamicNight?.isCurrentlyLastThird).toBe(true);
+
+      const panel = createInspectorPanel({ convention: 'UmmAlQura', madhab: 'Shafi' });
+      panel.inspectSettlement(makkahSettlement, instant);
+
+      const html = panel.element.innerHTML;
+      expect(html).toContain('inspector-night-badge active');
+      expect(html).toContain('inspector-night-card active');
+      expect(html).toContain(DICTIONARIES.en.inspector.lastThirdActive);
+      panel.dispose();
+    });
+
+    it('4. displays inactive state and countdown when before the last third', () => {
+      const makkahSettlement: Settlement = {
+        name: 'Makkah',
+        nameAr: 'مكة المكرمة',
+        latitude: 21.42,
+        longitude: 39.83,
+        countryCode: 'SA',
+        population: 2000000,
+        timezone: 'Asia/Riyadh',
+      };
+      const panel = createInspectorPanel({ convention: 'UmmAlQura', madhab: 'Shafi' });
+
+      // Daytime (12:00 UTC = 15:00 local) before Maghrib
+      const instantDay = new Date('2026-10-04T12:00:00Z');
+      panel.inspectSettlement(makkahSettlement, instantDay);
+      expect(panel.element.innerHTML).not.toContain('inspector-night-badge active');
+      expect(panel.element.innerHTML).not.toContain('inspector-night-card active');
+      expect(panel.element.innerHTML).toMatch(/\b\d{2}:\d{2}:\d{2}\b/);
+
+      // Evening (18:00 UTC = 21:00 local) in the first third of the night
+      const instantEvening = new Date('2026-10-04T18:00:00Z');
+      panel.inspectSettlement(makkahSettlement, instantEvening);
+      expect(panel.element.innerHTML).not.toContain('inspector-night-badge active');
+      expect(panel.element.innerHTML).not.toContain('inspector-night-card active');
+      expect(panel.element.innerHTML).toMatch(/\b\d{2}:\d{2}:\d{2}\b/);
+      panel.dispose();
+    });
+
+    it('5. updates countdown dynamically on time tick and boundary crossing in panel.updateTime(date)', () => {
+      const tokyoSettlement: Settlement = {
+        name: 'Tokyo',
+        nameAr: 'طوكيو',
+        latitude: 35.68,
+        longitude: 139.76,
+        countryCode: 'JP',
+        population: 14000000,
+        timezone: 'Asia/Tokyo',
+      };
+      const initialInstant = new Date('2026-10-04T19:12:01.579Z');
+      const panel = createInspectorPanel({ convention: 'UmmAlQura', madhab: 'Shafi' });
+      panel.inspectSettlement(tokyoSettlement, initialInstant);
+
+      const sched = getInspectorSchedule(35.68, 139.76, initialInstant, {
+        convention: 'UmmAlQura',
+        madhab: 'Shafi',
+        timezone: 'Asia/Tokyo',
+      });
+      const lastThirdStartMs = sched.islamicNight!.lastThirdStart.getTime();
+      const lastThirdEndMs = sched.islamicNight!.lastThirdEnd.getTime();
+
+      // 1000ms before last third start -> not active, countdown shows 00:00:01
+      panel.updateTime(new Date(lastThirdStartMs - 1000));
+      expect(panel.element.innerHTML).not.toContain('inspector-night-badge active');
+      expect(panel.element.innerHTML).toContain('00:00:01');
+
+      // Exactly at last third start -> active badge appears
+      panel.updateTime(new Date(lastThirdStartMs));
+      expect(panel.element.innerHTML).toContain('inspector-night-badge active');
+      expect(panel.element.innerHTML).toContain('inspector-night-card active');
+
+      // Exactly at last third end (Fajr) -> active badge disappears
+      panel.updateTime(new Date(lastThirdEndMs));
+      expect(panel.element.innerHTML).not.toContain('inspector-night-badge active');
+      expect(panel.element.innerHTML).not.toContain('inspector-night-card active');
+      panel.dispose();
+    });
+
+    it('6. gracefully renders when islamicNight is undefined in polar coordinates', () => {
+      const panel = createInspectorPanel({ convention: 'UmmAlQura', madhab: 'Shafi' });
+      const winterDate = new Date('2026-12-21T12:00:00Z');
+
+      expect(() => panel.inspectCoordinates(69.65, 18.96, winterDate)).not.toThrow();
+      const html = panel.element.innerHTML;
+      expect(html).toContain('inspector-night-card unresolved');
+      expect(html).toContain('--:--:--');
+      expect(html).toContain('--h --m');
+      expect(html).not.toContain('NaN');
+      expect(html).not.toContain('undefined');
+      panel.dispose();
+    });
+
+    it('7. verifies multilingual and RTL integrity across all 10 locales', () => {
+      const panel = createInspectorPanel({ convention: 'UmmAlQura', madhab: 'Shafi' });
+      const settlement: Settlement = {
+        name: 'Makkah',
+        nameAr: 'مكة المكرمة',
+        latitude: 21.42,
+        longitude: 39.83,
+        countryCode: 'SA',
+        population: 2000000,
+        timezone: 'Asia/Riyadh',
+      };
+      const instant = new Date('2026-10-05T01:00:00Z');
+
+      const localeList = ['en', 'ar', 'fr', 'tr', 'ur', 'fa', 'bn', 'id', 'ms', 'ru'] as const;
+      for (const loc of localeList) {
+        const dict = DICTIONARIES[loc];
+        expect(dict.inspector.lastThird).toBeTruthy();
+        expect(dict.inspector.nightDuration).toBeTruthy();
+        expect(dict.inspector.lastThirdStart).toBeTruthy();
+        expect(dict.inspector.lastThirdEnd).toBeTruthy();
+        expect(dict.inspector.lastThirdActive).toBeTruthy();
+        expect(dict.inspector.countdown).toBeTruthy();
+
+        i18n.setLocale(loc);
+        panel.inspectSettlement(settlement, instant);
+        const html = panel.element.innerHTML;
+        expect(html).toContain('inspector-night-card');
+        expect(html).toContain(dict.inspector.lastThird);
+        expect(html).toContain(dict.inspector.lastThirdActive);
+        expect(html).not.toContain('NaN');
+        // Ensure strictly Western numerals (0-9) and no Eastern Arabic-Indic numerals
+        expect(/[\u0660-\u0669\u06F0-\u06F9]/.test(html)).toBe(false);
+      }
+      i18n.setLocale('en');
+      panel.dispose();
     });
   });
 });

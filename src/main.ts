@@ -137,6 +137,12 @@ export function initializeApp(): AppInstance {
     onDayBoundary: (date) => {
       recomputeStatsForDate(date);
     },
+    onScrub: (date) => {
+      if (eventEngine && settlementsList.length > 0) {
+        const count = eventEngine.countSettlementsInLastThird(date);
+        hud.updateLastThirdCount(count);
+      }
+    },
     onFollowAdhan: () => {
       isNarrativeActive = !isNarrativeActive;
       narrativeDirector.setActive(isNarrativeActive);
@@ -190,6 +196,8 @@ export function initializeApp(): AppInstance {
         eventEngine.setConvention(cfg.convention);
         eventEngine.setMadhab(cfg.madhab);
         eventEngine.setHighLatitudeRule(cfg.highLatitudeRule);
+        const lastThirdCount = eventEngine.countSettlementsInLastThird(clock.getTime());
+        hud.updateLastThirdCount(lastThirdCount);
         recomputeStatsForDate(clock.getTime());
       }
       globeScene.setConvention(CALCULATION_CONVENTIONS[cfg.convention]);
@@ -260,6 +268,9 @@ export function initializeApp(): AppInstance {
         adhanDurationMinutes: cfg.adhanDurationMinutes,
         maxCacheSize: 60000,
       });
+      hud.setEventEngine(eventEngine);
+      const initialLastThird = eventEngine.countSettlementsInLastThird(clock.getTime());
+      hud.updateLastThirdCount(initialLastThird);
 
       // Calculate initial 24h continuity metrics
       const stats = computeGlobalAdhanContinuity(settlements, clock.getTime(), {
@@ -298,6 +309,9 @@ export function initializeApp(): AppInstance {
     if (eventEngine && settlementsList.length > 0) {
       const activeEvents = eventEngine.getActiveEvents(currentTime);
       globeScene.updateActiveEvents(activeEvents);
+
+      const lastThirdCount = eventEngine.countSettlementsInLastThird(currentTime);
+      hud.updateLastThirdCount(lastThirdCount);
 
       if (isNarrativeActive) {
         narrativeDirector.update(activeEvents, settlementsList);

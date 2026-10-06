@@ -35,6 +35,17 @@ export const SUPPORTED_LOCALES: Record<SupportedLocale, LocaleMeta> = {
 export const DEFAULT_LOCALE: SupportedLocale = 'en';
 
 /**
+ * Validates whether a candidate value is a recognized SupportedLocale,
+ * guarding against inherited Object.prototype properties.
+ */
+export function isSupportedLocale(candidate: unknown): candidate is SupportedLocale {
+  return (
+    typeof candidate === 'string' &&
+    Object.prototype.hasOwnProperty.call(SUPPORTED_LOCALES, candidate)
+  );
+}
+
+/**
  * Detects preferred locale based on:
  * 1. Path-based locale prefix (e.g. /ar, /tr, /ur)
  * 2. URL search parameter (?lang=)
@@ -52,22 +63,22 @@ export function detectLocale(): SupportedLocale {
     .replace(/^\/+|\/+$/g, '')
     .split('/')[0]
     ?.toLowerCase();
-  if (pathSegment && pathSegment in SUPPORTED_LOCALES) {
-    return pathSegment as SupportedLocale;
+  if (pathSegment && isSupportedLocale(pathSegment)) {
+    return pathSegment;
   }
 
   // 2. Query parameter override
   const params = new URLSearchParams(window.location.search);
   const langParam = params.get('lang')?.toLowerCase();
-  if (langParam && langParam in SUPPORTED_LOCALES) {
-    return langParam as SupportedLocale;
+  if (langParam && isSupportedLocale(langParam)) {
+    return langParam;
   }
 
   // 3. Saved user preference
   try {
     const saved = localStorage.getItem('adhan_locale')?.toLowerCase();
-    if (saved && saved in SUPPORTED_LOCALES) {
-      return saved as SupportedLocale;
+    if (saved && isSupportedLocale(saved)) {
+      return saved;
     }
   } catch {
     // Ignore localStorage access issues
@@ -77,8 +88,8 @@ export function detectLocale(): SupportedLocale {
   const navLangs = navigator.languages || [navigator.language || ''];
   for (const raw of navLangs) {
     if (!raw) continue;
-    const code = raw.toLowerCase().split('-')[0] as SupportedLocale;
-    if (code in SUPPORTED_LOCALES) {
+    const code = raw.toLowerCase().split('-')[0];
+    if (isSupportedLocale(code)) {
       return code;
     }
   }

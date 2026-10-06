@@ -35,12 +35,25 @@ export interface DailyPrayerTimes {
   isha: PrayerEntry;
 }
 
+export interface IslamicNightInfo {
+  durationMs: number;
+  midnight: Date;
+  firstThirdEnd?: Date;
+  lastThirdStart: Date;
+  lastThirdEnd: Date;
+  isCurrentlyLastThird: boolean;
+  isActive?: boolean;
+}
+
+export type IslamicNight = IslamicNightInfo;
+
 export interface PrayerTimesSchedule extends DailyPrayerTimes {
   sunset: PrayerEntry;
   currentPrayer: PrayerKey | 'none';
   nextPrayer: PrayerKey | 'none';
   nextPrayerTime: Date | null;
   countdownMs: number | null;
+  islamicNight?: IslamicNightInfo;
 }
 
 export interface CalculatorOptions {
@@ -57,6 +70,69 @@ export function isPrayerResolved(
   entry: PrayerEntry,
 ): entry is PrayerEntry & { date: Date } {
   return entry.date !== null;
+}
+
+/**
+ * Calculates Islamic legal night span and its divisions (halves and thirds)
+ * from Maghrib (sunset) to the subsequent Fajr (true dawn).
+ *
+ * @param maghrib Sunset / Maghrib athan timestamp
+ * @param nextFajr Subsequent true dawn / Fajr athan timestamp
+ * @param current Point in time to evaluate whether it falls within the last third of the night
+ * @returns IslamicNightInfo object, or null on invalid or unphysical input
+ */
+export function calculateIslamicNight(
+  maghrib: Date | null | undefined,
+  nextFajr: Date | null | undefined,
+  current?: Date | null,
+): IslamicNightInfo | null {
+  if (
+    !(maghrib instanceof Date) ||
+    !Number.isFinite(maghrib.getTime()) ||
+    !(nextFajr instanceof Date) ||
+    !Number.isFinite(nextFajr.getTime())
+  ) {
+    return null;
+  }
+
+  const maghribMs = maghrib.getTime();
+  const fajrMs = nextFajr.getTime();
+
+  if (fajrMs <= maghribMs) {
+    return null;
+  }
+
+  const durationMs = fajrMs - maghribMs;
+  if (durationMs > 24 * 3600000) {
+    return null;
+  }
+
+  const midnight = new Date(Math.round(maghribMs + durationMs / 2));
+  const firstThirdEnd = new Date(Math.round(maghribMs + durationMs / 3));
+  const lastThirdStartMs = Math.round(maghribMs + (durationMs * 2) / 3);
+  const lastThirdStart = new Date(lastThirdStartMs);
+  const lastThirdEnd = new Date(fajrMs);
+
+  const nowMs =
+    current instanceof Date && Number.isFinite(current.getTime())
+      ? current.getTime()
+      : current === undefined
+      ? Date.now()
+      : NaN;
+
+  const isActive = Number.isFinite(nowMs) && nowMs >= maghribMs && nowMs < fajrMs;
+  const isCurrentlyLastThird =
+    Number.isFinite(nowMs) && nowMs >= lastThirdStartMs && nowMs < fajrMs;
+
+  return {
+    durationMs,
+    midnight,
+    firstThirdEnd,
+    lastThirdStart,
+    lastThirdEnd,
+    isCurrentlyLastThird,
+    isActive,
+  };
 }
 
 /**
@@ -97,6 +173,7 @@ export function calculatePrayerTimes(
       nextPrayer: 'none',
       nextPrayerTime: null,
       countdownMs: null,
+      islamicNight: undefined,
     };
   }
 
@@ -355,6 +432,21 @@ export function calculatePrayerTimes(
   let nextPrayer: PrayerKey | 'none' = 'none';
   let nextPrayerTime: Date | null = null;
 
+  let tomorrowSchedule: PrayerTimesSchedule | null = null;
+  const getTomorrowSchedule = (): PrayerTimesSchedule => {
+    if (!tomorrowSchedule) {
+      const tomorrowDate = new Date(Date.UTC(year, month, day + 1, 12, 0, 0));
+      tomorrowSchedule = calculatePrayerTimes(
+        latitude,
+        longitude,
+        tomorrowDate,
+        options,
+        true,
+      );
+    }
+    return tomorrowSchedule;
+  };
+
   const fajrMs = fajr.date?.getTime() ?? null;
   const sunriseMs = sunrise.date?.getTime() ?? null;
   const dhuhrMs = dhuhr.date?.getTime() ?? null;
@@ -392,18 +484,11 @@ export function calculatePrayerTimes(
 
     // Multi-day lookahead: compute actual solar ephemeris for tomorrow
     if (!isLookahead) {
-      const tomorrowDate = new Date(Date.UTC(year, month, day + 1, 12, 0, 0));
-      const tomorrowSchedule = calculatePrayerTimes(
-        latitude,
-        longitude,
-        tomorrowDate,
-        options,
-        true,
-      );
+      const tomorrow = getTomorrowSchedule();
 
-      if (tomorrowSchedule.fajr.date !== null) {
+      if (tomorrow.fajr.date !== null) {
         nextPrayer = 'fajr';
-        nextPrayerTime = tomorrowSchedule.fajr.date;
+        nextPrayerTime = tomorrow.fajr.date;
       } else {
         const candidateKeys: (keyof DailyPrayerTimes)[] = [
           'sunrise',
@@ -412,10 +497,10 @@ export function calculatePrayerTimes(
           'maghrib',
           'isha',
         ];
-        const nextResolved = candidateKeys.find((k) => tomorrowSchedule[k].date !== null);
+        const nextResolved = candidateKeys.find((k) => tomorrow[k].date !== null);
         if (nextResolved) {
           nextPrayer = nextResolved as PrayerKey;
-          nextPrayerTime = tomorrowSchedule[nextResolved].date;
+          nextPrayerTime = tomorrow[nextResolved].date;
         } else {
           nextPrayer = 'none';
           nextPrayerTime = null;
@@ -429,6 +514,53 @@ export function calculatePrayerTimes(
 
   const countdownMs = nextPrayerTime ? Math.max(0, nextPrayerTime.getTime() - nowMs) : null;
 
+  let islamicNight: IslamicNightInfo | undefined = undefined;
+
+  if (!isLookahead) {
+    const evalTime = options.now ?? date;
+    const isVirtualSameDayNight =
+      maghrib.date !== null &&
+      fajr.date !== null &&
+      fajr.date.getTime() > maghrib.date.getTime();
+
+    if (fajr.date !== null && nowMs < fajr.date.getTime() && !isVirtualSameDayNight) {
+      // Pre-dawn hours before Fajr: active night started yesterday at Maghrib
+      const yesterdayDate = new Date(Date.UTC(year, month, day - 1, 12, 0, 0));
+      const yesterdaySchedule = calculatePrayerTimes(
+        latitude,
+        longitude,
+        yesterdayDate,
+        options,
+        true,
+      );
+      if (yesterdaySchedule.maghrib.date !== null) {
+        islamicNight = calculateIslamicNight(
+          yesterdaySchedule.maghrib.date,
+          fajr.date,
+          evalTime,
+        ) ?? undefined;
+      }
+    } else if (maghrib.date !== null) {
+      let nextFajrDate: Date | null = null;
+      if (isVirtualSameDayNight) {
+        nextFajrDate = fajr.date;
+      } else {
+        const tomorrow = getTomorrowSchedule();
+        if (tomorrow.fajr.date !== null) {
+          nextFajrDate = tomorrow.fajr.date;
+        }
+      }
+
+      if (nextFajrDate !== null) {
+        islamicNight = calculateIslamicNight(
+          maghrib.date,
+          nextFajrDate,
+          evalTime,
+        ) ?? undefined;
+      }
+    }
+  }
+
   return {
     fajr,
     sunrise,
@@ -441,5 +573,6 @@ export function calculatePrayerTimes(
     nextPrayer,
     nextPrayerTime,
     countdownMs,
+    islamicNight,
   };
 }

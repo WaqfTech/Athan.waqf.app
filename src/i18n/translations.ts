@@ -69,6 +69,7 @@ export interface Translations {
     legendApparentTerminator: string;
     legendGeometricTerminator: string;
     legendModelNote: string;
+    lastThirdActive: string;
   };
   credits: {
     title: string;
@@ -113,6 +114,12 @@ export interface Translations {
       highLat: ProvenanceBadgeTrans;
       unresolved: ProvenanceBadgeTrans;
     };
+    lastThird: string;
+    nightDuration: string;
+    lastThirdStart: string;
+    lastThirdEnd: string;
+    lastThirdActive: string;
+    countdown: string;
   };
   timeline: {
     title: string;
@@ -126,6 +133,12 @@ export interface Translations {
     gapTip: string;
     peakTip: string;
     modelDisclaimer: string;
+    lastThirdCities: string;
+    lastThirdTip: string;
+  };
+  stats: {
+    citiesInLastThird: string;
+    lastThirdTip: string;
   };
 }
 
@@ -189,6 +202,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'Apparent Terminator: day/night boundary (-0.833°)',
       legendGeometricTerminator: 'Geometric Terminator: center horizon (0.0°)',
       legendModelNote: 'Model simulation: 15,000 settlements, nominal 4m call duration.',
+      lastThirdActive: 'Last Third Active',
     },
     credits: {
       title: 'Credits & About',
@@ -253,6 +267,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'Solar event physically absent (polar night/midnight sun)',
         },
       },
+      lastThird: 'Last Third of the Night',
+      nightDuration: 'Night Duration',
+      lastThirdStart: 'Start of Last Third',
+      lastThirdEnd: 'End of Last Third (Fajr)',
+      lastThirdActive: 'Active Now',
+      countdown: 'Time Remaining',
     },
     timeline: {
       title: 'Continuous Planetary Adhān',
@@ -266,6 +286,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: 'Longest continuous interval in the 24-hour cycle with zero settlements in an active nominal adhan window across the 15,000 settlement model.',
       peakTip: 'Maximum count of concurrent settlements in the 15,000 database sharing an active nominal adhan window at the same instant.',
       modelDisclaimer: 'Simulation based on 15,000 settlements and nominal 4-minute call windows.',
+      lastThirdCities: 'Cities in Last Third',
+      lastThirdTip: 'Settlements currently between two-thirds of the night and true dawn (Fajr athan).',
+    },
+    stats: {
+      citiesInLastThird: 'Cities in Last Third',
+      lastThirdTip: 'Settlements currently between two-thirds of the night and true dawn (Fajr athan).',
     },
   },
 
@@ -328,6 +354,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'فاصل الشروق والغروب الظاهري: حد الليل والنهار (-0.833°)',
       legendGeometricTerminator: 'الفاصل الهندسي: مركز الشمس في الأفق (0.0°)',
       legendModelNote: 'نموذج محاكاة: 15,000 تجمع سكاني ونافذة 4 دقائق.',
+      lastThirdActive: 'الثلث الأخير نشط',
     },
     credits: {
       title: 'شكر وتقدير وعن المشروع',
@@ -392,6 +419,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'الحدث الفلكي غير متحقق في هذا التاريخ (ليل قطبي أو شمس منتصف الليل أو انعدام ظل الزوال)',
         },
       },
+      lastThird: 'الثلث الأخير من الليل',
+      nightDuration: 'مدة الليل',
+      lastThirdStart: 'بداية الثلث الأخير',
+      lastThirdEnd: 'نهاية الثلث الأخير (الفجر)',
+      lastThirdActive: 'نشط الآن',
+      countdown: 'الوقت المتبقي',
     },
     timeline: {
       title: 'استمرارية الأذان في النموذج المحاكي',
@@ -405,6 +438,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: 'أطول مدة زمنية في اليوم دون أذان في أي تجمع سكاني ضمن النموذج المحاكي.',
       peakTip: 'أكبر عدد من التجمعات السكانية التي يُرفع فيها الأذان في اللحظة ذاتها.',
       modelDisclaimer: 'محاكاة مستندة إلى 15,000 تجمع سكاني ونافذة أذان مقدرة 4 دقائق.',
+      lastThirdCities: 'مدن في الثلث الأخير',
+      lastThirdTip: 'التجمعات السكانية الواقعة حالياً بين ثلثي الليل وطلوع الفجر الصادق (أذان الفجر).',
+    },
+    stats: {
+      citiesInLastThird: 'مدن في الثلث الأخير',
+      lastThirdTip: 'التجمعات السكانية الواقعة حالياً بين ثلثي الليل وطلوع الفجر الصادق (أذان الفجر).',
     },
   },
 
@@ -467,6 +506,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'Zahiri Aydınlanma Çizgisi: gece/gündüz sınırı (-0.833°)',
       legendGeometricTerminator: 'Geometrik Aydınlanma Çizgisi: merkez ufuk (0.0°)',
       legendModelNote: 'Model simülasyonu: 15.000 yerleşim ve 4 dk ezan penceresi.',
+      lastThirdActive: 'Son Üçte Bir Aktif',
     },
     credits: {
       title: 'Katkıda Bulunanlar ve Hakkında',
@@ -531,6 +571,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'Güneş olayı fiilen gerçekleşmiyor',
         },
       },
+      lastThird: 'Gecenin Son Üçte Biri',
+      nightDuration: 'Gece Süresi',
+      lastThirdStart: 'Son Üçte Bir Başlangıcı',
+      lastThirdEnd: 'Son Üçte Bir Bitişi (İmsak)',
+      lastThirdActive: 'Şu An Aktif',
+      countdown: 'Kalan Süre',
     },
     timeline: {
       title: 'Dünya Çapında Ezan Sürekliliği (Simülasyon Modeli)',
@@ -544,6 +590,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: '15.000 yerleşim modelinde aktif ezan penceresi bulunmayan en uzun süre.',
       peakTip: 'Aynı anda aktif ezan penceresinde bulunan en yüksek yerleşim sayısı.',
       modelDisclaimer: '15.000 yerleşim ve 4 dakikalık ezan penceresine dayalı simülasyon.',
+      lastThirdCities: 'Son Üçte Birdeki Şehirler',
+      lastThirdTip: 'Şu anda gecenin üçte ikisi ile imsak vakti arasında bulunan yerleşimler.',
+    },
+    stats: {
+      citiesInLastThird: 'Son Üçte Birdeki Şehirler',
+      lastThirdTip: 'Şu anda gecenin üçte ikisi ile imsak vakti arasında bulunan yerleşimler.',
     },
   },
 
@@ -606,6 +658,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'Terminator Tampak: batas siang/malam (-0.833°)',
       legendGeometricTerminator: 'Terminator Geometris: pusat ufuk (0.0°)',
       legendModelNote: 'Simulasi model: 15.000 pemukiman, durasi adzan 4m.',
+      lastThirdActive: 'Sepertiga Malam Aktif',
     },
     credits: {
       title: 'Kredit & Tentang',
@@ -670,6 +723,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'Peristiwa matahari tidak terjadi secara fisik',
         },
       },
+      lastThird: 'Sepertiga Malam Terakhir',
+      nightDuration: 'Durasi Malam',
+      lastThirdStart: 'Awal Sepertiga Terakhir',
+      lastThirdEnd: 'Akhir Sepertiga Terakhir (Subuh)',
+      lastThirdActive: 'Aktif Sekarang',
+      countdown: 'Waktu Tersisa',
     },
     timeline: {
       title: 'Kontinuitas Adzan Global (Model Simulasi)',
@@ -683,6 +742,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: 'Interval kontinu terpanjang tanpa pemukiman aktif dalam model 15.000 pemukiman.',
       peakTip: 'Jumlah pemukiman bersamaan terbanyak dalam jendela adzan aktif pada waktu yang sama.',
       modelDisclaimer: 'Simulasi berdasarkan 15.000 pemukiman dan jendela adzan 4 menit.',
+      lastThirdCities: 'Kota di Sepertiga Malam',
+      lastThirdTip: 'Wilayah yang saat ini berada di antara dua pertiga malam dan azan Subuh.',
+    },
+    stats: {
+      citiesInLastThird: 'Kota di Sepertiga Malam',
+      lastThirdTip: 'Wilayah yang saat ini berada di antara dua pertiga malam dan azan Subuh.',
     },
   },
 
@@ -745,6 +810,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'Penamat Ketara: sempadan siang/malam (-0.833°)',
       legendGeometricTerminator: 'Penamat Geometri: pusat ufuk (0.0°)',
       legendModelNote: 'Simulasi model: 15,000 petempatan, tempoh azan 4 minit.',
+      lastThirdActive: 'Sepertiga Akhir Aktif',
     },
     credits: {
       title: 'Kredit & Perihal',
@@ -809,6 +875,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'Peristiwa matahari tidak berlaku secara fizikal',
         },
       },
+      lastThird: 'Sepertiga Akhir Malam',
+      nightDuration: 'Tempoh Malam',
+      lastThirdStart: 'Permulaan Sepertiga Akhir',
+      lastThirdEnd: 'Penghujung Sepertiga Akhir (Subuh)',
+      lastThirdActive: 'Aktif Sekarang',
+      countdown: 'Baki Masa',
     },
     timeline: {
       title: 'Kelestarian Azan Global (Model Simulasi)',
@@ -822,6 +894,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: 'Selang masa berterusan terpanjang tanpa petempatan aktif dalam model 15,000 petempatan.',
       peakTip: 'Bilangan maksimum petempatan serentak dalam jendela azan aktif pada masa yang sama.',
       modelDisclaimer: 'Simulasi berasaskan 15,000 petempatan dan jendela azan 4 minit.',
+      lastThirdCities: 'Bandar di Sepertiga Akhir',
+      lastThirdTip: 'Penempatan yang kini berada di antara dua pertiga malam dan azan Subuh.',
+    },
+    stats: {
+      citiesInLastThird: 'Bandar di Sepertiga Akhir',
+      lastThirdTip: 'Penempatan yang kini berada di antara dua pertiga malam dan azan Subuh.',
     },
   },
 
@@ -884,6 +962,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'ظاہری خط شب و روز: حد لیل و نہار (-0.833°)',
       legendGeometricTerminator: 'ہندسی خط شب و روز: افق پر مرکز شمس (0.0°)',
       legendModelNote: 'ماڈل نقالی: 15,000 بستیاں اور 4 منٹ اذان کا دورانیہ۔',
+      lastThirdActive: 'آخری تہائی فعال',
     },
     credits: {
       title: 'تعاون کنندگان اور تفصیلات',
@@ -948,6 +1027,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'شمسی واقعہ طبعی طور پر واقع نہیں ہوا',
         },
       },
+      lastThird: 'رات کا آخری تہائی حصہ',
+      nightDuration: 'رات کا دورانیہ',
+      lastThirdStart: 'آغازِ آخری تہائی',
+      lastThirdEnd: 'اختتامِ آخری تہائی (فجر)',
+      lastThirdActive: 'اب جاری ہے',
+      countdown: 'باقی وقت',
     },
     timeline: {
       title: 'ماڈل کے مطابق دنیا بھر میں مسلسل اذان',
@@ -961,6 +1046,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: '15,000 بستیوں کے ماڈل میں بغیر اذان کا طویل ترین دورانیہ۔',
       peakTip: 'ایک ہی وقت میں بیک وقت اذان دینے والی بستیوں کی زیادہ سے زیادہ تعداد۔',
       modelDisclaimer: '15,000 بستیوں اور 4 منٹ کے اذان کے دورانیے پر مبنی تخمینہ۔',
+      lastThirdCities: 'آخری تہائی میں شہر',
+      lastThirdTip: 'وہ آبادیاں جو فی الوقت رات کے دو تہائی اور فجر صادق کے درمیان واقع ہیں۔',
+    },
+    stats: {
+      citiesInLastThird: 'آخری تہائی میں شہر',
+      lastThirdTip: 'وہ آبادیاں جو فی الوقت رات کے دو تہائی اور فجر صادق کے درمیان واقع ہیں۔',
     },
   },
 
@@ -1023,6 +1114,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'خط مرز ظاهری شب و روز (-0.833°)',
       legendGeometricTerminator: 'خط مرز هندسی شب و روز (0.0°)',
       legendModelNote: 'شبیه‌سازی مدل: 15,000 آبادی و پنجره 4 دقیقه‌ای اذان.',
+      lastThirdActive: 'ثلث آخر فعال',
     },
     credits: {
       title: 'دست‌اندرکاران و درباره',
@@ -1087,6 +1179,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'پدیده خورشیدی از نظر فیزیکی رخ نداده است',
         },
       },
+      lastThird: 'ثلث آخر شب',
+      nightDuration: 'طول شب',
+      lastThirdStart: 'آغاز ثلث آخر',
+      lastThirdEnd: 'پایان ثلث آخر (اذان صبح)',
+      lastThirdActive: 'اکنون فعال',
+      countdown: 'زمان باقی‌مانده',
     },
     timeline: {
       title: 'تداوم اذان در مدل شبیه‌سازی',
@@ -1100,6 +1198,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: 'طولانی‌ترین فاصله پیوسته بدون آبادی فعال در مدل 15,000 آبادی.',
       peakTip: 'حداکثر تعداد آبادی‌های همزمان در پنجره اذان فعال در یک لحظه.',
       modelDisclaimer: 'شبیه‌سازی بر اساس 15,000 آبادی و پنجره 4 دقیقه‌ای اذان.',
+      lastThirdCities: 'شهرهای در ثلث آخر',
+      lastThirdTip: 'سکونتگاه‌هایی که در حال حاضر بین دو سوم شب و طلوع فجر صادق قرار دارند.',
+    },
+    stats: {
+      citiesInLastThird: 'شهرهای در ثلث آخر',
+      lastThirdTip: 'سکونتگاه‌هایی که در حال حاضر بین دو سوم شب و طلوع فجر صادق قرار دارند.',
     },
   },
 
@@ -1162,6 +1266,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'আপাত দিন-রাত বিভাজক রেখা (-0.833°)',
       legendGeometricTerminator: 'জ্যামিতিক দিন-রাত বিভাজক রেখা (0.0°)',
       legendModelNote: 'মডেল সিমুলেশন: 15,000 জনবসতি এবং 4 মিনিট আযান সময়সীমা।',
+      lastThirdActive: 'শেষ তৃতীয়াংশ সক্রিয়',
     },
     credits: {
       title: 'স্বীকৃতি ও বিবরণ',
@@ -1226,6 +1331,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'সৌর ঘটনা দৃশ্যমান নয় (মেরু রাত বা মধ্যরাতের সূর্য)',
         },
       },
+      lastThird: 'রাতের শেষ তৃতীয়াংশ',
+      nightDuration: 'রাতের মোট সময়কাল',
+      lastThirdStart: 'শেষ তৃতীয়াংশের শুরু',
+      lastThirdEnd: 'শেষ তৃতীয়াংশের সমাপ্তি (ফজর)',
+      lastThirdActive: 'এখন সক্রিয়',
+      countdown: 'অবশিষ্ট সময়',
     },
     timeline: {
       title: 'বিশ্বব্যাপী আযানের ধারাবাহিকতা (সিমুলেশন মডেল)',
@@ -1239,6 +1350,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: '15,000 জনবসতি মডেলে কোনো সক্রিয় আযান ছাড়া দীর্ঘতম সময়সীমা।',
       peakTip: 'একই সময়ে সক্রিয় আযান উইন্ডোতে থাকা সর্বোচ্চ জনবসতির সংখ্যা।',
       modelDisclaimer: '15,000 জনবসতি এবং 4 মিনিটের আযান সময়সীমার ওপর ভিত্তি করে সিমুলেশন।',
+      lastThirdCities: 'শেষ তৃতীয়াংশে শহর',
+      lastThirdTip: 'যে সকল জনপদ বর্তমানে রাতের দুই-তৃতীয়াংশ এবং সুবহে সাদিকের মধ্যবর্তী সময়ে অবস্থিত।',
+    },
+    stats: {
+      citiesInLastThird: 'শেষ তৃতীয়াংশে শহর',
+      lastThirdTip: 'যে সকল জনপদ বর্তমানে রাতের দুই-তৃতীয়াংশ এবং সুবহে সাদিকের মধ্যবর্তী সময়ে অবস্থিত।',
     },
   },
 
@@ -1301,6 +1418,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'Terminateur Apparent : limite jour/nuit (-0.833°)',
       legendGeometricTerminator: 'Terminateur Géométrique : horizon au centre (0.0°)',
       legendModelNote: 'Modèle simulé : 15 000 agglomérations, fenêtre nominale de 4 min.',
+      lastThirdActive: 'Dernier tiers actif',
     },
     credits: {
       title: 'Crédits & À propos',
@@ -1365,6 +1483,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'Événement solaire physiquement absent',
         },
       },
+      lastThird: 'Dernier tiers de la nuit',
+      nightDuration: 'Durée de la nuit',
+      lastThirdStart: 'Début du dernier tiers',
+      lastThirdEnd: 'Fin du dernier tiers (Fajr)',
+      lastThirdActive: 'Actif maintenant',
+      countdown: 'Temps restant',
     },
     timeline: {
       title: 'Continuité Planétaire de l\'Adhān (Modèle Simulé)',
@@ -1378,6 +1502,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: 'Plus long intervalle continu sans aucune agglomération active dans le modèle de 15 000 agglomérations.',
       peakTip: 'Nombre maximal d\'agglomérations partageant simultanément une fenêtre d\'appel active.',
       modelDisclaimer: 'Simulation basée sur 15 000 agglomérations et des appels nominaux de 4 minutes.',
+      lastThirdCities: 'Villes au dernier tiers',
+      lastThirdTip: 'Localités actuellement situées entre les deux tiers de la nuit et l’aube du Fajr.',
+    },
+    stats: {
+      citiesInLastThird: 'Villes au dernier tiers',
+      lastThirdTip: 'Localités actuellement situées entre les deux tiers de la nuit et l’aube du Fajr.',
     },
   },
 
@@ -1440,6 +1570,7 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       legendApparentTerminator: 'Видимый терминатор: граница дня и ночи (-0.833°)',
       legendGeometricTerminator: 'Геометрический терминатор: центр на горизонте (0.0°)',
       legendModelNote: 'Модель симуляции: 15 000 поселений, 4 мин длительность азана.',
+      lastThirdActive: 'Последняя треть активна',
     },
     credits: {
       title: 'Авторы и О проекте',
@@ -1504,6 +1635,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
           desc: 'Солнечное событие физически отсутствует',
         },
       },
+      lastThird: 'Последняя треть ночи',
+      nightDuration: 'Продолжительность ночи',
+      lastThirdStart: 'Начало последней трети',
+      lastThirdEnd: 'Конец последней трети (Фаджр)',
+      lastThirdActive: 'Активно сейчас',
+      countdown: 'Оставшееся время',
     },
     timeline: {
       title: 'Планетарный Азан (Модель Симуляции)',
@@ -1517,6 +1654,12 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
       gapTip: 'Самый долгий период без активного азана среди 15 000 поселений модели.',
       peakTip: 'Максимальное число поселений с активным азаном в один и тот же момент.',
       modelDisclaimer: 'Симуляция на основе 15 000 поселений и 4-минутного окна азана.',
+      lastThirdCities: 'Города в последней трети',
+      lastThirdTip: 'Населённые пункты между двумя третями ночи и истинным рассветом (Фаджр).',
+    },
+    stats: {
+      citiesInLastThird: 'Города в последней трети',
+      lastThirdTip: 'Населённые пункты между двумя третями ночи и истинным рассветом (Фаджр).',
     },
   },
 };
@@ -1525,5 +1668,8 @@ export const DICTIONARIES: Record<SupportedLocale, Translations> = {
  * Returns translated string dictionary for the given locale with English fallback.
  */
 export function getTranslations(locale: SupportedLocale): Translations {
-  return DICTIONARIES[locale] || DICTIONARIES.en;
+  if (locale && Object.prototype.hasOwnProperty.call(DICTIONARIES, locale)) {
+    return DICTIONARIES[locale];
+  }
+  return DICTIONARIES.en;
 }

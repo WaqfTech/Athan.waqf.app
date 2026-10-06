@@ -604,7 +604,7 @@ describe('Challenger M4: UI Components, Disclosures & RTL Interaction Oracles', 
       const timeline = createTimelineUI(clock);
 
       const chips = timeline.element.querySelectorAll('.stat-chip');
-      expect(chips.length).toBe(3);
+      expect(chips.length).toBe(4);
 
       for (const chip of chips) {
         expect(chip.getAttribute('tabindex')).toBe('0');
