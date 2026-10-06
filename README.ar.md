@@ -163,7 +163,9 @@ aube run deploy
 ## الترخيص
 
 هذا العمل هو وَقْفٌ لله تعالى تحت شروط رُخصة وَقْف الرَّقْمِيَّة العامَّة - الإصدار الأول.
-المُستوى المُطَبَّق هو: وَقْفٌ خَيْرِيٌّ مُلْزِمٌ بالإِسْنَادِ (WaqfDPL-Khayri-Mulzim 1.0).
+المُستوى الأساسي: وَقْفٌ خَيْرِيٌّ مُلْزِمٌ بِالإِسْنَادِ (Waqf-DPL-Khayri-Mulzim Draft 1.0).
+المراجعة المرجعية: https://waqftech.org/license/drafts/draft-2026-08-31
+SHA-256: 00b0de3122d71c1f365e08525099e2fa1174e2dd6a7ed7de5ffbdf3a87cc1a95
 
 راجع ملف [LICENSE.md](LICENSE.md) لنص الترخيص الكامل،
 أو [مستودع رخصة وقف](https://github.com/WaqfTech/waqf-license-draft) للمزيد من التفاصيل.
