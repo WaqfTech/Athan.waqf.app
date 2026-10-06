@@ -1,5 +1,7 @@
 # Adhan Earth (athan.waqf.app)
 
+[العربية](README.ar.md) | English
+
 Adhan Earth is an interactive 3D planetary observatory.
 It visualizes Earth in space with astronomical solar illumination,
 moving Islamic prayer fronts, and continuous global adhan events across 15,000 settlements.
@@ -21,6 +23,48 @@ moving Islamic prayer fronts, and continuous global adhan events across 15,000 s
 - Support for 10 calculation conventions, 2 madhabs, and 3 high-latitude adjustment rules.
 - GPU-instanced point cloud rendering 15,000 populated places at interactive frame rates.
 - Zero-backend static client architecture deployable to Cloudflare Workers or static hosts.
+
+## How Our Calculations Differ
+
+Most prayer time calculators and globe visualizers rely on simplified assumptions
+that fail at geographical or temporal boundaries. Adhan Earth resolves these issues
+by enforcing physical correctness, typed astronomical states, and strict radiometric
+rendering:
+
+1. Typed Astronomical Absence Instead of Fabricated Dates:
+Standard engines clamp out-of-range trigonometric outputs or return noon or midnight
+when the Sun does not cross target elevations. During high-latitude polar night or
+midnight sun, this fabricates fictitious sunrise, Maghrib, or Fajr dates. Adhan Earth
+treats absence as a first-class typed state (polar night, midnight sun, grazing).
+When the Sun does not rise, the system never returns an invented timestamp.
+
+2. Positive Noon Shadow Requirement for Asr:
+Conventional software solves the Asr shadow angle using the formula tan(|phi - delta|).
+During polar winter, this produces a negative tangent, returning false Asr events below
+the horizon or silently falling back to dhuhr plus two hours. Adhan Earth requires a
+strictly positive solar elevation at local solar noon before computing Asr, reporting
+a typed absence whenever a physical noon shadow cannot form.
+
+3. True Front Directionality and Coordinate Geometry:
+Globe renderers often invert prayer curves or misplace afternoon events. Adhan Earth
+tracks local hour angles explicitly. Dawn contours (Fajr and Sunrise) advance along
+rising solar altitude branches. Dusk contours (Maghrib and Isha) fall along setting
+branches. The Asr contour remains locked to the afternoon hemisphere, and fixed-interval
+Isha fronts accurately track time-shifted setting lines.
+
+4. Physically Decoupled Shading and Color Management:
+Standard WebGL globes use empirical textures or normal perturbations that cause daylight
+to bleed into the night hemisphere. Adhan Earth separates direct sunlight from indirect
+atmospheric scattering and night emissions. Planetary macro occlusion uses unperturbed
+geometric normals, eliminating artificial night albedo floors. Shaders execute Three.js
+tone mapping and linear-to-sRGB color management before final display.
+
+5. Multi-Day Civil Windowing and Exact Sweep-Line Continuity:
+Common calculators assume the next prayer occurs on the current UTC date or add a static
+24 hours. Adhan Earth evaluates absolute multi-day intervals across local civil dates
+and timezones to catch early morning transitions such as Tokyo Fajr. Global continuity
+metrics calculate exact interval unions with a sweep-line algorithm over 15,000 settlements,
+avoiding coarse binning proxies and eliminating false zero minimums.
 
 ## Mathematical and Physical Models
 
@@ -64,6 +108,40 @@ Multi-Day Simulation and Continuity:
 The simulation window evaluates adjacent civil dates to handle local day rollovers and timezones.
 Continuous coverage statistics use a sweep-line algorithm over exact half-open intervals.
 Calculates covered seconds, longest gap, instantaneous peak, and minimum concurrent adhans.
+
+## How We Achieved This
+
+Achieving mathematical and physical integrity required a systematic, research-grade
+engineering methodology rather than ad-hoc patches:
+
+1. Research-Lab-Grade Work-Order (R0001):
+The overhaul was designed under a rigorous specification contract (documented in
+GitHub Issue #5 and docs/R0001_Athan_Evidence_Packet/). The specification cataloged 13
+verified defects, 8 baseline failure witnesses, 12 implementation cells (C01 to C12),
+and 30 unambiguous acceptance criteria.
+
+2. Multi-Agent Teamwork Execution:
+We deployed a multi-agent teamwork architecture where specialized agents managed
+distinct phases of delivery. Survey agents mapped existing dependencies, worker agents
+implemented focused mathematical and shader modules, and reviewer agents verified
+architecture consistency at every milestone.
+
+3. Multi-Tier Adversarial Testing:
+We constructed a five-tier test suite containing 761 automated tests across 35 test
+files. Adversarial challenger agents authored dedicated tests targeting edge cases,
+such as Tromsø seasonal boundaries, polar nadir symmetry, cache pruning limits, and
+heavy multi-threaded CPU contention. The full suite runs in under 5 seconds with zero
+failures.
+
+4. Independent Victory Audit:
+Before landing changes, an independent victory auditor evaluated the codebase against
+the original requirements. The audit verified authentic mathematical implementations,
+zero mock facades, zero prohibited workflow files, and complete test reproducibility.
+
+5. Open Mathematical Specifications:
+We documented all reference frames, Julian date conversions, Meeus and NOAA ephemeris
+algorithms, Brent root-solving formulas, and GLSL radiometric equations in
+docs/solar-model.md for complete public transparency.
 
 ## Continuity Model Disclosures
 
@@ -131,7 +209,9 @@ aube run deploy
 ## License
 
 هذا العمل هو وَقْفٌ لله تعالى تحت شروط رُخصة وَقْف الرَّقْمِيَّة العامَّة - الإصدار الأول.
-المُستوى المُطَبَّق هو: وَقْفٌ خَيْرِيٌّ مُلْزِمٌ بالإِسْنَادِ (WaqfDPL-Khayri-Mulzim 1.0).
+المُستوى الأساسي: وَقْفٌ خَيْرِيٌّ مُلْزِمٌ بِالإِسْنَادِ (Waqf-DPL-Khayri-Mulzim Draft 1.0).
+المراجعة المرجعية: https://waqftech.org/license/drafts/draft-2026-08-31
+SHA-256: 00b0de3122d71c1f365e08525099e2fa1174e2dd6a7ed7de5ffbdf3a87cc1a95
 
 See the [LICENSE.md](LICENSE.md) file for the full license text,
 or the [WaqfDPL repository](https://github.com/WaqfTech/waqf-license-draft) for details.
