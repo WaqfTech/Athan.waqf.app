@@ -355,3 +355,55 @@ describe('SEO metadata, hreflang alternates, and SSR transformations', () => {
     }
   });
 });
+
+describe('Islamic night and last third of the night translations', () => {
+  const locales = Object.keys(SUPPORTED_LOCALES) as SupportedLocale[];
+
+  it('defines last third and night keys with non-empty strings across all 10 locales', () => {
+    for (const loc of locales) {
+      const trans = getTranslations(loc);
+
+      // Inspector panel keys
+      expect(trans.inspector.lastThird.length, `${loc}.inspector.lastThird`).toBeGreaterThan(0);
+      expect(trans.inspector.nightDuration.length, `${loc}.inspector.nightDuration`).toBeGreaterThan(0);
+      expect(trans.inspector.lastThirdStart.length, `${loc}.inspector.lastThirdStart`).toBeGreaterThan(0);
+      expect(trans.inspector.lastThirdEnd.length, `${loc}.inspector.lastThirdEnd`).toBeGreaterThan(0);
+      expect(trans.inspector.lastThirdActive.length, `${loc}.inspector.lastThirdActive`).toBeGreaterThan(0);
+      expect(trans.inspector.countdown.length, `${loc}.inspector.countdown`).toBeGreaterThan(0);
+
+      // Controls indicator
+      expect(trans.controls.lastThirdActive.length, `${loc}.controls.lastThirdActive`).toBeGreaterThan(0);
+
+      // Timeline telemetry keys
+      expect(trans.timeline.lastThirdCities.length, `${loc}.timeline.lastThirdCities`).toBeGreaterThan(0);
+      expect(trans.timeline.lastThirdTip.length, `${loc}.timeline.lastThirdTip`).toBeGreaterThan(15);
+
+      // Stats telemetry keys
+      expect(trans.stats.citiesInLastThird.length, `${loc}.stats.citiesInLastThird`).toBeGreaterThan(0);
+      expect(trans.stats.lastThirdTip.length, `${loc}.stats.lastThirdTip`).toBeGreaterThan(15);
+    }
+  });
+
+  it('matches classical Islamic phrasing for Arabic translations', () => {
+    const ar = getTranslations('ar');
+
+    expect(ar.inspector.lastThird).toBe('الثلث الأخير من الليل');
+    expect(ar.inspector.nightDuration).toBe('مدة الليل');
+    expect(ar.inspector.lastThirdStart).toBe('بداية الثلث الأخير');
+    expect(ar.inspector.lastThirdEnd).toBe('نهاية الثلث الأخير (الفجر)');
+    expect(ar.inspector.lastThirdActive).toBe('نشط الآن');
+    expect(ar.controls.lastThirdActive).toBe('الثلث الأخير نشط');
+    expect(ar.timeline.lastThirdCities).toBe('مدن في الثلث الأخير');
+    expect(ar.stats.citiesInLastThird).toBe('مدن في الثلث الأخير');
+  });
+
+  it('strictly excludes Eastern Arabic-Indic and Persian numerals from dictionaries', () => {
+    const easternNumeralsRegex = /[\u0660-\u0669\u06F0-\u06F9]/;
+
+    for (const loc of locales) {
+      const serialized = JSON.stringify(DICTIONARIES[loc]);
+      expect(easternNumeralsRegex.test(serialized), `Found Eastern numerals in ${loc}`).toBe(false);
+    }
+  });
+});
+

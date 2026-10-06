@@ -13,6 +13,7 @@ export interface TimelineUI {
   element: HTMLElement;
   updateStats: (stats: ContinuityStats) => void;
   updatePlayhead: (date: Date) => void;
+  updateLastThirdCount: (count: number) => void;
   setDate?: (date: Date) => void;
   dispose: () => void;
 }
@@ -61,10 +62,20 @@ export function createTimelineUI(
       <span class="stat-chip-label" id="stat-peak-label">${trans.timeline.peakFront}</span>
       <span class="stat-chip-val" id="stat-peak">--</span>
     </div>
+    <div class="stat-chip stat-chip-last-third" id="stat-chip-last-third">
+      <span class="stat-chip-dot" aria-hidden="true"></span>
+      <span class="stat-chip-label" id="stat-last-third-label">${trans.timeline.lastThirdCities}</span>
+      <span class="stat-chip-val" id="stat-last-third">--</span>
+    </div>
   `;
 
   const applyChipTips = (): void => {
-    const tips = [trans.timeline.coverageTip, trans.timeline.gapTip, trans.timeline.peakTip];
+    const tips = [
+      trans.timeline.coverageTip,
+      trans.timeline.gapTip,
+      trans.timeline.peakTip,
+      trans.timeline.lastThirdTip,
+    ];
     statsStrip.querySelectorAll('.stat-chip').forEach((chip, i) => {
       chip.setAttribute('title', tips[i] ?? '');
       chip.setAttribute('tabindex', '0');
@@ -197,6 +208,24 @@ export function createTimelineUI(
     renderCanvas();
   };
 
+  let lastRenderedCount = -1;
+
+  const updateLastThirdCount = (count: number): void => {
+    const safeCount = Math.max(0, Number.isFinite(count) ? Math.floor(count) : 0);
+    if (safeCount === lastRenderedCount) return;
+    lastRenderedCount = safeCount;
+
+    const valEl = container.querySelector('#stat-last-third');
+    if (valEl) {
+      valEl.textContent = safeCount.toLocaleString('en-US');
+    }
+
+    const chipEl = container.querySelector('#stat-chip-last-third');
+    if (chipEl) {
+      chipEl.classList.toggle('is-active', safeCount > 0);
+    }
+  };
+
   const unsubscribe = i18n.onLocaleChange((_locale, newTrans) => {
     trans = newTrans;
     const titleEl = container.querySelector('#timeline-title');
@@ -218,6 +247,8 @@ export function createTimelineUI(
     if (gapLabel) gapLabel.textContent = trans.timeline.longestGap;
     const peakLabel = container.querySelector('#stat-peak-label');
     if (peakLabel) peakLabel.textContent = trans.timeline.peakFront;
+    const lastThirdLabel = container.querySelector('#stat-last-third-label');
+    if (lastThirdLabel) lastThirdLabel.textContent = trans.timeline.lastThirdCities;
     applyChipTips();
 
     if (currentStats) {
@@ -343,6 +374,7 @@ export function createTimelineUI(
     element: container,
     updateStats,
     updatePlayhead,
+    updateLastThirdCount,
     setDate: updatePlayhead,
     dispose,
   };

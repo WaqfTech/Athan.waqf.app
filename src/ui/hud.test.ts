@@ -61,4 +61,26 @@ describe('HUD Layer Controls, Terminators and Disclosures (Milestone 4)', () => 
       expect(/[\u0660-\u0669\u06F0-\u06F9]/.test(ar.legendModelNote)).toBe(false);
     });
   });
+
+  describe('Last Third Telemetry Translations & Formats (Milestone 5)', () => {
+    it('defines last third telemetry keys across all 10 locales', () => {
+      const locales = Object.keys(DICTIONARIES) as (keyof typeof DICTIONARIES)[];
+      for (const loc of locales) {
+        const trans = DICTIONARIES[loc];
+        expect(trans.timeline.lastThirdCities).toBeTruthy();
+        expect(trans.timeline.lastThirdTip).toBeTruthy();
+        expect(trans.stats.citiesInLastThird).toBeTruthy();
+        expect(trans.stats.lastThirdTip).toBeTruthy();
+      }
+    });
+
+    it('Arabic and Persian last third labels use Western Arabic numerals without Eastern digits', () => {
+      const ar = DICTIONARIES.ar;
+      const fa = DICTIONARIES.fa;
+      expect(/[\u0660-\u0669\u06F0-\u06F9]/.test(ar.timeline.lastThirdCities)).toBe(false);
+      expect(/[\u0660-\u0669\u06F0-\u06F9]/.test(ar.timeline.lastThirdTip)).toBe(false);
+      expect(/[\u0660-\u0669\u06F0-\u06F9]/.test(fa.timeline.lastThirdCities)).toBe(false);
+      expect(/[\u0660-\u0669\u06F0-\u06F9]/.test(fa.timeline.lastThirdTip)).toBe(false);
+    });
+  });
 });

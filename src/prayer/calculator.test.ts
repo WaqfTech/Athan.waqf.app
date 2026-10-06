@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { calculatePrayerTimes } from './calculator';
+import {
+  calculatePrayerTimes,
+  calculateIslamicNight,
+  IslamicNightInfo,
+  IslamicNight,
+} from './calculator';
 import { CALCULATION_CONVENTIONS, CalculationConventionName } from './conventions';
 
 describe('Prayer calculation engine', () => {
@@ -257,5 +262,324 @@ describe('Prayer calculation engine', () => {
 
     // Isha MUST be strictly later than Maghrib, never inverted
     expect(sched.isha.date!.getTime()).toBeGreaterThan(sched.maghrib.date!.getTime());
+  });
+});
+
+describe('calculateIslamicNight pure function', () => {
+  it('correctly calculates mathematical division of the night (halves and thirds)', () => {
+    // 12-hour night: Maghrib at 18:00:00, next Fajr at 06:00:00
+    const maghrib = new Date('2026-10-04T18:00:00.000Z');
+    const nextFajr = new Date('2026-10-05T06:00:00.000Z');
+    const expectedDurationMs = 12 * 3600000;
+
+    const night: IslamicNightInfo | null = calculateIslamicNight(maghrib, nextFajr);
+    const nightAlias: IslamicNight | null = night;
+    expect(nightAlias).not.toBeNull();
+    if (!night) return;
+
+    expect(night.durationMs).toBe(expectedDurationMs);
+
+    // Midnight is exactly at half the duration (18:00 + 6h = 00:00:00)
+    expect(night.midnight.toISOString()).toBe('2026-10-05T00:00:00.000Z');
+    expect(night.midnight.getTime()).toBe(maghrib.getTime() + expectedDurationMs / 2);
+
+    // First third ends at 1/3 duration (18:00 + 4h = 22:00:00)
+    expect(night.firstThirdEnd?.toISOString()).toBe('2026-10-04T22:00:00.000Z');
+    expect(night.firstThirdEnd?.getTime()).toBe(maghrib.getTime() + expectedDurationMs / 3);
+
+    // Last third starts at 2/3 duration (18:00 + 8h = 02:00:00, or Fajr - 4h)
+    expect(night.lastThirdStart.toISOString()).toBe('2026-10-05T02:00:00.000Z');
+    expect(night.lastThirdStart.getTime()).toBe(maghrib.getTime() + (expectedDurationMs * 2) / 3);
+    expect(night.lastThirdStart.getTime()).toBe(nextFajr.getTime() - expectedDurationMs / 3);
+
+    // Last third ends exactly at Fajr athan
+    expect(night.lastThirdEnd.toISOString()).toBe('2026-10-05T06:00:00.000Z');
+    expect(night.lastThirdEnd.getTime()).toBe(nextFajr.getTime());
+  });
+
+  it('handles odd durations and non-round milliseconds accurately with integer rounding', () => {
+    // 7 hours, 13 minutes, 47 seconds, 123 ms = 26,027,123 ms
+    const maghrib = new Date('2026-06-21T21:15:30.100Z');
+    const nextFajr = new Date(maghrib.getTime() + 26027123);
+
+    const night = calculateIslamicNight(maghrib, nextFajr);
+    expect(night).not.toBeNull();
+    if (!night) return;
+
+    expect(night.durationMs).toBe(26027123);
+    expect(night.midnight.getTime()).toBe(maghrib.getTime() + Math.round(26027123 / 2));
+    expect(night.firstThirdEnd?.getTime()).toBe(maghrib.getTime() + Math.round(26027123 / 3));
+    expect(night.lastThirdStart.getTime()).toBe(maghrib.getTime() + Math.round((26027123 * 2) / 3));
+    expect(night.lastThirdEnd.getTime()).toBe(nextFajr.getTime());
+
+    // Chronological order verification
+    expect(maghrib.getTime()).toBeLessThan(night.firstThirdEnd!.getTime());
+    expect(night.firstThirdEnd!.getTime()).toBeLessThan(night.midnight.getTime());
+    expect(night.midnight.getTime()).toBeLessThan(night.lastThirdStart.getTime());
+    expect(night.lastThirdStart.getTime()).toBeLessThan(night.lastThirdEnd.getTime());
+  });
+
+  it('verifies point-in-time boundary assertions for isCurrentlyLastThird and isActive', () => {
+    const maghrib = new Date('2026-10-04T18:00:00.000Z');
+    const nextFajr = new Date('2026-10-05T06:00:00.000Z');
+    // Last third starts at 02:00:00.000Z and ends at 06:00:00.000Z
+
+    // 1 ms before Maghrib: not active, not last third
+    const beforeMaghrib = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-04T17:59:59.999Z'));
+    expect(beforeMaghrib?.isActive).toBe(false);
+    expect(beforeMaghrib?.isCurrentlyLastThird).toBe(false);
+
+    // At exact Maghrib timestamp: active, not last third
+    const atMaghrib = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-04T18:00:00.000Z'));
+    expect(atMaghrib?.isActive).toBe(true);
+    expect(atMaghrib?.isCurrentlyLastThird).toBe(false);
+
+    // In first third (20:00:00): active, not last third
+    const inFirstThird = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-04T20:00:00.000Z'));
+    expect(inFirstThird?.isActive).toBe(true);
+    expect(inFirstThird?.isCurrentlyLastThird).toBe(false);
+
+    // At exact Islamic midnight (00:00:00): active, not last third
+    const atMidnight = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-05T00:00:00.000Z'));
+    expect(atMidnight?.isActive).toBe(true);
+    expect(atMidnight?.isCurrentlyLastThird).toBe(false);
+
+    // 1 ms before last third start (01:59:59.999): active, not last third
+    const justBeforeLastThird = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-05T01:59:59.999Z'));
+    expect(justBeforeLastThird?.isActive).toBe(true);
+    expect(justBeforeLastThird?.isCurrentlyLastThird).toBe(false);
+
+    // At exact last third start (02:00:00.000): active, IS last third (inclusive start boundary)
+    const atLastThirdStart = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-05T02:00:00.000Z'));
+    expect(atLastThirdStart?.isActive).toBe(true);
+    expect(atLastThirdStart?.isCurrentlyLastThird).toBe(true);
+
+    // Inside last third (04:00:00.000): active, IS last third
+    const insideLastThird = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-05T04:00:00.000Z'));
+    expect(insideLastThird?.isActive).toBe(true);
+    expect(insideLastThird?.isCurrentlyLastThird).toBe(true);
+
+    // 1 ms before Fajr athan (05:59:59.999): active, IS last third
+    const justBeforeFajr = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-05T05:59:59.999Z'));
+    expect(justBeforeFajr?.isActive).toBe(true);
+    expect(justBeforeFajr?.isCurrentlyLastThird).toBe(true);
+
+    // At exact Fajr athan (06:00:00.000): night has concluded (exclusive end boundary)
+    const atFajr = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-05T06:00:00.000Z'));
+    expect(atFajr?.isActive).toBe(false);
+    expect(atFajr?.isCurrentlyLastThird).toBe(false);
+
+    // After Fajr (07:00:00): not active, not last third
+    const afterFajr = calculateIslamicNight(maghrib, nextFajr, new Date('2026-10-05T07:00:00.000Z'));
+    expect(afterFajr?.isActive).toBe(false);
+    expect(afterFajr?.isCurrentlyLastThird).toBe(false);
+
+    // Invalid or null current parameter safely returns false without crashing
+    const invalidCurrent = calculateIslamicNight(maghrib, nextFajr, new Date('invalid'));
+    expect(invalidCurrent?.isActive).toBe(false);
+    expect(invalidCurrent?.isCurrentlyLastThird).toBe(false);
+
+    const nullCurrent = calculateIslamicNight(maghrib, nextFajr, null);
+    expect(nullCurrent?.isActive).toBe(false);
+    expect(nullCurrent?.isCurrentlyLastThird).toBe(false);
+  });
+
+  it('safely returns null for invalid, null, NaN, inverted, and unphysical inputs', () => {
+    const validDate = new Date('2026-10-04T18:00:00Z');
+    const laterDate = new Date('2026-10-05T06:00:00Z');
+
+    // Null or undefined inputs
+    expect(calculateIslamicNight(null, laterDate)).toBeNull();
+    expect(calculateIslamicNight(validDate, null)).toBeNull();
+    expect(calculateIslamicNight(undefined, laterDate)).toBeNull();
+    expect(calculateIslamicNight(validDate, undefined)).toBeNull();
+    expect(calculateIslamicNight(null, null)).toBeNull();
+
+    // Invalid dates (NaN timestamp)
+    expect(calculateIslamicNight(new Date('invalid'), laterDate)).toBeNull();
+    expect(calculateIslamicNight(validDate, new Date(NaN))).toBeNull();
+
+    // Inverted timestamps (Fajr before Maghrib)
+    expect(calculateIslamicNight(laterDate, validDate)).toBeNull();
+
+    // Equal timestamps (zero duration)
+    expect(calculateIslamicNight(validDate, validDate)).toBeNull();
+
+    // Duration exceeding 24 hours (unphysical night interval)
+    const tooLateDate = new Date(validDate.getTime() + 25 * 3600000);
+    expect(calculateIslamicNight(validDate, tooLateDate)).toBeNull();
+
+    // Non-Date object types cast
+    expect(calculateIslamicNight('2026-10-04' as unknown as Date, laterDate)).toBeNull();
+    expect(calculateIslamicNight(validDate, 123456789 as unknown as Date)).toBeNull();
+  });
+});
+
+describe('Islamic night schedule in calculatePrayerTimes', () => {
+  it('calculates valid Islamic night for Makkah in daytime, evening, and pre-dawn', () => {
+    // Makkah: lat 21.4225, lon 39.8262 on 2026-10-04
+    // 1. Evaluated at local noon (daytime)
+    const daytime = new Date('2026-10-04T12:00:00Z');
+    const daytimeSched = calculatePrayerTimes(21.4225, 39.8262, daytime, { convention: 'UmmAlQura' });
+
+    expect(daytimeSched.islamicNight).toBeDefined();
+    const dayNight = daytimeSched.islamicNight!;
+    expect(dayNight.durationMs).toBeGreaterThan(10 * 3600000); // Makkah night is ~11 hours in Oct
+    expect(dayNight.durationMs).toBeLessThan(14 * 3600000);
+    expect(dayNight.isActive).toBe(false);
+    expect(dayNight.isCurrentlyLastThird).toBe(false);
+
+    // Midnight is midway between Maghrib and tomorrow's Fajr
+    expect(dayNight.midnight.getTime()).toBeGreaterThan(daytimeSched.maghrib.date!.getTime());
+    expect(dayNight.lastThirdStart.getTime()).toBeGreaterThan(dayNight.midnight.getTime());
+    expect(dayNight.lastThirdEnd.getTime()).toBeGreaterThan(dayNight.lastThirdStart.getTime());
+
+    // 2. Evaluated in evening after Maghrib (20:00 UTC)
+    const eveningTime = new Date('2026-10-04T20:00:00Z');
+    const eveningSched = calculatePrayerTimes(21.4225, 39.8262, eveningTime, { convention: 'UmmAlQura' });
+
+    expect(eveningSched.islamicNight).toBeDefined();
+    expect(eveningSched.islamicNight!.isActive).toBe(true);
+    expect(eveningSched.islamicNight!.isCurrentlyLastThird).toBe(false); // 20:00 UTC is before last third (~01:15 UTC)
+
+    // 3. Evaluated during pre-dawn Tahajjud hours (01:00 UTC / 04:00 AST on Oct 5, before Fajr at ~04:48 AST / 01:48 UTC)
+    const preDawnTime = new Date('2026-10-05T01:00:00Z');
+    const preDawnSched = calculatePrayerTimes(21.4225, 39.8262, preDawnTime, { convention: 'UmmAlQura' });
+
+    expect(preDawnSched.islamicNight).toBeDefined();
+    const preDawnNight = preDawnSched.islamicNight!;
+    expect(preDawnNight.isActive).toBe(true);
+    expect(preDawnNight.isCurrentlyLastThird).toBe(true); // Active in the last third!
+    expect(preDawnNight.lastThirdEnd.getTime()).toBe(preDawnSched.fajr.date!.getTime());
+  });
+
+  it('calculates Islamic night for London on solstices with high-latitude adjustments', () => {
+    // London: lat 51.5074, lon -0.1278
+    const summerSolstice = new Date('2026-06-21T12:00:00Z');
+
+    // AngleBased
+    const angleSched = calculatePrayerTimes(51.5074, -0.1278, summerSolstice, {
+      convention: 'MuslimWorldLeague',
+      highLatitudeRule: 'AngleBased',
+    });
+    expect(angleSched.islamicNight).toBeDefined();
+    expect(angleSched.islamicNight!.durationMs).toBeGreaterThan(4 * 3600000);
+    expect(angleSched.islamicNight!.durationMs).toBeLessThan(8 * 3600000);
+
+    // MiddleOfTheNight (half of the 7.37h night is ~3.68h)
+    const middleSched = calculatePrayerTimes(51.5074, -0.1278, summerSolstice, {
+      convention: 'MuslimWorldLeague',
+      highLatitudeRule: 'MiddleOfTheNight',
+    });
+    expect(middleSched.islamicNight).toBeDefined();
+    expect(middleSched.islamicNight!.durationMs).toBeGreaterThan(3 * 3600000);
+    expect(middleSched.islamicNight!.durationMs).toBeLessThan(8 * 3600000);
+
+    // SeventhOfTheNight
+    const seventhSched = calculatePrayerTimes(51.5074, -0.1278, summerSolstice, {
+      convention: 'MuslimWorldLeague',
+      highLatitudeRule: 'SeventhOfTheNight',
+    });
+    expect(seventhSched.islamicNight).toBeDefined();
+    expect(seventhSched.islamicNight!.durationMs).toBeGreaterThan(4 * 3600000);
+    expect(seventhSched.islamicNight!.durationMs).toBeLessThan(8 * 3600000);
+
+    // Durations reflect the fraction assigned to night before Fajr:
+    // MiddleOfTheNight (0.50 of night) < AngleBased (0.70 of night) < SeventhOfTheNight (6/7 of night)
+    expect(middleSched.islamicNight!.durationMs).toBeLessThan(angleSched.islamicNight!.durationMs);
+    expect(angleSched.islamicNight!.durationMs).toBeLessThan(seventhSched.islamicNight!.durationMs);
+
+    // Verification that highLatitudeRule cascades into lastThirdStart
+    expect(middleSched.islamicNight!.lastThirdStart.getTime()).toBeLessThan(
+      seventhSched.islamicNight!.lastThirdStart.getTime(),
+    );
+  });
+
+  it('handles Tromsø polar night and midnight sun gracefully without errors', () => {
+    // Tromsø: lat 69.6492, lon 18.9553
+    // 1. Winter solstice: Polar night (sun never rises or sets, Maghrib is null)
+    const winterSolstice = new Date('2026-12-21T12:00:00Z');
+    const winterSched = calculatePrayerTimes(69.6492, 18.9553, winterSolstice, {
+      convention: 'MuslimWorldLeague',
+    });
+    expect(winterSched.maghrib.date).toBeNull();
+    // In polar night without Maghrib, islamicNight is cleanly undefined with zero errors
+    expect(winterSched.islamicNight).toBeUndefined();
+
+    // 2. Summer solstice without high-latitude rule (Midnight Sun, Maghrib is null)
+    const summerSolstice = new Date('2026-06-21T12:00:00Z');
+    const summerNoRuleSched = calculatePrayerTimes(69.6492, 18.9553, summerSolstice, {
+      convention: 'MuslimWorldLeague',
+    });
+    expect(summerNoRuleSched.maghrib.date).toBeNull();
+    expect(summerNoRuleSched.islamicNight).toBeUndefined();
+
+    // 3. Summer solstice WITH MiddleOfTheNight rule (Virtual night of 8 hours)
+    const summerWithRuleSched = calculatePrayerTimes(69.6492, 18.9553, summerSolstice, {
+      convention: 'MuslimWorldLeague',
+      highLatitudeRule: 'MiddleOfTheNight',
+    });
+    expect(summerWithRuleSched.maghrib.date).not.toBeNull();
+    expect(summerWithRuleSched.fajr.date).not.toBeNull();
+    expect(summerWithRuleSched.islamicNight).toBeDefined();
+
+    const polarNight = summerWithRuleSched.islamicNight!;
+    // Duration must be strictly positive and under 8 hours (never an unphysical 28 hours)
+    expect(polarNight.durationMs).toBeGreaterThan(0);
+    expect(polarNight.durationMs).toBeLessThanOrEqual(8 * 3600000);
+
+    // Check last third activation inside Tromsø virtual night
+    // Maghrib is ~18:44 UTC, Fajr is ~22:44 UTC, duration = 4h. Last third starts at ~21:24 UTC.
+    const inTromsoLastThird = calculatePrayerTimes(69.6492, 18.9553, summerSolstice, {
+      convention: 'MuslimWorldLeague',
+      highLatitudeRule: 'MiddleOfTheNight',
+      now: new Date('2026-06-21T21:45:00Z'),
+    });
+    expect(inTromsoLastThird.islamicNight?.isActive).toBe(true);
+    expect(inTromsoLastThird.islamicNight?.isCurrentlyLastThird).toBe(true);
+  });
+
+  it('calculates valid Islamic night for Tokyo across international date lines', () => {
+    // Tokyo: lat 35.6762, lon 139.6503 (UTC+9)
+    const tokyoNoon = new Date('2026-10-05T03:00:00Z'); // 12:00 JST
+    const sched = calculatePrayerTimes(35.6762, 139.6503, tokyoNoon);
+
+    expect(sched.islamicNight).toBeDefined();
+    const night = sched.islamicNight!;
+    expect(night.durationMs).toBeGreaterThan(10 * 3600000);
+    expect(night.durationMs).toBeLessThan(13 * 3600000);
+
+    expect(sched.maghrib.date!.getTime()).toBeLessThan(night.midnight.getTime());
+    expect(night.midnight.getTime()).toBeLessThan(night.lastThirdStart.getTime());
+    expect(night.lastThirdStart.getTime()).toBeLessThan(night.lastThirdEnd.getTime());
+  });
+
+  it('reflects seasonal asymmetry in Southern Hemisphere (Sydney)', () => {
+    // Sydney: lat -33.8688, lon 151.2093
+    // June 21 is Southern Winter (long night)
+    const juneSolstice = new Date('2026-06-21T02:00:00Z');
+    const juneSched = calculatePrayerTimes(-33.8688, 151.2093, juneSolstice);
+
+    // December 21 is Southern Summer (short night)
+    const decSolstice = new Date('2026-12-21T02:00:00Z');
+    const decSched = calculatePrayerTimes(-33.8688, 151.2093, decSolstice);
+
+    expect(juneSched.islamicNight).toBeDefined();
+    expect(decSched.islamicNight).toBeDefined();
+
+    const winterNightMs = juneSched.islamicNight!.durationMs;
+    const summerNightMs = decSched.islamicNight!.durationMs;
+
+    // Southern winter night is strictly longer than southern summer night
+    expect(winterNightMs).toBeGreaterThan(summerNightMs);
+    expect((winterNightMs - summerNightMs) / 3600000).toBeGreaterThan(3.5); // > 3.5h seasonal difference
+  });
+
+  it('safely sets islamicNight to undefined when coordinates or date are invalid', () => {
+    const invalidCoords = calculatePrayerTimes(150, 0, new Date('2026-10-04T12:00:00Z'));
+    expect(invalidCoords.islamicNight).toBeUndefined();
+
+    const invalidDate = calculatePrayerTimes(21.42, 39.82, new Date('invalid'));
+    expect(invalidDate.islamicNight).toBeUndefined();
   });
 });
