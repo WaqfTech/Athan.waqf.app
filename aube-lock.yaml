@@ -15,6 +15,9 @@ importers:
       '@types/three':
         specifier: ^0.186.0
         version: 0.186.0
+      adhan:
+        specifier: ^4.4.6
+        version: 4.4.6
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
@@ -296,6 +299,9 @@ packages:
 
   '@vitest/spy@5.0.3':
     resolution: {integrity: sha512-XhFysQTB8AZ+P4gMi+Lpo99vg2AZi0qKpaB9yXQl37+CaMEAPO3iH/wGVnSyL5MPERiLezpqTVtrR6UZH5GCXg==}
+
+  adhan@4.4.6:
+    resolution: {integrity: sha512-cpLLcr6qxx+mLc6jgSXJwAAHxDFrhXhVLuzRbZPrpQKIEpJw+0LcfG6u9WEjq66kcTX/2sCkI3VztgRoUXBnFg==}
 
   assertion-error@2.0.1:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
@@ -713,6 +719,8 @@ snapshots:
       vite: 8.3.2
 
   '@vitest/spy@5.0.3': {}
+
+  adhan@4.4.6: {}
 
   assertion-error@2.0.1: {}
 
