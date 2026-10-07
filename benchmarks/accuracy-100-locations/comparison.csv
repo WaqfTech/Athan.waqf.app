@@ -2,7 +2,7 @@ Location_ID,Category,Location_Name,Latitude,Longitude,Prayer,Athan_Earth_UTC,Bat
 1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Fajr,01:59:46,01:59:46,02:00:00,+0.4,-13.6,-14.0,astronomicalSign
 1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Sunrise,03:13:38,03:13:38,03:14:00,+0.9,-21.1,-22.0,astronomicalSign
 1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Dhuhr,09:09:31,09:09:33,09:09:00,-1.8,+31.2,+33.0,astronomicalSign
-1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Asr,12:30:58,12:30:30,12:31:00,+28.4,-1.6,-30.0,astronomicalSign
+1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Asr,12:30:58,12:30:30,12:32:00,+28.4,-61.6,-90.0,astronomicalSign
 1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Maghrib,15:03:09,15:03:09,15:03:00,+0.8,+9.8,+9.0,astronomicalSign
 1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Isha,16:12:41,16:12:39,16:13:00,+2.7,-18.3,-21.0,astronomicalSign
 2,Main,"Madinah, Saudi Arabia",24.4672,39.6111,Fajr,02:00:14,02:00:14,02:00:00,+0.9,+14.9,+14.0,astronomicalSign
@@ -56,7 +56,7 @@ Location_ID,Category,Location_Name,Latitude,Longitude,Prayer,Athan_Earth_UTC,Bat
 10,Main,"Paris, France",48.8566,2.3522,Fajr,04:13:39,04:13:40,04:14:00,-0.2,-20.2,-20.0,astronomicalSign
 10,Main,"Paris, France",48.8566,2.3522,Sunrise,05:58:46,05:58:45,05:59:00,+1.2,-13.8,-15.0,astronomicalSign
 10,Main,"Paris, France",48.8566,2.3522,Dhuhr,11:39:24,11:39:24,11:38:00,+0.9,+84.9,+84.0,astronomicalSign
-10,Main,"Paris, France",48.8566,2.3522,Asr,14:40:26,14:39:38,14:41:00,+48.8,-33.2,-82.0,astronomicalSign
+10,Main,"Paris, France",48.8566,2.3522,Asr,14:40:26,14:39:38,14:42:00,+48.8,-93.2,-142.0,astronomicalSign
 10,Main,"Paris, France",48.8566,2.3522,Maghrib,17:17:14,17:17:13,17:17:00,+1.2,+14.2,+13.0,astronomicalSign
 10,Main,"Paris, France",48.8566,2.3522,Isha,18:55:51,18:55:46,18:56:00,+5.4,-8.6,-14.0,astronomicalSign
 11,Main,"Moscow, Russia",55.7558,37.6173,Fajr,01:40:17,01:40:17,01:40:00,+0.3,+17.3,+17.0,astronomicalSign
@@ -362,7 +362,7 @@ Location_ID,Category,Location_Name,Latitude,Longitude,Prayer,Athan_Earth_UTC,Bat
 61,Hard,"Helsinki, Finland",60.1699,24.9384,Fajr,02:19:19,02:19:19,02:19:00,+0.4,+19.4,+19.0,astronomicalSign
 61,Hard,"Helsinki, Finland",60.1699,24.9384,Sunrise,04:40:00,04:39:59,04:40:00,+1.0,+0.0,-1.0,astronomicalSign
 61,Hard,"Helsinki, Finland",60.1699,24.9384,Dhuhr,10:09:04,10:09:05,10:08:00,-0.8,+64.2,+65.0,astronomicalSign
-61,Hard,"Helsinki, Finland",60.1699,24.9384,Asr,12:46:31,12:45:12,12:48:00,+79.0,-89.0,-168.0,astronomicalSign
+61,Hard,"Helsinki, Finland",60.1699,24.9384,Asr,12:46:31,12:45:12,12:49:00,+79.0,-149.0,-228.0,astronomicalSign
 61,Hard,"Helsinki, Finland",60.1699,24.9384,Maghrib,15:34:57,15:34:56,15:35:00,+1.1,-2.9,-4.0,astronomicalSign
 61,Hard,"Helsinki, Finland",60.1699,24.9384,Isha,17:46:26,17:46:18,17:47:00,+8.2,-33.8,-42.0,astronomicalSign
 62,Hard,"Stockholm, Sweden",59.3293,18.0686,Fajr,02:49:25,02:49:25,02:49:00,+0.1,+25.1,+25.0,astronomicalSign
