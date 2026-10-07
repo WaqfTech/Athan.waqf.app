@@ -1,0 +1,601 @@
+Location_ID,Category,Location_Name,Latitude,Longitude,Prayer,Athan_Earth_UTC,Batoul_Adhan_UTC,AlAdhan_API_UTC,Diff_Athan_vs_Batoul_sec,Diff_Athan_vs_AlAdhan_sec,Diff_Batoul_vs_AlAdhan_sec,Provenance_Notes
+1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Fajr,01:59:46,01:59:46,02:00:00,+0.4,-13.6,-14.0,astronomicalSign
+1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Sunrise,03:13:38,03:13:38,03:14:00,+0.9,-21.1,-22.0,astronomicalSign
+1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Dhuhr,09:09:31,09:09:33,09:09:00,-1.8,+31.2,+33.0,astronomicalSign
+1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Asr,12:30:58,12:30:30,12:31:00,+28.4,-1.6,-30.0,astronomicalSign
+1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Maghrib,15:03:09,15:03:09,15:03:00,+0.8,+9.8,+9.0,astronomicalSign
+1,Main,"Makkah, Saudi Arabia",21.4225,39.8262,Isha,16:12:41,16:12:39,16:13:00,+2.7,-18.3,-21.0,astronomicalSign
+2,Main,"Madinah, Saudi Arabia",24.4672,39.6111,Fajr,02:00:14,02:00:14,02:00:00,+0.9,+14.9,+14.0,astronomicalSign
+2,Main,"Madinah, Saudi Arabia",24.4672,39.6111,Sunrise,03:15:48,03:15:47,03:16:00,+1.3,-11.7,-13.0,astronomicalSign
+2,Main,"Madinah, Saudi Arabia",24.4672,39.6111,Dhuhr,09:10:22,09:10:24,09:09:00,-1.2,+82.8,+84.0,astronomicalSign
+2,Main,"Madinah, Saudi Arabia",24.4672,39.6111,Asr,12:31:34,12:31:05,12:32:00,+29.5,-25.5,-55.0,astronomicalSign
+2,Main,"Madinah, Saudi Arabia",24.4672,39.6111,Maghrib,15:02:40,15:02:40,15:03:00,+0.9,-19.1,-20.0,astronomicalSign
+2,Main,"Madinah, Saudi Arabia",24.4672,39.6111,Isha,16:13:46,16:13:44,16:14:00,+2.8,-13.2,-16.0,astronomicalSign
+3,Main,"Cairo, Egypt",30.0444,31.2357,Fajr,02:32:22,02:32:22,02:32:00,+0.5,+22.5,+22.0,astronomicalSign
+3,Main,"Cairo, Egypt",30.0444,31.2357,Sunrise,03:51:50,03:51:50,03:52:00,+0.6,-9.4,-10.0,astronomicalSign
+3,Main,"Cairo, Egypt",30.0444,31.2357,Dhuhr,09:43:52,09:43:54,09:43:00,-1.1,+52.9,+54.0,astronomicalSign
+3,Main,"Cairo, Egypt",30.0444,31.2357,Asr,13:03:22,13:02:50,13:04:00,+32.0,-38.0,-70.0,astronomicalSign
+3,Main,"Cairo, Egypt",30.0444,31.2357,Maghrib,15:33:32,15:33:32,15:34:00,+0.5,-27.5,-28.0,astronomicalSign
+3,Main,"Cairo, Egypt",30.0444,31.2357,Isha,16:48:17,16:48:14,16:48:00,+3.5,+17.5,+14.0,astronomicalSign
+4,Main,"Istanbul, Turkey",41.0082,28.9784,Fajr,02:35:23,02:35:23,02:35:00,+0.4,+23.4,+23.0,astronomicalSign
+4,Main,"Istanbul, Turkey",41.0082,28.9784,Sunrise,04:06:43,04:06:43,04:07:00,+0.7,-16.3,-17.0,astronomicalSign
+4,Main,"Istanbul, Turkey",41.0082,28.9784,Dhuhr,09:52:54,09:52:55,09:52:00,-0.4,+54.6,+55.0,astronomicalSign
+4,Main,"Istanbul, Turkey",41.0082,28.9784,Asr,13:04:21,13:03:43,13:05:00,+38.4,-38.6,-77.0,astronomicalSign
+4,Main,"Istanbul, Turkey",41.0082,28.9784,Maghrib,15:36:30,15:36:29,15:36:00,+1.1,+30.1,+29.0,astronomicalSign
+4,Main,"Istanbul, Turkey",41.0082,28.9784,Isha,17:02:19,17:02:15,17:02:00,+4.1,+19.1,+15.0,astronomicalSign
+5,Main,"Jakarta, Indonesia",-6.2088,106.8456,Fajr,21:25:22,21:25:22,21:25:00,+0.2,+22.2,+22.0,astronomicalSign
+5,Main,"Jakarta, Indonesia",-6.2088,106.8456,Sunrise,22:34:52,22:34:52,22:35:00,+0.8,-7.2,-8.0,astronomicalSign
+5,Main,"Jakarta, Indonesia",-6.2088,106.8456,Dhuhr,04:41:26,04:41:31,04:41:00,-4.5,+26.5,+31.0,astronomicalSign
+5,Main,"Jakarta, Indonesia",-6.2088,106.8456,Asr,07:42:40,07:43:01,07:42:00,-20.9,+40.1,+61.0,astronomicalSign
+5,Main,"Jakarta, Indonesia",-6.2088,106.8456,Maghrib,10:46:16,10:46:15,10:46:00,+1.1,+16.1,+15.0,astronomicalSign
+5,Main,"Jakarta, Indonesia",-6.2088,106.8456,Isha,11:51:45,11:51:45,11:52:00,+1.0,-14.0,-15.0,astronomicalSign
+6,Main,"Karachi, Pakistan",24.8607,67.0011,Fajr,00:10:35,00:10:35,00:11:00,+0.4,-24.6,-25.0,astronomicalSign
+6,Main,"Karachi, Pakistan",24.8607,67.0011,Sunrise,01:26:23,01:26:22,01:26:00,+1.0,+23.0,+22.0,astronomicalSign
+6,Main,"Karachi, Pakistan",24.8607,67.0011,Dhuhr,07:20:49,07:20:52,07:20:00,-2.8,+49.2,+52.0,astronomicalSign
+6,Main,"Karachi, Pakistan",24.8607,67.0011,Asr,10:42:02,10:41:34,10:43:00,+28.9,-57.1,-86.0,astronomicalSign
+6,Main,"Karachi, Pakistan",24.8607,67.0011,Maghrib,13:13:01,13:13:00,13:13:00,+1.2,+1.2,+0.0,astronomicalSign
+6,Main,"Karachi, Pakistan",24.8607,67.0011,Isha,14:24:20,14:24:18,14:24:00,+2.4,+20.4,+18.0,astronomicalSign
+7,Main,"London, United Kingdom",51.5074,-0.1278,Fajr,04:19:37,04:19:38,04:20:00,-0.5,-22.5,-22.0,astronomicalSign
+7,Main,"London, United Kingdom",51.5074,-0.1278,Sunrise,06:10:55,06:10:55,06:11:00,+0.4,-4.6,-5.0,astronomicalSign
+7,Main,"London, United Kingdom",51.5074,-0.1278,Dhuhr,11:49:20,11:49:20,11:48:00,+0.1,+80.1,+80.0,astronomicalSign
+7,Main,"London, United Kingdom",51.5074,-0.1278,Asr,14:45:51,14:44:57,14:47:00,+54.1,-68.9,-123.0,astronomicalSign
+7,Main,"London, United Kingdom",51.5074,-0.1278,Maghrib,17:24:50,17:24:50,17:25:00,+0.5,-9.5,-10.0,astronomicalSign
+7,Main,"London, United Kingdom",51.5074,-0.1278,Isha,19:09:12,19:09:06,19:09:00,+6.5,+12.5,+6.0,astronomicalSign
+8,Main,"New York, USA",40.7128,-74.0060,Fajr,09:27:51,09:27:52,09:28:00,-0.2,-8.2,-8.0,astronomicalSign
+8,Main,"New York, USA",40.7128,-74.0060,Sunrise,10:58:47,10:58:46,10:59:00,+1.1,-12.9,-14.0,astronomicalSign
+8,Main,"New York, USA",40.7128,-74.0060,Dhuhr,16:44:50,16:44:47,16:44:00,+3.9,+50.9,+47.0,astronomicalSign
+8,Main,"New York, USA",40.7128,-74.0060,Asr,19:55:58,19:55:16,19:57:00,+42.4,-61.6,-104.0,astronomicalSign
+8,Main,"New York, USA",40.7128,-74.0060,Maghrib,22:28:09,22:28:09,22:28:00,+0.8,+9.8,+9.0,astronomicalSign
+8,Main,"New York, USA",40.7128,-74.0060,Isha,23:53:35,23:53:30,23:54:00,+5.6,-24.4,-30.0,astronomicalSign
+9,Main,"Tokyo, Japan",35.6762,139.6503,Fajr,19:16:00,19:16:00,19:16:00,+0.9,+0.9,+0.0,astronomicalSign
+9,Main,"Tokyo, Japan",35.6762,139.6503,Sunrise,20:40:45,20:40:45,20:41:00,+0.6,-14.4,-15.0,astronomicalSign
+9,Main,"Tokyo, Japan",35.6762,139.6503,Dhuhr,02:30:13,02:30:20,02:29:00,-6.6,+73.4,+80.0,astronomicalSign
+9,Main,"Tokyo, Japan",35.6762,139.6503,Asr,05:46:57,05:46:28,05:48:00,+30.0,-62.0,-92.0,astronomicalSign
+9,Main,"Tokyo, Japan",35.6762,139.6503,Maghrib,08:17:22,08:17:22,08:17:00,+0.8,+22.8,+22.0,astronomicalSign
+9,Main,"Tokyo, Japan",35.6762,139.6503,Isha,09:37:03,09:37:01,09:37:00,+2.0,+3.0,+1.0,astronomicalSign
+10,Main,"Paris, France",48.8566,2.3522,Fajr,04:13:39,04:13:40,04:14:00,-0.2,-20.2,-20.0,astronomicalSign
+10,Main,"Paris, France",48.8566,2.3522,Sunrise,05:58:46,05:58:45,05:59:00,+1.2,-13.8,-15.0,astronomicalSign
+10,Main,"Paris, France",48.8566,2.3522,Dhuhr,11:39:24,11:39:24,11:38:00,+0.9,+84.9,+84.0,astronomicalSign
+10,Main,"Paris, France",48.8566,2.3522,Asr,14:40:26,14:39:38,14:41:00,+48.8,-33.2,-82.0,astronomicalSign
+10,Main,"Paris, France",48.8566,2.3522,Maghrib,17:17:14,17:17:13,17:17:00,+1.2,+14.2,+13.0,astronomicalSign
+10,Main,"Paris, France",48.8566,2.3522,Isha,18:55:51,18:55:46,18:56:00,+5.4,-8.6,-14.0,astronomicalSign
+11,Main,"Moscow, Russia",55.7558,37.6173,Fajr,01:40:17,01:40:17,01:40:00,+0.3,+17.3,+17.0,astronomicalSign
+11,Main,"Moscow, Russia",55.7558,37.6173,Sunrise,03:43:52,03:43:52,03:44:00,+0.8,-7.2,-8.0,astronomicalSign
+11,Main,"Moscow, Russia",55.7558,37.6173,Dhuhr,09:18:21,09:18:23,09:17:00,-1.7,+81.3,+83.0,astronomicalSign
+11,Main,"Moscow, Russia",55.7558,37.6173,Asr,12:06:45,12:05:43,12:08:00,+62.4,-74.6,-137.0,astronomicalSign
+11,Main,"Moscow, Russia",55.7558,37.6173,Maghrib,14:49:50,14:49:50,14:50:00,+0.5,-9.5,-10.0,astronomicalSign
+11,Main,"Moscow, Russia",55.7558,37.6173,Isha,16:45:35,16:45:29,16:46:00,+6.0,-25.0,-31.0,astronomicalSign
+12,Main,"Kuala Lumpur, Malaysia",3.1390,101.6869,Fajr,21:50:03,21:50:02,21:50:00,+1.1,+3.1,+2.0,astronomicalSign
+12,Main,"Kuala Lumpur, Malaysia",3.1390,101.6869,Sunrise,22:59:04,22:59:03,22:59:00,+1.3,+4.3,+3.0,astronomicalSign
+12,Main,"Kuala Lumpur, Malaysia",3.1390,101.6869,Dhuhr,05:02:04,05:02:09,05:01:00,-4.4,+64.6,+69.0,astronomicalSign
+12,Main,"Kuala Lumpur, Malaysia",3.1390,101.6869,Asr,08:14:36,08:14:12,08:15:00,+24.5,-23.5,-48.0,astronomicalSign
+12,Main,"Kuala Lumpur, Malaysia",3.1390,101.6869,Maghrib,11:03:12,11:03:12,11:03:00,+0.6,+12.6,+12.0,astronomicalSign
+12,Main,"Kuala Lumpur, Malaysia",3.1390,101.6869,Isha,12:08:13,12:08:12,12:08:00,+1.6,+13.6,+12.0,astronomicalSign
+13,Main,"Dubai, UAE",25.2048,55.2708,Fajr,00:57:27,00:57:27,00:57:00,+0.7,+27.6,+27.0,astronomicalSign
+13,Main,"Dubai, UAE",25.2048,55.2708,Sunrise,02:13:28,02:13:27,02:13:00,+1.1,+28.1,+27.0,astronomicalSign
+13,Main,"Dubai, UAE",25.2048,55.2708,Dhuhr,08:07:44,08:07:47,08:07:00,-2.5,+44.5,+47.0,astronomicalSign
+13,Main,"Dubai, UAE",25.2048,55.2708,Asr,11:28:51,11:28:23,11:29:00,+28.7,-8.3,-37.0,astronomicalSign
+13,Main,"Dubai, UAE",25.2048,55.2708,Maghrib,13:59:45,13:59:44,14:00:00,+1.2,-14.8,-16.0,astronomicalSign
+13,Main,"Dubai, UAE",25.2048,55.2708,Isha,15:11:16,15:11:14,15:11:00,+2.4,+16.4,+14.0,astronomicalSign
+14,Main,"Riyadh, Saudi Arabia",24.7136,46.6753,Fajr,01:31:56,01:31:56,01:32:00,+0.5,-3.5,-4.0,astronomicalSign
+14,Main,"Riyadh, Saudi Arabia",24.7136,46.6753,Sunrise,02:47:38,02:47:38,02:48:00,+0.8,-21.2,-22.0,astronomicalSign
+14,Main,"Riyadh, Saudi Arabia",24.7136,46.6753,Dhuhr,08:42:07,08:42:09,08:41:00,-1.6,+67.4,+69.0,astronomicalSign
+14,Main,"Riyadh, Saudi Arabia",24.7136,46.6753,Asr,12:03:18,12:02:49,12:04:00,+29.2,-41.8,-71.0,astronomicalSign
+14,Main,"Riyadh, Saudi Arabia",24.7136,46.6753,Maghrib,14:34:19,14:34:19,14:34:00,+1.0,+20.0,+19.0,astronomicalSign
+14,Main,"Riyadh, Saudi Arabia",24.7136,46.6753,Isha,15:45:34,15:45:32,15:46:00,+2.3,-25.7,-28.0,astronomicalSign
+15,Main,"Casablanca, Morocco",33.5731,-7.5898,Fajr,05:06:21,05:06:21,05:06:00,+0.4,+21.4,+21.0,astronomicalSign
+15,Main,"Casablanca, Morocco",33.5731,-7.5898,Sunrise,06:28:57,06:28:56,06:29:00,+1.2,-2.8,-4.0,astronomicalSign
+15,Main,"Casablanca, Morocco",33.5731,-7.5898,Dhuhr,12:19:11,12:19:10,12:18:00,+1.0,+71.0,+70.0,astronomicalSign
+15,Main,"Casablanca, Morocco",33.5731,-7.5898,Asr,15:36:36,15:36:01,15:37:00,+35.3,-23.7,-59.0,astronomicalSign
+15,Main,"Casablanca, Morocco",33.5731,-7.5898,Maghrib,18:06:54,18:06:54,18:07:00,+0.7,-5.3,-6.0,astronomicalSign
+15,Main,"Casablanca, Morocco",33.5731,-7.5898,Isha,19:24:34,19:24:31,19:25:00,+3.8,-25.2,-29.0,astronomicalSign
+16,Main,"Baghdad, Iraq",33.3152,44.3661,Fajr,01:38:32,01:38:32,01:39:00,+0.8,-27.2,-28.0,astronomicalSign
+16,Main,"Baghdad, Iraq",33.3152,44.3661,Sunrise,03:00:53,03:00:53,03:01:00,+0.6,-6.4,-7.0,astronomicalSign
+16,Main,"Baghdad, Iraq",33.3152,44.3661,Dhuhr,08:51:21,08:51:23,08:50:00,-1.4,+81.6,+83.0,astronomicalSign
+16,Main,"Baghdad, Iraq",33.3152,44.3661,Asr,12:09:11,12:08:39,12:10:00,+32.6,-48.4,-81.0,astronomicalSign
+16,Main,"Baghdad, Iraq",33.3152,44.3661,Maghrib,14:39:24,14:39:24,14:39:00,+0.7,+24.7,+24.0,astronomicalSign
+16,Main,"Baghdad, Iraq",33.3152,44.3661,Isha,15:56:50,15:56:48,15:57:00,+2.8,-9.2,-12.0,astronomicalSign
+17,Main,"Tehran, Iran",35.6892,51.3890,Fajr,01:09:15,01:09:15,01:09:00,+0.2,+15.2,+15.0,astronomicalSign
+17,Main,"Tehran, Iran",35.6892,51.3890,Sunrise,02:34:00,02:34:00,02:34:00,+0.8,+0.8,+0.0,astronomicalSign
+17,Main,"Tehran, Iran",35.6892,51.3890,Dhuhr,08:23:16,08:23:18,08:22:00,-1.9,+76.1,+78.0,astronomicalSign
+17,Main,"Tehran, Iran",35.6892,51.3890,Asr,11:39:32,11:38:59,11:40:00,+33.7,-27.3,-61.0,astronomicalSign
+17,Main,"Tehran, Iran",35.6892,51.3890,Maghrib,14:10:04,14:10:04,14:10:00,+0.6,+4.6,+4.0,astronomicalSign
+17,Main,"Tehran, Iran",35.6892,51.3890,Isha,15:29:45,15:29:42,15:30:00,+3.7,-14.3,-18.0,astronomicalSign
+18,Main,"Dhaka, Bangladesh",23.8103,90.4125,Fajr,22:37:05,22:37:05,22:37:00,+0.7,+5.7,+5.0,astronomicalSign
+18,Main,"Dhaka, Bangladesh",23.8103,90.4125,Sunrise,23:52:15,23:52:15,23:52:00,+0.6,+15.6,+15.0,astronomicalSign
+18,Main,"Dhaka, Bangladesh",23.8103,90.4125,Dhuhr,05:47:10,05:47:14,05:46:00,-3.5,+70.5,+74.0,astronomicalSign
+18,Main,"Dhaka, Bangladesh",23.8103,90.4125,Asr,09:08:38,09:08:11,09:09:00,+27.7,-21.3,-49.0,astronomicalSign
+18,Main,"Dhaka, Bangladesh",23.8103,90.4125,Maghrib,11:39:54,11:39:54,11:40:00,+0.3,-5.7,-6.0,astronomicalSign
+18,Main,"Dhaka, Bangladesh",23.8103,90.4125,Isha,12:50:38,12:50:36,12:51:00,+2.4,-21.6,-24.0,astronomicalSign
+19,Main,"Toronto, Canada",43.6532,-79.3832,Fajr,09:46:52,09:46:53,09:47:00,-1.0,-8.0,-7.0,astronomicalSign
+19,Main,"Toronto, Canada",43.6532,-79.3832,Sunrise,11:22:12,11:22:12,11:22:00,+0.5,+12.5,+12.0,astronomicalSign
+19,Main,"Toronto, Canada",43.6532,-79.3832,Dhuhr,17:06:21,17:06:17,17:05:00,+4.4,+81.4,+77.0,astronomicalSign
+19,Main,"Toronto, Canada",43.6532,-79.3832,Asr,20:14:06,20:13:21,20:15:00,+45.2,-53.8,-99.0,astronomicalSign
+19,Main,"Toronto, Canada",43.6532,-79.3832,Maghrib,22:47:40,22:47:40,22:48:00,+1.0,-19.0,-20.0,astronomicalSign
+19,Main,"Toronto, Canada",43.6532,-79.3832,Isha,00:17:13,00:17:08,00:17:00,+5.8,+13.8,+8.0,astronomicalSign
+20,Main,"Berlin, Germany",52.5200,13.4050,Fajr,03:23:42,03:23:42,03:24:00,+0.3,-17.7,-18.0,astronomicalSign
+20,Main,"Berlin, Germany",52.5200,13.4050,Sunrise,05:17:38,05:17:38,05:18:00,+0.6,-21.4,-22.0,astronomicalSign
+20,Main,"Berlin, Germany",52.5200,13.4050,Dhuhr,10:55:12,10:55:12,10:54:00,+0.3,+72.3,+72.0,astronomicalSign
+20,Main,"Berlin, Germany",52.5200,13.4050,Asr,13:49:58,13:49:03,13:51:00,+55.2,-61.8,-117.0,astronomicalSign
+20,Main,"Berlin, Germany",52.5200,13.4050,Maghrib,16:29:50,16:29:50,16:30:00,+0.9,-9.1,-10.0,astronomicalSign
+20,Main,"Berlin, Germany",52.5200,13.4050,Isha,18:16:39,18:16:34,18:17:00,+5.7,-20.3,-26.0,astronomicalSign
+21,Main,Singapore,1.3521,103.8198,Fajr,21:40:54,21:40:54,21:41:00,+0.2,-5.8,-6.0,astronomicalSign
+21,Main,Singapore,1.3521,103.8198,Sunrise,22:49:52,22:49:51,22:50:00,+1.1,-7.9,-9.0,astronomicalSign
+21,Main,Singapore,1.3521,103.8198,Dhuhr,04:53:32,04:53:37,04:53:00,-4.3,+32.7,+37.0,astronomicalSign
+21,Main,Singapore,1.3521,103.8198,Asr,08:04:02,08:03:38,08:05:00,+24.7,-57.3,-82.0,astronomicalSign
+21,Main,Singapore,1.3521,103.8198,Maghrib,10:55:22,10:55:22,10:55:00,+0.7,+22.7,+22.0,astronomicalSign
+21,Main,Singapore,1.3521,103.8198,Isha,12:00:20,12:00:20,12:00:00,+0.8,+20.8,+20.0,astronomicalSign
+22,Main,"Johannesburg, South Africa",-26.2041,28.0473,Fajr,02:23:10,02:23:09,02:23:00,+1.6,+10.6,+9.0,astronomicalSign
+22,Main,"Johannesburg, South Africa",-26.2041,28.0473,Sunrise,03:41:10,03:41:09,03:41:00,+1.1,+10.1,+9.0,astronomicalSign
+22,Main,"Johannesburg, South Africa",-26.2041,28.0473,Dhuhr,09:56:38,09:56:39,09:56:00,-0.9,+38.1,+39.0,astronomicalSign
+22,Main,"Johannesburg, South Africa",-26.2041,28.0473,Asr,13:25:16,13:25:41,13:25:00,-24.4,+16.6,+41.0,astronomicalSign
+22,Main,"Johannesburg, South Africa",-26.2041,28.0473,Maghrib,16:10:32,16:10:32,16:11:00,+1.0,-27.0,-28.0,astronomicalSign
+22,Main,"Johannesburg, South Africa",-26.2041,28.0473,Isha,17:24:03,17:24:04,17:24:00,-0.1,+3.9,+4.0,astronomicalSign
+23,Main,"Buenos Aires, Argentina",-34.6037,-58.3816,Fajr,07:55:54,07:55:52,07:56:00,+2.1,-5.9,-8.0,astronomicalSign
+23,Main,"Buenos Aires, Argentina",-34.6037,-58.3816,Sunrise,09:21:51,09:21:51,09:22:00,+0.7,-8.3,-9.0,astronomicalSign
+23,Main,"Buenos Aires, Argentina",-34.6037,-58.3816,Dhuhr,15:42:21,15:42:18,15:41:00,+3.0,+81.0,+78.0,astronomicalSign
+23,Main,"Buenos Aires, Argentina",-34.6037,-58.3816,Asr,19:16:12,19:16:43,19:16:00,-30.3,+12.7,+43.0,astronomicalSign
+23,Main,"Buenos Aires, Argentina",-34.6037,-58.3816,Maghrib,22:01:18,22:01:18,22:01:00,+0.9,+18.9,+18.0,astronomicalSign
+23,Main,"Buenos Aires, Argentina",-34.6037,-58.3816,Isha,23:22:20,23:22:22,23:22:00,-1.6,+20.4,+22.0,astronomicalSign
+24,Main,"Sydney, Australia",-33.8688,151.2093,Fajr,17:59:42,17:59:43,18:00:00,-0.1,-17.1,-17.0,astronomicalSign
+24,Main,"Sydney, Australia",-33.8688,151.2093,Sunrise,19:24:43,19:24:43,19:25:00,+0.9,-16.1,-17.0,astronomicalSign
+24,Main,"Sydney, Australia",-33.8688,151.2093,Dhuhr,01:43:59,01:44:06,01:43:00,-6.8,+59.2,+66.0,astronomicalSign
+24,Main,"Sydney, Australia",-33.8688,151.2093,Asr,05:17:00,05:17:25,05:16:00,-24.0,+61.0,+85.0,astronomicalSign
+24,Main,"Sydney, Australia",-33.8688,151.2093,Maghrib,08:02:02,08:02:02,08:02:00,+0.5,+2.5,+2.0,astronomicalSign
+24,Main,"Sydney, Australia",-33.8688,151.2093,Isha,09:22:10,09:22:11,09:22:00,-0.5,+10.5,+11.0,astronomicalSign
+25,Main,"Tashkent, Uzbekistan",41.2995,69.2401,Fajr,23:53:59,23:53:58,23:54:00,+1.1,-0.9,-2.0,astronomicalSign
+25,Main,"Tashkent, Uzbekistan",41.2995,69.2401,Sunrise,01:25:44,01:25:44,01:26:00,+0.5,-15.5,-16.0,astronomicalSign
+25,Main,"Tashkent, Uzbekistan",41.2995,69.2401,Dhuhr,07:11:51,07:11:55,07:11:00,-3.2,+51.8,+55.0,astronomicalSign
+25,Main,"Tashkent, Uzbekistan",41.2995,69.2401,Asr,10:23:15,10:22:38,10:24:00,+37.1,-44.9,-82.0,astronomicalSign
+25,Main,"Tashkent, Uzbekistan",41.2995,69.2401,Maghrib,12:55:27,12:55:26,12:55:00,+1.2,+27.2,+26.0,astronomicalSign
+25,Main,"Tashkent, Uzbekistan",41.2995,69.2401,Isha,14:21:39,14:21:36,14:22:00,+3.5,-20.5,-24.0,astronomicalSign
+26,Known,"Amman, Jordan",31.9539,35.9106,Fajr,02:12:57,02:12:57,02:13:00,+0.9,-2.1,-3.0,astronomicalSign
+26,Known,"Amman, Jordan",31.9539,35.9106,Sunrise,03:34:03,03:34:03,03:34:00,+0.3,+3.3,+3.0,astronomicalSign
+26,Known,"Amman, Jordan",31.9539,35.9106,Dhuhr,09:25:10,09:25:12,09:24:00,-1.1,+70.9,+72.0,astronomicalSign
+26,Known,"Amman, Jordan",31.9539,35.9106,Asr,12:43:45,12:43:13,12:44:00,+32.3,-14.7,-47.0,astronomicalSign
+26,Known,"Amman, Jordan",31.9539,35.9106,Maghrib,15:13:54,15:13:54,15:14:00,+0.2,-5.8,-6.0,astronomicalSign
+26,Known,"Amman, Jordan",31.9539,35.9106,Isha,16:30:10,16:30:07,16:30:00,+3.0,+10.0,+7.0,astronomicalSign
+27,Known,"Jerusalem, Palestine",31.7683,35.2137,Fajr,02:15:49,02:15:49,02:16:00,+0.7,-10.3,-11.0,astronomicalSign
+27,Known,"Jerusalem, Palestine",31.7683,35.2137,Sunrise,03:36:45,03:36:44,03:37:00,+1.2,-14.8,-16.0,astronomicalSign
+27,Known,"Jerusalem, Palestine",31.7683,35.2137,Dhuhr,09:27:58,09:27:59,09:27:00,-0.8,+58.2,+59.0,astronomicalSign
+27,Known,"Jerusalem, Palestine",31.7683,35.2137,Asr,12:46:38,12:46:06,12:47:00,+32.3,-21.7,-54.0,astronomicalSign
+27,Known,"Jerusalem, Palestine",31.7683,35.2137,Maghrib,15:16:47,15:16:46,15:17:00,+1.0,-13.0,-14.0,astronomicalSign
+27,Known,"Jerusalem, Palestine",31.7683,35.2137,Isha,16:32:53,16:32:50,16:33:00,+3.6,-6.4,-10.0,astronomicalSign
+28,Known,"Sarajevo, Bosnia and Herzegovina",43.8563,18.4131,Fajr,03:15:09,03:15:09,03:15:00,+0.4,+9.4,+9.0,astronomicalSign
+28,Known,"Sarajevo, Bosnia and Herzegovina",43.8563,18.4131,Sunrise,04:50:50,04:50:49,04:51:00,+1.1,-9.9,-11.0,astronomicalSign
+28,Known,"Sarajevo, Bosnia and Herzegovina",43.8563,18.4131,Dhuhr,10:35:10,10:35:11,10:34:00,-0.7,+70.3,+71.0,astronomicalSign
+28,Known,"Sarajevo, Bosnia and Herzegovina",43.8563,18.4131,Asr,13:43:19,13:42:38,13:44:00,+41.5,-40.5,-82.0,astronomicalSign
+28,Known,"Sarajevo, Bosnia and Herzegovina",43.8563,18.4131,Maghrib,16:16:50,16:16:49,16:17:00,+1.2,-9.8,-11.0,astronomicalSign
+28,Known,"Sarajevo, Bosnia and Herzegovina",43.8563,18.4131,Isha,17:46:41,17:46:37,17:47:00,+4.6,-18.4,-23.0,astronomicalSign
+29,Known,"Cordoba, Spain",37.8882,-4.7794,Fajr,04:52:45,04:52:45,04:53:00,+0.5,-14.5,-15.0,astronomicalSign
+29,Known,"Cordoba, Spain",37.8882,-4.7794,Sunrise,06:20:01,06:20:01,06:20:00,+0.4,+1.4,+1.0,astronomicalSign
+29,Known,"Cordoba, Spain",37.8882,-4.7794,Dhuhr,12:07:56,12:07:56,12:07:00,+0.5,+56.5,+56.0,astronomicalSign
+29,Known,"Cordoba, Spain",37.8882,-4.7794,Asr,15:22:09,15:21:32,15:23:00,+37.7,-50.3,-88.0,astronomicalSign
+29,Known,"Cordoba, Spain",37.8882,-4.7794,Maghrib,17:53:16,17:53:16,17:53:00,+0.8,+16.8,+16.0,astronomicalSign
+29,Known,"Cordoba, Spain",37.8882,-4.7794,Isha,19:15:18,19:15:14,19:15:00,+4.2,+18.2,+14.0,astronomicalSign
+30,Known,"Samarkand, Uzbekistan",39.6542,66.9597,Fajr,00:04:23,00:04:23,00:04:00,+0.9,+23.9,+23.0,astronomicalSign
+30,Known,"Samarkand, Uzbekistan",39.6542,66.9597,Sunrise,01:33:53,01:33:53,01:34:00,+0.4,-6.6,-7.0,astronomicalSign
+30,Known,"Samarkand, Uzbekistan",39.6542,66.9597,Dhuhr,07:20:59,07:21:02,07:20:00,-2.9,+59.1,+62.0,astronomicalSign
+30,Known,"Samarkand, Uzbekistan",39.6542,66.9597,Asr,10:34:00,10:33:25,10:35:00,+35.6,-59.4,-95.0,astronomicalSign
+30,Known,"Samarkand, Uzbekistan",39.6542,66.9597,Maghrib,13:05:34,13:05:34,13:06:00,+0.8,-25.2,-26.0,astronomicalSign
+30,Known,"Samarkand, Uzbekistan",39.6542,66.9597,Isha,14:29:40,14:29:37,14:30:00,+3.5,-19.5,-23.0,astronomicalSign
+31,Known,"Lahore, Pakistan",31.5497,74.3436,Fajr,23:39:19,23:39:19,23:39:00,+0.4,+19.4,+19.0,astronomicalSign
+31,Known,"Lahore, Pakistan",31.5497,74.3436,Sunrise,01:00:03,01:00:03,01:00:00,+0.4,+3.4,+3.0,astronomicalSign
+31,Known,"Lahore, Pakistan",31.5497,74.3436,Dhuhr,06:51:26,06:51:30,06:50:00,-3.0,+87.0,+90.0,astronomicalSign
+31,Known,"Lahore, Pakistan",31.5497,74.3436,Asr,10:10:24,10:09:54,10:11:00,+30.6,-35.4,-66.0,astronomicalSign
+31,Known,"Lahore, Pakistan",31.5497,74.3436,Maghrib,12:40:30,12:40:30,12:40:00,+0.5,+30.5,+30.0,astronomicalSign
+31,Known,"Lahore, Pakistan",31.5497,74.3436,Isha,13:56:26,13:56:24,13:56:00,+2.3,+26.3,+24.0,astronomicalSign
+32,Known,"Alexandria, Egypt",31.2001,29.9187,Fajr,02:37:14,02:37:14,02:37:00,+0.2,+14.2,+14.0,astronomicalSign
+32,Known,"Alexandria, Egypt",31.2001,29.9187,Sunrise,03:57:40,03:57:39,03:58:00,+1.0,-20.0,-21.0,astronomicalSign
+32,Known,"Alexandria, Egypt",31.2001,29.9187,Dhuhr,09:49:08,09:49:10,09:48:00,-1.0,+69.0,+70.0,astronomicalSign
+32,Known,"Alexandria, Egypt",31.2001,29.9187,Asr,13:08:05,13:07:33,13:09:00,+32.1,-54.9,-87.0,astronomicalSign
+32,Known,"Alexandria, Egypt",31.2001,29.9187,Maghrib,15:38:13,15:38:13,15:38:00,+0.9,+13.9,+13.0,astronomicalSign
+32,Known,"Alexandria, Egypt",31.2001,29.9187,Isha,16:53:52,16:53:50,16:54:00,+2.8,-7.2,-10.0,astronomicalSign
+33,Known,"Baku, Azerbaijan",40.4093,49.8671,Fajr,01:12:14,01:12:14,01:12:00,+0.8,+14.8,+14.0,astronomicalSign
+33,Known,"Baku, Azerbaijan",40.4093,49.8671,Sunrise,02:42:45,02:42:44,02:43:00,+1.2,-14.8,-16.0,astronomicalSign
+33,Known,"Baku, Azerbaijan",40.4093,49.8671,Dhuhr,08:29:21,08:29:23,08:28:00,-1.6,+81.4,+83.0,astronomicalSign
+33,Known,"Baku, Azerbaijan",40.4093,49.8671,Asr,11:41:32,11:40:55,11:42:00,+37.4,-27.6,-65.0,astronomicalSign
+33,Known,"Baku, Azerbaijan",40.4093,49.8671,Maghrib,14:13:24,14:13:24,14:13:00,+0.9,+24.9,+24.0,astronomicalSign
+33,Known,"Baku, Azerbaijan",40.4093,49.8671,Isha,15:38:27,15:38:24,15:39:00,+3.3,-32.7,-36.0,astronomicalSign
+34,Known,"Algiers, Algeria",36.7538,3.0588,Fajr,04:22:04,04:22:05,04:22:00,-0.0,+5.0,+5.0,astronomicalSign
+34,Known,"Algiers, Algeria",36.7538,3.0588,Sunrise,05:48:01,05:48:00,05:48:00,+1.2,+1.2,+0.0,astronomicalSign
+34,Known,"Algiers, Algeria",36.7538,3.0588,Dhuhr,11:36:35,11:36:35,11:36:00,+0.3,+35.3,+35.0,astronomicalSign
+34,Known,"Algiers, Algeria",36.7538,3.0588,Asr,14:51:47,14:51:11,14:53:00,+36.8,-72.2,-109.0,astronomicalSign
+34,Known,"Algiers, Algeria",36.7538,3.0588,Maghrib,17:22:36,17:22:36,17:23:00,+0.8,-23.2,-24.0,astronomicalSign
+34,Known,"Algiers, Algeria",36.7538,3.0588,Isha,18:43:23,18:43:20,18:43:00,+3.8,+23.8,+20.0,astronomicalSign
+35,Known,"Tunis, Tunisia",36.8065,10.1815,Fajr,03:53:32,03:53:32,03:54:00,+0.6,-27.4,-28.0,astronomicalSign
+35,Known,"Tunis, Tunisia",36.8065,10.1815,Sunrise,05:19:32,05:19:32,05:20:00,+0.4,-27.6,-28.0,astronomicalSign
+35,Known,"Tunis, Tunisia",36.8065,10.1815,Dhuhr,11:08:05,11:08:06,11:07:00,-0.1,+65.9,+66.0,astronomicalSign
+35,Known,"Tunis, Tunisia",36.8065,10.1815,Asr,14:23:18,14:22:42,14:24:00,+36.1,-41.9,-78.0,astronomicalSign
+35,Known,"Tunis, Tunisia",36.8065,10.1815,Maghrib,16:54:07,16:54:07,16:54:00,+0.3,+7.3,+7.0,astronomicalSign
+35,Known,"Tunis, Tunisia",36.8065,10.1815,Isha,18:14:57,18:14:54,18:15:00,+3.7,-2.3,-6.0,astronomicalSign
+36,Known,"Muscat, Oman",23.5880,58.3829,Fajr,00:45:16,00:45:16,00:45:00,+0.7,+16.7,+16.0,astronomicalSign
+36,Known,"Muscat, Oman",23.5880,58.3829,Sunrise,02:00:19,02:00:18,02:00:00,+1.1,+19.1,+18.0,astronomicalSign
+36,Known,"Muscat, Oman",23.5880,58.3829,Dhuhr,07:55:17,07:55:20,07:54:00,-2.4,+77.6,+80.0,astronomicalSign
+36,Known,"Muscat, Oman",23.5880,58.3829,Asr,11:16:40,11:16:12,11:17:00,+28.6,-19.4,-48.0,astronomicalSign
+36,Known,"Muscat, Oman",23.5880,58.3829,Maghrib,13:48:02,13:48:01,13:48:00,+1.2,+2.2,+1.0,astronomicalSign
+36,Known,"Muscat, Oman",23.5880,58.3829,Isha,14:58:39,14:58:37,14:59:00,+2.2,-20.8,-23.0,astronomicalSign
+37,Known,"Doha, Qatar",25.2854,51.5310,Fajr,01:12:24,01:12:24,01:12:00,+0.5,+24.5,+24.0,astronomicalSign
+37,Known,"Doha, Qatar",25.2854,51.5310,Sunrise,02:28:28,02:28:27,02:28:00,+1.0,+28.0,+27.0,astronomicalSign
+37,Known,"Doha, Qatar",25.2854,51.5310,Dhuhr,08:22:42,08:22:44,08:22:00,-2.0,+42.0,+44.0,astronomicalSign
+37,Known,"Doha, Qatar",25.2854,51.5310,Asr,11:43:47,11:43:18,11:44:00,+29.5,-12.5,-42.0,astronomicalSign
+37,Known,"Doha, Qatar",25.2854,51.5310,Maghrib,14:14:39,14:14:39,14:15:00,+0.9,-20.1,-21.0,astronomicalSign
+37,Known,"Doha, Qatar",25.2854,51.5310,Isha,15:26:14,15:26:11,15:26:00,+3.0,+14.0,+11.0,astronomicalSign
+38,Known,"Kuwait City, Kuwait",29.3759,47.9774,Fajr,01:25:35,01:25:35,01:26:00,+0.9,-24.1,-25.0,astronomicalSign
+38,Known,"Kuwait City, Kuwait",29.3759,47.9774,Sunrise,02:44:32,02:44:31,02:45:00,+1.0,-28.0,-29.0,astronomicalSign
+38,Known,"Kuwait City, Kuwait",29.3759,47.9774,Dhuhr,08:36:54,08:36:57,08:36:00,-2.1,+54.9,+57.0,astronomicalSign
+38,Known,"Kuwait City, Kuwait",29.3759,47.9774,Asr,11:56:45,11:56:15,11:57:00,+30.3,-14.7,-45.0,astronomicalSign
+38,Known,"Kuwait City, Kuwait",29.3759,47.9774,Maghrib,14:26:57,14:26:57,14:27:00,+0.3,-2.7,-3.0,astronomicalSign
+38,Known,"Kuwait City, Kuwait",29.3759,47.9774,Isha,15:41:12,15:41:10,15:41:00,+2.5,+12.5,+10.0,astronomicalSign
+39,Known,"Manama, Bahrain",26.2285,50.5860,Fajr,01:15:59,01:15:59,01:16:00,+0.8,-0.2,-1.0,astronomicalSign
+39,Known,"Manama, Bahrain",26.2285,50.5860,Sunrise,02:32:39,02:32:39,02:33:00,+0.8,-20.2,-21.0,astronomicalSign
+39,Known,"Manama, Bahrain",26.2285,50.5860,Dhuhr,08:26:28,08:26:31,08:26:00,-2.2,+28.8,+31.0,astronomicalSign
+39,Known,"Manama, Bahrain",26.2285,50.5860,Asr,11:47:21,11:46:52,11:48:00,+29.4,-38.6,-68.0,astronomicalSign
+39,Known,"Manama, Bahrain",26.2285,50.5860,Maghrib,14:18:00,14:18:00,14:18:00,+0.7,+0.7,+0.0,astronomicalSign
+39,Known,"Manama, Bahrain",26.2285,50.5860,Isha,15:30:08,15:30:06,15:30:00,+2.9,+8.9,+6.0,astronomicalSign
+40,Known,"Mogadishu, Somalia",2.0469,45.3182,Fajr,01:35:06,01:35:06,01:35:00,+0.8,+6.8,+6.0,astronomicalSign
+40,Known,"Mogadishu, Somalia",2.0469,45.3182,Sunrise,02:44:05,02:44:05,02:44:00,+0.8,+5.8,+5.0,astronomicalSign
+40,Known,"Mogadishu, Somalia",2.0469,45.3182,Dhuhr,08:47:33,08:47:35,08:47:00,-1.9,+33.1,+35.0,astronomicalSign
+40,Known,"Mogadishu, Somalia",2.0469,45.3182,Asr,11:58:47,11:58:21,11:59:00,+26.4,-12.6,-39.0,astronomicalSign
+40,Known,"Mogadishu, Somalia",2.0469,45.3182,Maghrib,14:49:03,14:49:03,14:49:00,+0.4,+3.4,+3.0,astronomicalSign
+40,Known,"Mogadishu, Somalia",2.0469,45.3182,Isha,15:54:02,15:54:01,15:54:00,+1.6,+2.6,+1.0,astronomicalSign
+41,Known,"Dakar, Senegal",14.7167,-17.4677,Fajr,05:48:59,05:48:59,05:49:00,+0.5,-0.5,-1.0,astronomicalSign
+41,Known,"Dakar, Senegal",14.7167,-17.4677,Sunrise,07:00:07,07:00:07,07:00:00,+0.6,+7.6,+7.0,astronomicalSign
+41,Known,"Dakar, Senegal",14.7167,-17.4677,Dhuhr,12:58:41,12:58:40,12:58:00,+1.7,+41.7,+40.0,astronomicalSign
+41,Known,"Dakar, Senegal",14.7167,-17.4677,Asr,16:18:54,16:18:25,16:19:00,+29.2,-5.8,-35.0,astronomicalSign
+41,Known,"Dakar, Senegal",14.7167,-17.4677,Maghrib,18:55:02,18:55:02,18:55:00,+0.4,+2.4,+2.0,astronomicalSign
+41,Known,"Dakar, Senegal",14.7167,-17.4677,Isha,20:02:01,20:01:59,20:02:00,+2.1,+1.1,-1.0,astronomicalSign
+42,Known,"Kazan, Tatarstan, Russia",55.7961,49.1064,Fajr,00:54:10,00:54:10,00:54:00,+0.4,+10.4,+10.0,astronomicalSign
+42,Known,"Kazan, Tatarstan, Russia",55.7961,49.1064,Sunrise,02:57:54,02:57:53,02:58:00,+1.2,-5.8,-7.0,astronomicalSign
+42,Known,"Kazan, Tatarstan, Russia",55.7961,49.1064,Dhuhr,08:32:23,08:32:26,08:31:00,-2.1,+83.9,+86.0,astronomicalSign
+42,Known,"Kazan, Tatarstan, Russia",55.7961,49.1064,Asr,11:20:49,11:19:48,11:22:00,+61.9,-70.1,-132.0,astronomicalSign
+42,Known,"Kazan, Tatarstan, Russia",55.7961,49.1064,Maghrib,14:03:55,14:03:55,14:04:00,+0.4,-4.6,-5.0,astronomicalSign
+42,Known,"Kazan, Tatarstan, Russia",55.7961,49.1064,Isha,15:59:47,15:59:41,16:00:00,+6.4,-12.6,-19.0,astronomicalSign
+43,Known,"Nairobi, Kenya",-1.2921,36.8219,Fajr,02:07:46,02:07:46,02:08:00,+0.7,-13.3,-14.0,astronomicalSign
+43,Known,"Nairobi, Kenya",-1.2921,36.8219,Sunrise,03:16:47,03:16:47,03:17:00,+0.8,-12.2,-13.0,astronomicalSign
+43,Known,"Nairobi, Kenya",-1.2921,36.8219,Dhuhr,09:21:32,09:21:33,09:21:00,-0.8,+32.2,+33.0,astronomicalSign
+43,Known,"Nairobi, Kenya",-1.2921,36.8219,Asr,12:28:29,12:28:02,12:29:00,+27.0,-31.0,-58.0,astronomicalSign
+43,Known,"Nairobi, Kenya",-1.2921,36.8219,Maghrib,15:24:21,15:24:21,15:24:00,+0.6,+21.6,+21.0,astronomicalSign
+43,Known,"Nairobi, Kenya",-1.2921,36.8219,Isha,16:29:23,16:29:22,16:29:00,+1.1,+23.1,+22.0,astronomicalSign
+44,Known,"Auckland, New Zealand",-36.8485,174.7633,Fajr,16:20:08,16:20:09,16:20:00,-0.4,+8.6,+9.0,astronomicalSign
+44,Known,"Auckland, New Zealand",-36.8485,174.7633,Sunrise,17:48:46,17:48:46,17:49:00,+0.5,-13.5,-14.0,astronomicalSign
+44,Known,"Auckland, New Zealand",-36.8485,174.7633,Dhuhr,00:09:46,00:09:54,00:09:00,-7.7,+46.3,+54.0,astronomicalSign
+44,Known,"Auckland, New Zealand",-36.8485,174.7633,Asr,03:43:48,03:44:13,03:43:00,-24.0,+49.0,+73.0,astronomicalSign
+44,Known,"Auckland, New Zealand",-36.8485,174.7633,Maghrib,06:29:40,06:29:39,06:30:00,+1.2,-19.8,-21.0,astronomicalSign
+44,Known,"Auckland, New Zealand",-36.8485,174.7633,Isha,07:53:12,07:53:13,07:53:00,-0.5,+12.5,+13.0,astronomicalSign
+45,Known,"Chicago, USA",41.8781,-87.6298,Fajr,10:21:27,10:21:28,10:21:00,-0.3,+27.7,+28.0,astronomicalSign
+45,Known,"Chicago, USA",41.8781,-87.6298,Sunrise,11:54:03,11:54:02,11:54:00,+1.2,+3.2,+2.0,astronomicalSign
+45,Known,"Chicago, USA",41.8781,-87.6298,Dhuhr,17:39:20,17:39:16,17:38:00,+4.6,+80.6,+76.0,astronomicalSign
+45,Known,"Chicago, USA",41.8781,-87.6298,Asr,20:49:07,20:48:24,20:50:00,+43.4,-52.6,-96.0,astronomicalSign
+45,Known,"Chicago, USA",41.8781,-87.6298,Maghrib,23:21:50,23:21:50,23:22:00,+0.3,-9.7,-10.0,astronomicalSign
+45,Known,"Chicago, USA",41.8781,-87.6298,Isha,00:48:49,00:48:44,00:49:00,+5.5,-10.5,-16.0,astronomicalSign
+46,Known,"Los Angeles, USA",34.0522,-118.2437,Fajr,12:28:58,12:28:59,12:29:00,-0.2,-1.2,-1.0,astronomicalSign
+46,Known,"Los Angeles, USA",34.0522,-118.2437,Sunrise,13:52:02,13:52:02,13:52:00,+0.8,+2.8,+2.0,astronomicalSign
+46,Known,"Los Angeles, USA",34.0522,-118.2437,Dhuhr,19:41:47,19:41:42,19:41:00,+5.9,+47.9,+42.0,astronomicalSign
+46,Known,"Los Angeles, USA",34.0522,-118.2437,Asr,22:58:22,22:57:43,22:59:00,+39.1,-37.9,-77.0,astronomicalSign
+46,Known,"Los Angeles, USA",34.0522,-118.2437,Maghrib,01:28:51,01:28:51,01:29:00,+0.8,-8.2,-9.0,astronomicalSign
+46,Known,"Los Angeles, USA",34.0522,-118.2437,Isha,02:46:58,02:46:54,02:47:00,+4.4,-1.6,-6.0,astronomicalSign
+47,Known,"Sao Paulo, Brazil",-23.5505,-46.6333,Fajr,07:24:50,07:24:49,07:25:00,+1.3,-9.7,-11.0,astronomicalSign
+47,Known,"Sao Paulo, Brazil",-23.5505,-46.6333,Sunrise,08:41:00,08:41:00,08:41:00,+0.6,+0.6,+0.0,astronomicalSign
+47,Known,"Sao Paulo, Brazil",-23.5505,-46.6333,Dhuhr,14:55:21,14:55:19,14:54:00,+2.5,+81.5,+79.0,astronomicalSign
+47,Known,"Sao Paulo, Brazil",-23.5505,-46.6333,Asr,18:21:49,18:22:15,18:21:00,-25.3,+49.7,+75.0,astronomicalSign
+47,Known,"Sao Paulo, Brazil",-23.5505,-46.6333,Maghrib,21:07:59,21:07:59,21:08:00,+0.2,-0.8,-1.0,astronomicalSign
+47,Known,"Sao Paulo, Brazil",-23.5505,-46.6333,Isha,22:19:47,22:19:48,22:20:00,-0.9,-12.9,-12.0,astronomicalSign
+48,Known,"Mumbai, India",19.0760,72.8777,Fajr,23:47:40,23:47:40,23:48:00,+0.8,-19.2,-20.0,astronomicalSign
+48,Known,"Mumbai, India",19.0760,72.8777,Sunrise,01:00:27,01:00:26,01:00:00,+1.1,+27.1,+26.0,astronomicalSign
+48,Known,"Mumbai, India",19.0760,72.8777,Dhuhr,06:57:18,06:57:22,06:56:00,-3.2,+78.8,+82.0,astronomicalSign
+48,Known,"Mumbai, India",19.0760,72.8777,Asr,10:18:44,10:18:18,10:19:00,+26.9,-15.1,-42.0,astronomicalSign
+48,Known,"Mumbai, India",19.0760,72.8777,Maghrib,12:52:02,12:52:01,12:52:00,+1.2,+2.2,+1.0,astronomicalSign
+48,Known,"Mumbai, India",19.0760,72.8777,Isha,14:00:32,14:00:30,14:01:00,+2.2,-27.8,-30.0,astronomicalSign
+49,Known,"Beijing, China",39.9042,116.4074,Fajr,20:46:16,20:46:16,20:46:00,+0.9,+16.9,+16.0,astronomicalSign
+49,Known,"Beijing, China",39.9042,116.4074,Sunrise,22:16:06,22:16:06,22:16:00,+0.5,+6.5,+6.0,astronomicalSign
+49,Known,"Beijing, China",39.9042,116.4074,Dhuhr,04:03:11,04:03:17,04:02:00,-5.3,+71.7,+77.0,astronomicalSign
+49,Known,"Beijing, China",39.9042,116.4074,Asr,07:16:16,07:15:42,07:17:00,+34.2,-43.8,-78.0,astronomicalSign
+49,Known,"Beijing, China",39.9042,116.4074,Maghrib,09:47:51,09:47:51,09:48:00,+0.3,-8.7,-9.0,astronomicalSign
+49,Known,"Beijing, China",39.9042,116.4074,Isha,11:12:15,11:12:13,11:12:00,+2.6,+15.6,+13.0,astronomicalSign
+50,Known,"Fez, Morocco",34.0331,-5.0003,Fajr,04:55:46,04:55:47,04:56:00,-0.2,-13.2,-13.0,astronomicalSign
+50,Known,"Fez, Morocco",34.0331,-5.0003,Sunrise,06:18:49,06:18:49,06:19:00,+0.6,-10.4,-11.0,astronomicalSign
+50,Known,"Fez, Morocco",34.0331,-5.0003,Dhuhr,12:08:49,12:08:49,12:08:00,+0.5,+49.5,+49.0,astronomicalSign
+50,Known,"Fez, Morocco",34.0331,-5.0003,Asr,15:25:57,15:25:23,15:27:00,+34.9,-62.1,-97.0,astronomicalSign
+50,Known,"Fez, Morocco",34.0331,-5.0003,Maghrib,17:56:19,17:56:18,17:56:00,+1.1,+19.1,+18.0,astronomicalSign
+50,Known,"Fez, Morocco",34.0331,-5.0003,Isha,19:14:24,19:14:21,19:14:00,+3.4,+24.4,+21.0,astronomicalSign
+51,Hard,"Tromso, Norway",69.6492,18.9553,Fajr,01:54:22,01:54:23,01:55:00,-0.1,-37.1,-37.0,astronomicalSign
+51,Hard,"Tromso, Norway",69.6492,18.9553,Sunrise,05:22:27,05:22:26,05:22:00,+1.2,+27.2,+26.0,astronomicalSign
+51,Hard,"Tromso, Norway",69.6492,18.9553,Dhuhr,10:33:00,10:33:01,10:32:00,-0.8,+60.2,+61.0,astronomicalSign
+51,Hard,"Tromso, Norway",69.6492,18.9553,Asr,12:37:08,12:34:24,12:41:00,+164.6,-231.4,-396.0,astronomicalSign
+51,Hard,"Tromso, Norway",69.6492,18.9553,Maghrib,15:39:45,15:39:45,15:40:00,+0.8,-14.2,-15.0,astronomicalSign
+51,Hard,"Tromso, Norway",69.6492,18.9553,Isha,18:52:13,18:51:59,18:53:00,+14.9,-46.1,-61.0,astronomicalSign
+52,Hard,"Longyearbyen, Svalbard",78.2232,15.6267,Fajr,22:43:50,22:39:53,01:45:00,+237.1,-10869.4,-11106.5,highLatitudeAdjustment
+52,Hard,"Longyearbyen, Svalbard",78.2232,15.6267,Sunrise,06:17:46,06:17:44,06:17:00,+2.1,+46.1,+44.0,astronomicalSign
+52,Hard,"Longyearbyen, Svalbard",78.2232,15.6267,Dhuhr,10:46:19,10:46:19,10:45:00,+0.1,+79.1,+79.0,astronomicalSign
+52,Hard,"Longyearbyen, Svalbard",78.2232,15.6267,Asr,11:58:50,11:49:22,12:11:00,+568.2,-729.8,-1298.0,astronomicalSign
+52,Hard,"Longyearbyen, Svalbard",78.2232,15.6267,Maghrib,15:09:55,15:09:54,15:09:00,+1.2,+55.2,+54.0,astronomicalSign
+52,Hard,"Longyearbyen, Svalbard",78.2232,15.6267,Isha,21:36:26,21:25:01,19:27:00,+685.5,+7766.5,+7081.0,astronomicalSign
+53,Hard,"Murmansk, Russia",68.9585,33.0827,Fajr,01:03:14,01:03:14,01:04:00,+0.2,-45.8,-46.0,astronomicalSign
+53,Hard,"Murmansk, Russia",68.9585,33.0827,Sunrise,04:23:54,04:23:54,04:24:00,+0.8,-5.2,-6.0,astronomicalSign
+53,Hard,"Murmansk, Russia",68.9585,33.0827,Dhuhr,09:36:29,09:36:31,09:36:00,-1.4,+29.6,+31.0,astronomicalSign
+53,Hard,"Murmansk, Russia",68.9585,33.0827,Asr,11:43:58,11:41:25,11:48:00,+153.8,-241.2,-395.0,astronomicalSign
+53,Hard,"Murmansk, Russia",68.9585,33.0827,Maghrib,14:45:21,14:45:21,14:45:00,+0.8,+21.8,+21.0,astronomicalSign
+53,Hard,"Murmansk, Russia",68.9585,33.0827,Isha,17:51:14,17:51:01,17:52:00,+13.7,-45.3,-59.0,astronomicalSign
+54,Hard,"Reykjavik, Iceland",64.1466,-21.9426,Fajr,05:12:13,05:12:15,05:12:00,-1.5,+13.5,+15.0,astronomicalSign
+54,Hard,"Reykjavik, Iceland",64.1466,-21.9426,Sunrise,07:54:05,07:54:05,07:54:00,+0.8,+5.8,+5.0,astronomicalSign
+54,Hard,"Reykjavik, Iceland",64.1466,-21.9426,Dhuhr,13:16:35,13:16:34,13:16:00,+1.7,+35.7,+34.0,astronomicalSign
+54,Hard,"Reykjavik, Iceland",64.1466,-21.9426,Asr,15:41:19,15:39:36,15:44:00,+103.8,-160.2,-264.0,astronomicalSign
+54,Hard,"Reykjavik, Iceland",64.1466,-21.9426,Maghrib,18:35:37,18:35:37,18:36:00,+0.5,-22.5,-23.0,astronomicalSign
+54,Hard,"Reykjavik, Iceland",64.1466,-21.9426,Isha,21:06:30,21:06:19,21:07:00,+11.8,-29.2,-41.0,astronomicalSign
+55,Hard,"Fairbanks, Alaska, USA",64.8378,-147.7164,Fajr,13:33:18,13:33:24,13:33:00,-5.4,+18.6,+24.0,astronomicalSign
+55,Hard,"Fairbanks, Alaska, USA",64.8378,-147.7164,Sunrise,16:19:31,16:19:31,16:19:00,+0.8,+31.8,+31.0,astronomicalSign
+55,Hard,"Fairbanks, Alaska, USA",64.8378,-147.7164,Dhuhr,21:39:41,21:39:34,21:39:00,+7.4,+41.4,+34.0,astronomicalSign
+55,Hard,"Fairbanks, Alaska, USA",64.8378,-147.7164,Asr,23:59:56,23:58:05,00:03:00,+111.5,-183.5,-295.0,astronomicalSign
+55,Hard,"Fairbanks, Alaska, USA",64.8378,-147.7164,Maghrib,02:56:08,02:56:08,02:56:00,+0.7,+8.7,+8.0,astronomicalSign
+55,Hard,"Fairbanks, Alaska, USA",64.8378,-147.7164,Isha,05:31:01,05:30:45,05:31:00,+16.4,+1.4,-15.0,astronomicalSign
+56,Hard,"Oulu, Finland",65.0121,25.4651,Fajr,01:58:04,01:58:05,01:58:00,-0.5,+4.5,+5.0,astronomicalSign
+56,Hard,"Oulu, Finland",65.0121,25.4651,Sunrise,04:45:39,04:45:39,04:46:00,+1.0,-20.0,-21.0,astronomicalSign
+56,Hard,"Oulu, Finland",65.0121,25.4651,Dhuhr,10:06:57,10:06:58,10:06:00,-0.2,+57.8,+58.0,astronomicalSign
+56,Hard,"Oulu, Finland",65.0121,25.4651,Asr,12:29:31,12:27:42,12:32:00,+109.4,-148.6,-258.0,astronomicalSign
+56,Hard,"Oulu, Finland",65.0121,25.4651,Maghrib,15:24:49,15:24:48,15:25:00,+1.0,-11.0,-12.0,astronomicalSign
+56,Hard,"Oulu, Finland",65.0121,25.4651,Isha,18:00:53,18:00:44,18:01:00,+9.9,-6.1,-16.0,astronomicalSign
+57,Hard,"Trondheim, Norway",63.4305,10.3951,Fajr,03:05:42,03:05:42,03:06:00,+0.0,-18.0,-18.0,astronomicalSign
+57,Hard,"Trondheim, Norway",63.4305,10.3951,Sunrise,05:43:14,05:43:13,05:43:00,+1.3,+14.3,+13.0,astronomicalSign
+57,Hard,"Trondheim, Norway",63.4305,10.3951,Dhuhr,11:07:14,11:07:15,11:06:00,-0.4,+74.6,+75.0,astronomicalSign
+57,Hard,"Trondheim, Norway",63.4305,10.3951,Asr,13:34:50,13:33:12,13:37:00,+98.4,-129.6,-228.0,astronomicalSign
+57,Hard,"Trondheim, Norway",63.4305,10.3951,Maghrib,16:27:52,16:27:52,16:28:00,+0.5,-7.5,-8.0,astronomicalSign
+57,Hard,"Trondheim, Norway",63.4305,10.3951,Isha,18:54:48,18:54:38,18:55:00,+10.1,-11.9,-22.0,astronomicalSign
+58,Hard,"Nuuk, Greenland",64.1814,-51.6941,Fajr,07:11:20,07:11:23,07:11:00,-2.1,+20.9,+23.0,astronomicalSign
+58,Hard,"Nuuk, Greenland",64.1814,-51.6941,Sunrise,09:53:24,09:53:24,09:53:00,+0.6,+24.6,+24.0,astronomicalSign
+58,Hard,"Nuuk, Greenland",64.1814,-51.6941,Dhuhr,15:15:36,15:15:33,15:15:00,+3.0,+36.0,+33.0,astronomicalSign
+58,Hard,"Nuuk, Greenland",64.1814,-51.6941,Asr,17:39:44,17:37:59,17:42:00,+105.4,-135.6,-241.0,astronomicalSign
+58,Hard,"Nuuk, Greenland",64.1814,-51.6941,Maghrib,20:34:16,20:34:16,20:34:00,+0.6,+16.6,+16.0,astronomicalSign
+58,Hard,"Nuuk, Greenland",64.1814,-51.6941,Isha,23:05:20,23:05:08,23:06:00,+12.6,-39.4,-52.0,astronomicalSign
+59,Hard,"Yellowknife, Canada",62.4540,-114.3718,Fajr,11:29:44,11:29:48,11:30:00,-3.7,-15.7,-12.0,astronomicalSign
+59,Hard,"Yellowknife, Canada",62.4540,-114.3718,Sunrise,14:01:38,14:01:38,14:02:00,+0.6,-21.4,-22.0,astronomicalSign
+59,Hard,"Yellowknife, Canada",62.4540,-114.3718,Dhuhr,19:26:18,19:26:13,19:25:00,+5.7,+78.7,+73.0,astronomicalSign
+59,Hard,"Yellowknife, Canada",62.4540,-114.3718,Asr,21:55:08,21:53:34,21:57:00,+94.8,-111.2,-206.0,astronomicalSign
+59,Hard,"Yellowknife, Canada",62.4540,-114.3718,Maghrib,00:47:27,00:47:27,00:47:00,+0.6,+27.6,+27.0,astronomicalSign
+59,Hard,"Yellowknife, Canada",62.4540,-114.3718,Isha,03:09:15,03:09:02,03:10:00,+13.9,-44.1,-58.0,astronomicalSign
+60,Hard,"Anchorage, Alaska, USA",61.2181,-149.9003,Fajr,13:56:33,13:56:38,13:57:00,-4.2,-26.2,-22.0,astronomicalSign
+60,Hard,"Anchorage, Alaska, USA",61.2181,-149.9003,Sunrise,16:22:04,16:22:03,16:22:00,+1.4,+4.4,+3.0,astronomicalSign
+60,Hard,"Anchorage, Alaska, USA",61.2181,-149.9003,Dhuhr,21:48:25,21:48:18,21:47:00,+7.5,+85.5,+78.0,astronomicalSign
+60,Hard,"Anchorage, Alaska, USA",61.2181,-149.9003,Asr,00:20:33,00:19:04,00:23:00,+89.4,-146.6,-236.0,astronomicalSign
+60,Hard,"Anchorage, Alaska, USA",61.2181,-149.9003,Maghrib,03:11:15,03:11:15,03:11:00,+0.9,+15.9,+15.0,astronomicalSign
+60,Hard,"Anchorage, Alaska, USA",61.2181,-149.9003,Isha,05:27:12,05:26:59,05:27:00,+13.7,+12.7,-1.0,astronomicalSign
+61,Hard,"Helsinki, Finland",60.1699,24.9384,Fajr,02:19:19,02:19:19,02:19:00,+0.4,+19.4,+19.0,astronomicalSign
+61,Hard,"Helsinki, Finland",60.1699,24.9384,Sunrise,04:40:00,04:39:59,04:40:00,+1.0,+0.0,-1.0,astronomicalSign
+61,Hard,"Helsinki, Finland",60.1699,24.9384,Dhuhr,10:09:04,10:09:05,10:08:00,-0.8,+64.2,+65.0,astronomicalSign
+61,Hard,"Helsinki, Finland",60.1699,24.9384,Asr,12:46:31,12:45:12,12:48:00,+79.0,-89.0,-168.0,astronomicalSign
+61,Hard,"Helsinki, Finland",60.1699,24.9384,Maghrib,15:34:57,15:34:56,15:35:00,+1.1,-2.9,-4.0,astronomicalSign
+61,Hard,"Helsinki, Finland",60.1699,24.9384,Isha,17:46:26,17:46:18,17:47:00,+8.2,-33.8,-42.0,astronomicalSign
+62,Hard,"Stockholm, Sweden",59.3293,18.0686,Fajr,02:49:25,02:49:25,02:49:00,+0.1,+25.1,+25.0,astronomicalSign
+62,Hard,"Stockholm, Sweden",59.3293,18.0686,Sunrise,05:06:24,05:06:23,05:06:00,+1.2,+24.2,+23.0,astronomicalSign
+62,Hard,"Stockholm, Sweden",59.3293,18.0686,Dhuhr,10:36:32,10:36:33,10:36:00,-0.0,+33.0,+33.0,astronomicalSign
+62,Hard,"Stockholm, Sweden",59.3293,18.0686,Asr,13:16:09,13:14:53,13:18:00,+76.2,-110.8,-187.0,astronomicalSign
+62,Hard,"Stockholm, Sweden",59.3293,18.0686,Maghrib,16:03:32,16:03:31,16:03:00,+1.0,+32.0,+31.0,astronomicalSign
+62,Hard,"Stockholm, Sweden",59.3293,18.0686,Isha,18:11:37,18:11:30,18:12:00,+7.5,-22.5,-30.0,astronomicalSign
+63,Hard,"Oslo, Norway",59.9139,10.7522,Fajr,03:16:58,03:16:59,03:17:00,-0.7,-1.7,-1.0,astronomicalSign
+63,Hard,"Oslo, Norway",59.9139,10.7522,Sunrise,05:36:29,05:36:29,05:36:00,+0.6,+29.6,+29.0,astronomicalSign
+63,Hard,"Oslo, Norway",59.9139,10.7522,Dhuhr,11:05:48,11:05:49,11:05:00,-0.1,+48.9,+49.0,astronomicalSign
+63,Hard,"Oslo, Norway",59.9139,10.7522,Asr,13:43:46,13:42:28,13:46:00,+78.4,-133.6,-212.0,astronomicalSign
+63,Hard,"Oslo, Norway",59.9139,10.7522,Maghrib,16:31:56,16:31:55,16:32:00,+1.3,-3.7,-5.0,astronomicalSign
+63,Hard,"Oslo, Norway",59.9139,10.7522,Isha,18:42:21,18:42:14,18:43:00,+7.7,-38.3,-46.0,astronomicalSign
+64,Hard,"Saint Petersburg, Russia",59.9311,30.3609,Fajr,01:58:20,01:58:20,01:58:00,+0.5,+20.5,+20.0,astronomicalSign
+64,Hard,"Saint Petersburg, Russia",59.9311,30.3609,Sunrise,04:17:57,04:17:56,04:18:00,+1.0,-3.0,-4.0,astronomicalSign
+64,Hard,"Saint Petersburg, Russia",59.9311,30.3609,Dhuhr,09:47:22,09:47:24,09:46:00,-1.2,+82.8,+84.0,astronomicalSign
+64,Hard,"Saint Petersburg, Russia",59.9311,30.3609,Asr,12:25:32,12:24:14,12:27:00,+78.6,-87.4,-166.0,astronomicalSign
+64,Hard,"Saint Petersburg, Russia",59.9311,30.3609,Maghrib,15:13:38,15:13:38,15:14:00,+0.5,-21.5,-22.0,astronomicalSign
+64,Hard,"Saint Petersburg, Russia",59.9311,30.3609,Isha,17:24:08,17:24:01,17:24:00,+7.6,+8.6,+1.0,astronomicalSign
+65,Hard,"Edinburgh, Scotland, UK",55.9533,-3.1883,Fajr,04:23:18,04:23:19,04:23:00,-0.6,+18.4,+19.0,astronomicalSign
+65,Hard,"Edinburgh, Scotland, UK",55.9533,-3.1883,Sunrise,06:27:32,06:27:32,06:27:00,+0.5,+32.5,+32.0,astronomicalSign
+65,Hard,"Edinburgh, Scotland, UK",55.9533,-3.1883,Dhuhr,12:01:34,12:01:34,12:01:00,+0.7,+34.7,+34.0,astronomicalSign
+65,Hard,"Edinburgh, Scotland, UK",55.9533,-3.1883,Asr,14:49:06,14:48:02,14:51:00,+64.7,-113.3,-178.0,astronomicalSign
+65,Hard,"Edinburgh, Scotland, UK",55.9533,-3.1883,Maghrib,17:32:33,17:32:32,17:32:00,+1.2,+33.2,+32.0,astronomicalSign
+65,Hard,"Edinburgh, Scotland, UK",55.9533,-3.1883,Isha,19:28:53,19:28:46,19:29:00,+7.5,-6.5,-14.0,astronomicalSign
+66,Hard,"Copenhagen, Denmark",55.6761,12.5683,Fajr,03:20:48,03:20:49,03:21:00,-0.5,-11.5,-11.0,astronomicalSign
+66,Hard,"Copenhagen, Denmark",55.6761,12.5683,Sunrise,05:24:07,05:24:07,05:24:00,+0.7,+7.7,+7.0,astronomicalSign
+66,Hard,"Copenhagen, Denmark",55.6761,12.5683,Dhuhr,10:58:33,10:58:33,10:58:00,+0.1,+33.1,+33.0,astronomicalSign
+66,Hard,"Copenhagen, Denmark",55.6761,12.5683,Asr,13:46:51,13:45:49,13:48:00,+62.9,-68.1,-131.0,astronomicalSign
+66,Hard,"Copenhagen, Denmark",55.6761,12.5683,Maghrib,16:29:56,16:29:56,16:30:00,+0.9,-3.1,-4.0,astronomicalSign
+66,Hard,"Copenhagen, Denmark",55.6761,12.5683,Isha,18:25:26,18:25:20,18:26:00,+6.5,-33.5,-40.0,astronomicalSign
+67,Hard,"Yakutsk, Siberia, Russia",62.0355,129.6755,Fajr,19:13:07,19:13:05,19:13:00,+2.5,+7.5,+5.0,astronomicalSign
+67,Hard,"Yakutsk, Siberia, Russia",62.0355,129.6755,Sunrise,21:42:59,21:42:58,21:43:00,+1.0,-1.0,-2.0,astronomicalSign
+67,Hard,"Yakutsk, Siberia, Russia",62.0355,129.6755,Dhuhr,03:10:07,03:10:13,03:09:00,-5.7,+67.3,+73.0,astronomicalSign
+67,Hard,"Yakutsk, Siberia, Russia",62.0355,129.6755,Asr,05:43:44,05:42:19,05:46:00,+85.0,-136.0,-221.0,astronomicalSign
+67,Hard,"Yakutsk, Siberia, Russia",62.0355,129.6755,Maghrib,08:34:08,08:34:08,08:34:00,+0.8,+8.8,+8.0,astronomicalSign
+67,Hard,"Yakutsk, Siberia, Russia",62.0355,129.6755,Isha,10:54:02,10:53:57,10:54:00,+5.1,+2.1,-3.0,astronomicalSign
+68,Hard,"Norilsk, Siberia, Russia",69.3558,88.1893,Fajr,21:18:56,21:18:54,21:19:00,+2.1,-3.9,-6.0,astronomicalSign
+68,Hard,"Norilsk, Siberia, Russia",69.3558,88.1893,Sunrise,00:43:57,00:43:56,00:44:00,+1.1,-2.9,-4.0,astronomicalSign
+68,Hard,"Norilsk, Siberia, Russia",69.3558,88.1893,Dhuhr,05:56:04,05:56:08,05:55:00,-4.0,+64.0,+68.0,astronomicalSign
+68,Hard,"Norilsk, Siberia, Russia",69.3558,88.1893,Asr,08:03:05,08:00:27,08:07:00,+158.1,-234.9,-393.0,astronomicalSign
+68,Hard,"Norilsk, Siberia, Russia",69.3558,88.1893,Maghrib,11:04:31,11:04:31,11:04:00,+0.4,+31.4,+31.0,astronomicalSign
+68,Hard,"Norilsk, Siberia, Russia",69.3558,88.1893,Isha,14:14:14,14:14:04,14:15:00,+10.6,-45.4,-56.0,astronomicalSign
+69,Hard,"Hammerfest, Norway",70.6634,23.6821,Fajr,01:26:15,01:26:15,01:27:00,+0.2,-44.8,-45.0,astronomicalSign
+69,Hard,"Hammerfest, Norway",70.6634,23.6821,Sunrise,05:06:29,05:06:28,05:06:00,+1.3,+29.3,+28.0,astronomicalSign
+69,Hard,"Hammerfest, Norway",70.6634,23.6821,Dhuhr,10:14:05,10:14:06,10:13:00,-0.2,+65.8,+66.0,astronomicalSign
+69,Hard,"Hammerfest, Norway",70.6634,23.6821,Asr,12:13:40,12:10:38,12:18:00,+182.3,-259.7,-442.0,astronomicalSign
+69,Hard,"Hammerfest, Norway",70.6634,23.6821,Maghrib,15:17:49,15:17:49,15:18:00,+0.7,-10.3,-11.0,astronomicalSign
+69,Hard,"Hammerfest, Norway",70.6634,23.6821,Isha,18:41:02,18:40:46,18:42:00,+16.6,-57.4,-74.0,astronomicalSign
+70,Hard,"Alert, Nunavut, Canada",82.5018,-62.3481,Fajr,03:55:02,03:47:17,07:21:00,+465.4,-12357.1,-12822.5,highLatitudeAdjustment
+70,Hard,"Alert, Nunavut, Canada",82.5018,-62.3481,Sunrise,12:35:14,12:35:03,12:34:00,+11.2,+74.2,+63.0,astronomicalSign
+70,Hard,"Alert, Nunavut, Canada",82.5018,-62.3481,Dhuhr,15:58:13,15:58:09,15:57:00,+4.0,+73.0,+69.0,astronomicalSign
+70,Hard,"Alert, Nunavut, Canada",82.5018,-62.3481,Asr,UNRESOLVED,15:31:22,16:52:00,N/A,N/A,-4838.0,unresolved
+70,Hard,"Alert, Nunavut, Canada",82.5018,-62.3481,Maghrib,19:14:51,19:14:59,19:13:00,-7.4,+111.6,+119.0,astronomicalSign
+70,Hard,"Alert, Nunavut, Canada",82.5018,-62.3481,Isha,03:55:02,04:02:44,00:08:00,-461.6,+13622.9,+14084.5,highLatitudeAdjustment
+71,Hard,"Ushuaia, Argentina",-54.8019,-68.3030,Fajr,07:30:53,07:30:50,07:31:00,+3.8,-6.2,-10.0,astronomicalSign
+71,Hard,"Ushuaia, Argentina",-54.8019,-68.3030,Sunrise,09:43:20,09:43:20,09:43:00,+1.0,+21.0,+20.0,astronomicalSign
+71,Hard,"Ushuaia, Argentina",-54.8019,-68.3030,Dhuhr,16:22:02,16:21:58,16:21:00,+4.2,+62.2,+58.0,astronomicalSign
+71,Hard,"Ushuaia, Argentina",-54.8019,-68.3030,Asr,19:56:08,19:56:57,19:55:00,-48.1,+68.9,+117.0,astronomicalSign
+71,Hard,"Ushuaia, Argentina",-54.8019,-68.3030,Maghrib,22:59:50,22:59:50,23:00:00,+0.8,-9.2,-10.0,astronomicalSign
+71,Hard,"Ushuaia, Argentina",-54.8019,-68.3030,Isha,01:04:23,01:04:29,01:04:00,-5.9,+23.1,+29.0,astronomicalSign
+72,Hard,"Punta Arenas, Chile",-53.1638,-70.9171,Fajr,07:50:07,07:50:03,07:50:00,+4.1,+7.1,+3.0,astronomicalSign
+72,Hard,"Punta Arenas, Chile",-53.1638,-70.9171,Sunrise,09:55:53,09:55:52,09:56:00,+1.3,-6.7,-8.0,astronomicalSign
+72,Hard,"Punta Arenas, Chile",-53.1638,-70.9171,Dhuhr,16:32:29,16:32:26,16:31:00,+3.6,+89.6,+86.0,astronomicalSign
+72,Hard,"Punta Arenas, Chile",-53.1638,-70.9171,Asr,20:07:13,20:08:00,20:06:00,-46.2,+73.8,+120.0,astronomicalSign
+72,Hard,"Punta Arenas, Chile",-53.1638,-70.9171,Maghrib,23:08:08,23:08:07,23:08:00,+1.3,+8.3,+7.0,astronomicalSign
+72,Hard,"Punta Arenas, Chile",-53.1638,-70.9171,Isha,01:06:27,01:06:33,01:06:00,-5.5,+27.5,+33.0,astronomicalSign
+73,Hard,"Stanley, Falkland Islands",-51.6977,-57.8517,Fajr,07:04:57,07:04:55,07:05:00,+2.9,-2.1,-5.0,astronomicalSign
+73,Hard,"Stanley, Falkland Islands",-51.6977,-57.8517,Sunrise,09:05:27,09:05:26,09:05:00,+1.1,+27.1,+26.0,astronomicalSign
+73,Hard,"Stanley, Falkland Islands",-51.6977,-57.8517,Dhuhr,15:40:13,15:40:11,15:39:00,+2.9,+73.9,+71.0,astronomicalSign
+73,Hard,"Stanley, Falkland Islands",-51.6977,-57.8517,Asr,19:15:20,19:16:04,19:14:00,-43.4,+80.6,+124.0,astronomicalSign
+73,Hard,"Stanley, Falkland Islands",-51.6977,-57.8517,Maghrib,22:14:00,22:14:00,22:14:00,+0.4,+0.4,+0.0,astronomicalSign
+73,Hard,"Stanley, Falkland Islands",-51.6977,-57.8517,Isha,00:07:24,00:07:29,00:07:00,-4.8,+24.2,+29.0,astronomicalSign
+74,Hard,"Invercargill, New Zealand",-46.4132,168.3538,Fajr,16:21:49,16:21:52,16:22:00,-2.0,-10.0,-8.0,astronomicalSign
+74,Hard,"Invercargill, New Zealand",-46.4132,168.3538,Sunrise,18:07:14,18:07:14,18:07:00,+0.7,+14.7,+14.0,astronomicalSign
+74,Hard,"Invercargill, New Zealand",-46.4132,168.3538,Dhuhr,00:35:24,00:35:32,00:35:00,-7.5,+24.5,+32.0,astronomicalSign
+74,Hard,"Invercargill, New Zealand",-46.4132,168.3538,Asr,04:10:24,04:10:54,04:10:00,-29.4,+24.6,+54.0,astronomicalSign
+74,Hard,"Invercargill, New Zealand",-46.4132,168.3538,Maghrib,07:02:44,07:02:43,07:03:00,+1.0,-16.0,-17.0,astronomicalSign
+74,Hard,"Invercargill, New Zealand",-46.4132,168.3538,Isha,08:42:01,08:42:03,08:42:00,-1.0,+2.0,+3.0,astronomicalSign
+75,Hard,"Dunedin, New Zealand",-45.8788,170.5028,Fajr,16:14:55,16:14:57,16:15:00,-1.3,-4.3,-3.0,astronomicalSign
+75,Hard,"Dunedin, New Zealand",-45.8788,170.5028,Sunrise,17:59:07,17:59:07,17:59:00,+0.5,+7.5,+7.0,astronomicalSign
+75,Hard,"Dunedin, New Zealand",-45.8788,170.5028,Dhuhr,00:26:48,00:26:56,00:26:00,-7.2,+48.8,+56.0,astronomicalSign
+75,Hard,"Dunedin, New Zealand",-45.8788,170.5028,Asr,04:01:51,04:02:21,04:01:00,-29.8,+51.2,+81.0,astronomicalSign
+75,Hard,"Dunedin, New Zealand",-45.8788,170.5028,Maghrib,06:53:38,06:53:38,06:54:00,+0.8,-21.2,-22.0,astronomicalSign
+75,Hard,"Dunedin, New Zealand",-45.8788,170.5028,Isha,08:31:48,08:31:49,08:32:00,-0.6,-11.6,-11.0,astronomicalSign
+76,Hard,"Hobart, Tasmania, Australia",-42.8821,147.3272,Fajr,17:56:02,17:56:03,17:56:00,-0.3,+2.7,+3.0,astronomicalSign
+76,Hard,"Hobart, Tasmania, Australia",-42.8821,147.3272,Sunrise,19:34:09,19:34:09,19:34:00,+0.5,+9.5,+9.0,astronomicalSign
+76,Hard,"Hobart, Tasmania, Australia",-42.8821,147.3272,Dhuhr,01:59:30,01:59:37,01:59:00,-6.1,+30.9,+37.0,astronomicalSign
+76,Hard,"Hobart, Tasmania, Australia",-42.8821,147.3272,Asr,05:34:41,05:35:10,05:34:00,-28.3,+41.7,+70.0,astronomicalSign
+76,Hard,"Hobart, Tasmania, Australia",-42.8821,147.3272,Maghrib,08:23:53,08:23:53,08:24:00,+0.4,-6.6,-7.0,astronomicalSign
+76,Hard,"Hobart, Tasmania, Australia",-42.8821,147.3272,Isha,09:56:20,09:56:21,09:56:00,-0.6,+20.4,+21.0,astronomicalSign
+77,Hard,"Puerto Williams, Chile",-54.9341,-67.6109,Fajr,07:27:22,07:27:18,07:27:00,+4.5,+22.5,+18.0,astronomicalSign
+77,Hard,"Puerto Williams, Chile",-54.9341,-67.6109,Sunrise,09:40:24,09:40:24,09:40:00,+0.5,+24.5,+24.0,astronomicalSign
+77,Hard,"Puerto Williams, Chile",-54.9341,-67.6109,Dhuhr,16:19:16,16:19:12,16:18:00,+4.1,+76.1,+72.0,astronomicalSign
+77,Hard,"Puerto Williams, Chile",-54.9341,-67.6109,Asr,19:53:19,19:54:08,19:52:00,-48.7,+79.3,+128.0,astronomicalSign
+77,Hard,"Puerto Williams, Chile",-54.9341,-67.6109,Maghrib,22:57:15,22:57:15,22:57:00,+0.5,+15.5,+15.0,astronomicalSign
+77,Hard,"Puerto Williams, Chile",-54.9341,-67.6109,Isha,01:02:20,01:02:26,01:02:00,-5.8,+20.2,+26.0,astronomicalSign
+78,Hard,"McMurdo Station, Antarctica",-77.8419,166.6863,Fajr,12:44:01,12:48:19,14:18:00,-258.0,-5639.0,-5381.0,highLatitudeAdjustment
+78,Hard,"McMurdo Station, Antarctica",-77.8419,166.6863,Sunrise,16:41:11,16:41:12,16:40:00,-0.8,+71.2,+72.0,astronomicalSign
+78,Hard,"McMurdo Station, Antarctica",-77.8419,166.6863,Dhuhr,00:42:04,00:42:12,00:41:00,-7.3,+64.7,+72.0,astronomicalSign
+78,Hard,"McMurdo Station, Antarctica",-77.8419,166.6863,Asr,03:49:57,03:52:53,03:45:00,-175.1,+297.9,+473.0,astronomicalSign
+78,Hard,"McMurdo Station, Antarctica",-77.8419,166.6863,Maghrib,08:46:50,08:46:49,08:46:00,+1.9,+50.9,+49.0,astronomicalSign
+78,Hard,"McMurdo Station, Antarctica",-77.8419,166.6863,Isha,12:44:01,12:39:42,11:01:00,+259.0,+6181.0,+5922.0,highLatitudeAdjustment
+79,Hard,"Pontianak, Indonesia (Equator)",0.0000,109.3333,Fajr,21:18:20,21:18:20,21:18:00,+0.4,+20.4,+20.0,astronomicalSign
+79,Hard,"Pontianak, Indonesia (Equator)",0.0000,109.3333,Sunrise,22:27:18,22:27:18,22:27:00,+0.5,+18.5,+18.0,astronomicalSign
+79,Hard,"Pontianak, Indonesia (Equator)",0.0000,109.3333,Dhuhr,04:31:29,04:31:34,04:31:00,-4.5,+29.5,+34.0,astronomicalSign
+79,Hard,"Pontianak, Indonesia (Equator)",0.0000,109.3333,Asr,07:40:17,07:39:53,07:41:00,+24.4,-42.6,-67.0,astronomicalSign
+79,Hard,"Pontianak, Indonesia (Equator)",0.0000,109.3333,Maghrib,10:33:51,10:33:51,10:34:00,+0.5,-8.5,-9.0,astronomicalSign
+79,Hard,"Pontianak, Indonesia (Equator)",0.0000,109.3333,Isha,11:38:49,11:38:49,11:39:00,+1.0,-10.0,-11.0,astronomicalSign
+80,Hard,"Macapa, Brazil (Equator)",0.0355,-51.0705,Fajr,07:59:49,07:59:48,08:00:00,+1.1,-10.9,-12.0,astronomicalSign
+80,Hard,"Macapa, Brazil (Equator)",0.0355,-51.0705,Sunrise,09:08:48,09:08:48,09:09:00,+0.3,-11.7,-12.0,astronomicalSign
+80,Hard,"Macapa, Brazil (Equator)",0.0355,-51.0705,Dhuhr,15:13:06,15:13:03,15:12:00,+3.4,+66.4,+63.0,astronomicalSign
+80,Hard,"Macapa, Brazil (Equator)",0.0355,-51.0705,Asr,18:21:45,18:21:17,18:22:00,+28.7,-14.3,-43.0,astronomicalSign
+80,Hard,"Macapa, Brazil (Equator)",0.0355,-51.0705,Maghrib,21:15:19,21:15:19,21:15:00,+0.9,+19.9,+19.0,astronomicalSign
+80,Hard,"Macapa, Brazil (Equator)",0.0355,-51.0705,Isha,22:20:19,22:20:18,22:20:00,+1.5,+19.5,+18.0,astronomicalSign
+81,Hard,"Quito, Ecuador (Equator)",-0.1807,-78.4678,Fajr,09:49:17,09:49:16,09:49:00,+1.6,+17.6,+16.0,astronomicalSign
+81,Hard,"Quito, Ecuador (Equator)",-0.1807,-78.4678,Sunrise,10:58:17,10:58:17,10:58:00,+0.3,+17.3,+17.0,astronomicalSign
+81,Hard,"Quito, Ecuador (Equator)",-0.1807,-78.4678,Dhuhr,17:02:41,17:02:37,17:02:00,+4.7,+41.7,+37.0,astronomicalSign
+81,Hard,"Quito, Ecuador (Equator)",-0.1807,-78.4678,Asr,20:11:02,20:10:33,20:12:00,+29.1,-57.9,-87.0,astronomicalSign
+81,Hard,"Quito, Ecuador (Equator)",-0.1807,-78.4678,Maghrib,23:04:59,23:04:59,23:05:00,+0.2,-0.8,-1.0,astronomicalSign
+81,Hard,"Quito, Ecuador (Equator)",-0.1807,-78.4678,Isha,00:09:59,00:09:58,00:10:00,+1.3,-0.7,-2.0,astronomicalSign
+82,Hard,"Kisumu, Kenya (Equator)",-0.0917,34.7680,Fajr,02:16:29,02:16:29,02:16:00,+0.6,+29.6,+29.0,astronomicalSign
+82,Hard,"Kisumu, Kenya (Equator)",-0.0917,34.7680,Sunrise,03:25:28,03:25:28,03:25:00,+0.3,+28.3,+28.0,astronomicalSign
+82,Hard,"Kisumu, Kenya (Equator)",-0.0917,34.7680,Dhuhr,09:29:45,09:29:46,09:29:00,-0.9,+45.1,+46.0,astronomicalSign
+82,Hard,"Kisumu, Kenya (Equator)",-0.0917,34.7680,Asr,12:38:20,12:37:54,12:39:00,+26.5,-39.5,-66.0,astronomicalSign
+82,Hard,"Kisumu, Kenya (Equator)",-0.0917,34.7680,Maghrib,15:32:05,15:32:05,15:32:00,+0.8,+5.8,+5.0,astronomicalSign
+82,Hard,"Kisumu, Kenya (Equator)",-0.0917,34.7680,Isha,16:37:04,16:37:04,16:37:00,+0.9,+4.9,+4.0,astronomicalSign
+83,Hard,"Kampala, Uganda (Near Equator)",0.3476,32.5825,Fajr,02:25:24,02:25:24,02:25:00,+0.5,+24.5,+24.0,astronomicalSign
+83,Hard,"Kampala, Uganda (Near Equator)",0.3476,32.5825,Sunrise,03:34:22,03:34:22,03:34:00,+0.9,+22.9,+22.0,astronomicalSign
+83,Hard,"Kampala, Uganda (Near Equator)",0.3476,32.5825,Dhuhr,09:38:29,09:38:31,09:38:00,-1.3,+29.7,+31.0,astronomicalSign
+83,Hard,"Kampala, Uganda (Near Equator)",0.3476,32.5825,Asr,12:47:39,12:47:12,12:48:00,+27.2,-20.8,-48.0,astronomicalSign
+83,Hard,"Kampala, Uganda (Near Equator)",0.3476,32.5825,Maghrib,15:40:39,15:40:39,15:41:00,+0.7,-20.3,-21.0,astronomicalSign
+83,Hard,"Kampala, Uganda (Near Equator)",0.3476,32.5825,Isha,16:45:38,16:45:37,16:46:00,+1.4,-21.6,-23.0,astronomicalSign
+84,Hard,"Libreville, Gabon (Near Equator)",0.4162,9.4673,Fajr,03:57:52,03:57:52,03:58:00,+0.6,-7.4,-8.0,astronomicalSign
+84,Hard,"Libreville, Gabon (Near Equator)",0.4162,9.4673,Sunrise,05:06:51,05:06:50,05:07:00,+1.0,-9.0,-10.0,astronomicalSign
+84,Hard,"Libreville, Gabon (Near Equator)",0.4162,9.4673,Dhuhr,11:10:57,11:10:57,11:10:00,+0.3,+57.3,+57.0,astronomicalSign
+84,Hard,"Libreville, Gabon (Near Equator)",0.4162,9.4673,Asr,14:20:10,14:19:43,14:21:00,+27.4,-49.6,-77.0,astronomicalSign
+84,Hard,"Libreville, Gabon (Near Equator)",0.4162,9.4673,Maghrib,17:13:04,17:13:04,17:13:00,+0.6,+4.6,+4.0,astronomicalSign
+84,Hard,"Libreville, Gabon (Near Equator)",0.4162,9.4673,Isha,18:18:03,18:18:02,18:18:00,+1.4,+3.4,+2.0,astronomicalSign
+85,Hard,"Galapagos Islands, Ecuador",-0.9538,-90.9656,Fajr,10:38:56,10:38:55,10:39:00,+1.6,-3.4,-5.0,astronomicalSign
+85,Hard,"Galapagos Islands, Ecuador",-0.9538,-90.9656,Sunrise,11:47:57,11:47:57,11:48:00,+0.9,-2.1,-3.0,astronomicalSign
+85,Hard,"Galapagos Islands, Ecuador",-0.9538,-90.9656,Dhuhr,17:52:41,17:52:36,17:52:00,+5.2,+41.2,+36.0,astronomicalSign
+85,Hard,"Galapagos Islands, Ecuador",-0.9538,-90.9656,Asr,20:59:58,20:59:29,21:00:00,+29.2,-1.8,-31.0,astronomicalSign
+85,Hard,"Galapagos Islands, Ecuador",-0.9538,-90.9656,Maghrib,23:55:16,23:55:16,23:55:00,+1.0,+17.0,+16.0,astronomicalSign
+85,Hard,"Galapagos Islands, Ecuador",-0.9538,-90.9656,Isha,01:00:18,01:00:17,01:00:00,+1.7,+18.7,+17.0,astronomicalSign
+86,Hard,"La Paz, Bolivia (3640m)",-16.4897,-68.1193,Fajr,08:57:44,08:57:43,08:58:00,+1.5,-15.5,-17.0,astronomicalSign
+86,Hard,"La Paz, Bolivia (3640m)",-16.4897,-68.1193,Sunrise,10:10:11,10:10:11,10:10:00,+0.6,+11.6,+11.0,astronomicalSign
+86,Hard,"La Paz, Bolivia (3640m)",-16.4897,-68.1193,Dhuhr,16:21:18,16:21:14,16:20:00,+4.1,+78.1,+74.0,astronomicalSign
+86,Hard,"La Paz, Bolivia (3640m)",-16.4897,-68.1193,Asr,19:39:53,19:40:16,19:39:00,-23.0,+53.0,+76.0,astronomicalSign
+86,Hard,"La Paz, Bolivia (3640m)",-16.4897,-68.1193,Maghrib,22:30:32,22:30:32,22:31:00,+0.5,-27.5,-28.0,astronomicalSign
+86,Hard,"La Paz, Bolivia (3640m)",-16.4897,-68.1193,Isha,23:38:49,23:38:50,23:39:00,-0.3,-10.3,-10.0,astronomicalSign
+87,Hard,"Lhasa, Tibet, China (3656m)",29.6525,91.1721,Fajr,22:32:39,22:32:39,22:33:00,+0.8,-20.2,-21.0,astronomicalSign
+87,Hard,"Lhasa, Tibet, China (3656m)",29.6525,91.1721,Sunrise,23:51:48,23:51:48,23:52:00,+0.9,-11.1,-12.0,astronomicalSign
+87,Hard,"Lhasa, Tibet, China (3656m)",29.6525,91.1721,Dhuhr,05:44:08,05:44:12,05:43:00,-3.8,+68.2,+72.0,astronomicalSign
+87,Hard,"Lhasa, Tibet, China (3656m)",29.6525,91.1721,Asr,09:04:02,09:03:34,09:05:00,+28.9,-57.1,-86.0,astronomicalSign
+87,Hard,"Lhasa, Tibet, China (3656m)",29.6525,91.1721,Maghrib,11:34:10,11:34:10,11:34:00,+0.9,+10.9,+10.0,astronomicalSign
+87,Hard,"Lhasa, Tibet, China (3656m)",29.6525,91.1721,Isha,12:48:38,12:48:36,12:49:00,+2.2,-21.8,-24.0,astronomicalSign
+88,Hard,Quito High Plateau (2850m),-0.2299,-78.5249,Fajr,09:49:30,09:49:29,09:49:00,+1.0,+30.0,+29.0,astronomicalSign
+88,Hard,Quito High Plateau (2850m),-0.2299,-78.5249,Sunrise,10:58:29,10:58:29,10:58:00,+0.8,+29.8,+29.0,astronomicalSign
+88,Hard,Quito High Plateau (2850m),-0.2299,-78.5249,Dhuhr,17:02:55,17:02:51,17:02:00,+4.4,+55.4,+51.0,astronomicalSign
+88,Hard,Quito High Plateau (2850m),-0.2299,-78.5249,Asr,20:11:11,20:10:42,20:12:00,+29.9,-48.1,-78.0,astronomicalSign
+88,Hard,Quito High Plateau (2850m),-0.2299,-78.5249,Maghrib,23:05:14,23:05:13,23:05:00,+1.1,+14.1,+13.0,astronomicalSign
+88,Hard,Quito High Plateau (2850m),-0.2299,-78.5249,Isha,00:10:14,00:10:13,00:10:00,+1.3,+14.3,+13.0,astronomicalSign
+89,Hard,"Thimphu, Bhutan (2320m)",27.4728,89.6393,Fajr,22:39:26,22:39:25,22:39:00,+1.1,+26.1,+25.0,astronomicalSign
+89,Hard,"Thimphu, Bhutan (2320m)",27.4728,89.6393,Sunrise,23:56:57,23:56:56,23:57:00,+1.2,-2.8,-4.0,astronomicalSign
+89,Hard,"Thimphu, Bhutan (2320m)",27.4728,89.6393,Dhuhr,05:50:16,05:50:20,05:49:00,-4.0,+76.0,+80.0,astronomicalSign
+89,Hard,"Thimphu, Bhutan (2320m)",27.4728,89.6393,Asr,09:10:57,09:10:29,09:12:00,+28.2,-62.8,-91.0,astronomicalSign
+89,Hard,"Thimphu, Bhutan (2320m)",27.4728,89.6393,Maghrib,11:41:20,11:41:20,11:41:00,+0.4,+20.4,+20.0,astronomicalSign
+89,Hard,"Thimphu, Bhutan (2320m)",27.4728,89.6393,Isha,12:54:16,12:54:14,12:54:00,+2.1,+16.1,+14.0,astronomicalSign
+90,Hard,"Sana'a, Yemen (2250m)",15.3694,44.1910,Fajr,01:42:23,01:42:22,01:42:00,+1.1,+23.1,+22.0,astronomicalSign
+90,Hard,"Sana'a, Yemen (2250m)",15.3694,44.1910,Sunrise,02:53:43,02:53:43,02:54:00,+0.8,-16.2,-17.0,astronomicalSign
+90,Hard,"Sana'a, Yemen (2250m)",15.3694,44.1910,Dhuhr,08:52:03,08:52:05,08:51:00,-1.4,+63.6,+65.0,astronomicalSign
+90,Hard,"Sana'a, Yemen (2250m)",15.3694,44.1910,Asr,12:12:38,12:12:11,12:13:00,+27.4,-21.6,-49.0,astronomicalSign
+90,Hard,"Sana'a, Yemen (2250m)",15.3694,44.1910,Maghrib,14:48:15,14:48:15,14:48:00,+0.5,+15.5,+15.0,astronomicalSign
+90,Hard,"Sana'a, Yemen (2250m)",15.3694,44.1910,Isha,15:55:25,15:55:24,15:55:00,+1.8,+25.8,+24.0,astronomicalSign
+91,Hard,"Addis Ababa, Ethiopia (2355m)",9.0250,38.7469,Fajr,02:03:19,02:03:19,02:03:00,+1.0,+20.0,+19.0,astronomicalSign
+91,Hard,"Addis Ababa, Ethiopia (2355m)",9.0250,38.7469,Sunrise,03:13:02,03:13:02,03:13:00,+0.5,+2.5,+2.0,astronomicalSign
+91,Hard,"Addis Ababa, Ethiopia (2355m)",9.0250,38.7469,Dhuhr,09:13:50,09:13:51,09:13:00,-0.8,+50.2,+51.0,astronomicalSign
+91,Hard,"Addis Ababa, Ethiopia (2355m)",9.0250,38.7469,Asr,12:31:20,12:30:54,12:32:00,+26.4,-39.6,-66.0,astronomicalSign
+91,Hard,"Addis Ababa, Ethiopia (2355m)",9.0250,38.7469,Maghrib,15:12:34,15:12:34,15:13:00,+0.7,-25.3,-26.0,astronomicalSign
+91,Hard,"Addis Ababa, Ethiopia (2355m)",9.0250,38.7469,Isha,16:18:13,16:18:12,16:18:00,+1.8,+13.8,+12.0,astronomicalSign
+92,Hard,"Denver, Colorado, USA (1609m)",39.7392,-104.9903,Fajr,11:32:36,11:32:38,11:33:00,-1.2,-23.2,-22.0,astronomicalSign
+92,Hard,"Denver, Colorado, USA (1609m)",39.7392,-104.9903,Sunrise,13:02:12,13:02:12,13:02:00,+0.8,+12.8,+12.0,astronomicalSign
+92,Hard,"Denver, Colorado, USA (1609m)",39.7392,-104.9903,Dhuhr,18:48:47,18:48:42,18:48:00,+5.1,+47.1,+42.0,astronomicalSign
+92,Hard,"Denver, Colorado, USA (1609m)",39.7392,-104.9903,Asr,22:00:42,22:00:00,22:02:00,+43.0,-77.0,-120.0,astronomicalSign
+92,Hard,"Denver, Colorado, USA (1609m)",39.7392,-104.9903,Maghrib,00:32:34,00:32:34,00:33:00,+0.8,-25.2,-26.0,astronomicalSign
+92,Hard,"Denver, Colorado, USA (1609m)",39.7392,-104.9903,Isha,01:56:46,01:56:41,01:57:00,+5.8,-13.2,-19.0,astronomicalSign
+93,Hard,"Greenwich, London (0 deg meridian)",51.4826,0.0000,Fajr,04:19:09,04:19:09,04:19:00,+0.2,+9.2,+9.0,astronomicalSign
+93,Hard,"Greenwich, London (0 deg meridian)",51.4826,0.0000,Sunrise,06:10:23,06:10:23,06:10:00,+0.4,+23.4,+23.0,astronomicalSign
+93,Hard,"Greenwich, London (0 deg meridian)",51.4826,0.0000,Dhuhr,11:48:49,11:48:49,11:48:00,+0.5,+49.5,+49.0,astronomicalSign
+93,Hard,"Greenwich, London (0 deg meridian)",51.4826,0.0000,Asr,14:45:23,14:44:30,14:47:00,+53.2,-96.8,-150.0,astronomicalSign
+93,Hard,"Greenwich, London (0 deg meridian)",51.4826,0.0000,Maghrib,17:24:21,17:24:20,17:24:00,+1.2,+21.2,+20.0,astronomicalSign
+93,Hard,"Greenwich, London (0 deg meridian)",51.4826,0.0000,Isha,19:08:39,19:08:34,19:09:00,+5.8,-20.2,-26.0,astronomicalSign
+94,Hard,"Suva, Fiji (Antimeridian East)",-18.1416,178.4419,Fajr,16:30:37,16:30:38,16:31:00,-0.2,-22.2,-22.0,astronomicalSign
+94,Hard,"Suva, Fiji (Antimeridian East)",-18.1416,178.4419,Sunrise,17:43:45,17:43:45,17:44:00,+0.3,-14.7,-15.0,astronomicalSign
+94,Hard,"Suva, Fiji (Antimeridian East)",-18.1416,178.4419,Dhuhr,23:55:03,23:55:11,23:54:00,-7.6,+63.4,+71.0,astronomicalSign
+94,Hard,"Suva, Fiji (Antimeridian East)",-18.1416,178.4419,Asr,03:15:35,03:15:55,03:15:00,-19.9,+35.1,+55.0,astronomicalSign
+94,Hard,"Suva, Fiji (Antimeridian East)",-18.1416,178.4419,Maghrib,06:04:54,06:04:54,06:05:00,+0.8,-5.2,-6.0,astronomicalSign
+94,Hard,"Suva, Fiji (Antimeridian East)",-18.1416,178.4419,Isha,07:13:50,07:13:50,07:14:00,+0.2,-9.8,-10.0,astronomicalSign
+95,Hard,"Apia, Samoa (Antimeridian West)",-13.8333,-171.7667,Fajr,15:54:17,15:54:15,15:54:00,+2.4,+17.4,+15.0,astronomicalSign
+95,Hard,"Apia, Samoa (Antimeridian West)",-13.8333,-171.7667,Sunrise,17:05:44,17:05:44,17:06:00,+1.0,-15.0,-16.0,astronomicalSign
+95,Hard,"Apia, Samoa (Antimeridian West)",-13.8333,-171.7667,Dhuhr,23:15:53,23:15:45,23:15:00,+8.5,+53.5,+45.0,astronomicalSign
+95,Hard,"Apia, Samoa (Antimeridian West)",-13.8333,-171.7667,Asr,02:30:44,02:31:07,02:30:00,-22.5,+44.5,+67.0,astronomicalSign
+95,Hard,"Apia, Samoa (Antimeridian West)",-13.8333,-171.7667,Maghrib,05:23:57,05:23:57,05:24:00,+0.6,-2.4,-3.0,astronomicalSign
+95,Hard,"Apia, Samoa (Antimeridian West)",-13.8333,-171.7667,Isha,06:31:18,06:31:18,06:31:00,+0.5,+18.5,+18.0,astronomicalSign
+96,Hard,"Funafuti, Tuvalu (179 deg E)",-8.5211,179.1962,Fajr,16:34:45,16:34:45,16:35:00,+0.2,-14.8,-15.0,astronomicalSign
+96,Hard,"Funafuti, Tuvalu (179 deg E)",-8.5211,179.1962,Sunrise,17:44:40,17:44:40,17:45:00,+0.6,-19.4,-20.0,astronomicalSign
+96,Hard,"Funafuti, Tuvalu (179 deg E)",-8.5211,179.1962,Dhuhr,23:52:02,23:52:10,23:51:00,-7.6,+62.4,+70.0,astronomicalSign
+96,Hard,"Funafuti, Tuvalu (179 deg E)",-8.5211,179.1962,Asr,02:57:54,02:58:16,02:57:00,-21.1,+54.9,+76.0,astronomicalSign
+96,Hard,"Funafuti, Tuvalu (179 deg E)",-8.5211,179.1962,Maghrib,05:57:49,05:57:48,05:58:00,+1.0,-11.0,-12.0,astronomicalSign
+96,Hard,"Funafuti, Tuvalu (179 deg E)",-8.5211,179.1962,Isha,07:03:42,07:03:42,07:04:00,+0.5,-17.5,-18.0,astronomicalSign
+97,Hard,"Nuku'alofa, Tonga (UTC+13)",-21.1393,-175.2049,Fajr,16:01:23,16:01:21,16:01:00,+2.3,+23.3,+21.0,astronomicalSign
+97,Hard,"Nuku'alofa, Tonga (UTC+13)",-21.1393,-175.2049,Sunrise,17:16:08,17:16:08,17:16:00,+0.4,+8.4,+8.0,astronomicalSign
+97,Hard,"Nuku'alofa, Tonga (UTC+13)",-21.1393,-175.2049,Dhuhr,23:29:38,23:29:30,23:28:00,+8.6,+98.6,+90.0,astronomicalSign
+97,Hard,"Nuku'alofa, Tonga (UTC+13)",-21.1393,-175.2049,Asr,02:53:51,02:54:17,02:53:00,-25.8,+51.2,+77.0,astronomicalSign
+97,Hard,"Nuku'alofa, Tonga (UTC+13)",-21.1393,-175.2049,Maghrib,05:41:10,05:41:10,05:41:00,+1.0,+11.0,+10.0,astronomicalSign
+97,Hard,"Nuku'alofa, Tonga (UTC+13)",-21.1393,-175.2049,Isha,06:51:38,06:51:39,06:52:00,-0.5,-21.5,-21.0,astronomicalSign
+98,Hard,"Kiritimati, Kiribati (UTC+14)",1.8709,-157.3630,Fajr,15:05:36,15:05:36,15:06:00,+0.9,-23.1,-24.0,astronomicalSign
+98,Hard,"Kiritimati, Kiribati (UTC+14)",1.8709,-157.3630,Sunrise,16:14:37,16:14:36,16:15:00,+1.1,-22.9,-24.0,astronomicalSign
+98,Hard,"Kiritimati, Kiribati (UTC+14)",1.8709,-157.3630,Dhuhr,22:18:16,22:18:09,22:17:00,+7.6,+76.6,+69.0,astronomicalSign
+98,Hard,"Kiritimati, Kiribati (UTC+14)",1.8709,-157.3630,Asr,01:29:02,01:28:30,01:30:00,+32.1,-57.9,-90.0,astronomicalSign
+98,Hard,"Kiritimati, Kiribati (UTC+14)",1.8709,-157.3630,Maghrib,04:19:39,04:19:39,04:20:00,+0.8,-20.2,-21.0,astronomicalSign
+98,Hard,"Kiritimati, Kiribati (UTC+14)",1.8709,-157.3630,Isha,05:24:40,05:24:39,05:25:00,+1.2,-19.8,-21.0,astronomicalSign
+99,Hard,Tristan da Cunha (Remote Atlantic),-37.1052,-12.2777,Fajr,04:46:56,04:46:54,04:47:00,+2.0,-4.0,-6.0,astronomicalSign
+99,Hard,Tristan da Cunha (Remote Atlantic),-37.1052,-12.2777,Sunrise,06:16:00,06:16:00,06:16:00,+0.7,+0.7,+0.0,astronomicalSign
+99,Hard,Tristan da Cunha (Remote Atlantic),-37.1052,-12.2777,Dhuhr,12:37:56,12:37:55,12:37:00,+1.1,+56.1,+55.0,astronomicalSign
+99,Hard,Tristan da Cunha (Remote Atlantic),-37.1052,-12.2777,Asr,16:12:35,16:13:05,16:12:00,-29.5,+35.5,+65.0,astronomicalSign
+99,Hard,Tristan da Cunha (Remote Atlantic),-37.1052,-12.2777,Maghrib,18:58:27,18:58:27,18:58:00,+0.9,+27.9,+27.0,astronomicalSign
+99,Hard,Tristan da Cunha (Remote Atlantic),-37.1052,-12.2777,Isha,20:22:25,20:22:27,20:22:00,-1.6,+25.4,+27.0,astronomicalSign
+100,Hard,"Easter Island, Chile (Remote Pacific)",-27.1127,-109.3497,Fajr,11:31:08,11:31:06,11:31:00,+2.5,+8.5,+6.0,astronomicalSign
+100,Hard,"Easter Island, Chile (Remote Pacific)",-27.1127,-109.3497,Sunrise,12:49:52,12:49:52,12:50:00,+0.5,-7.5,-8.0,astronomicalSign
+100,Hard,"Easter Island, Chile (Remote Pacific)",-27.1127,-109.3497,Dhuhr,19:06:13,19:06:08,19:05:00,+5.4,+73.4,+68.0,astronomicalSign
+100,Hard,"Easter Island, Chile (Remote Pacific)",-27.1127,-109.3497,Asr,22:35:46,22:36:15,22:35:00,-28.1,+46.9,+75.0,astronomicalSign
+100,Hard,"Easter Island, Chile (Remote Pacific)",-27.1127,-109.3497,Maghrib,01:20:48,01:20:48,01:21:00,+0.9,-11.1,-12.0,astronomicalSign
+100,Hard,"Easter Island, Chile (Remote Pacific)",-27.1127,-109.3497,Isha,02:35:01,02:35:03,02:35:00,-1.1,+1.9,+3.0,astronomicalSign
