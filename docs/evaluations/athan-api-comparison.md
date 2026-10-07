@@ -330,6 +330,35 @@ Tier 2: External REST Parity Suite (AlAdhan API)
   * High-latitude tests (above 55 degrees) must assert typed absence in Athan Earth and skip
     direct equality checks against AlAdhan's collapsed polar values.
 
+## Alternative Paradigm: Kalimat Open Prayer Times
+
+Kalimat Open Prayer Times (github.com/Kalimat-ai/open-prayer-times) takes a different approach
+from standard astronomical calculators.
+
+Instead of computing prayer times purely from celestial mechanics, it treats local published
+mosque schedules as the target. It uses a three-stage optimization pipeline in Python:
+
+1. Astronomical core: PyEphem (XEphem ephemeris) and Khalid Shaukat moonsighting formulas.
+2. High-latitude adaptation: tests AngleBased, OneSeventh, and MiddleNight rules against the
+   target schedule to select the best match.
+3. Residual correction layers: fits polynomial regression curves and splines over the residual
+   errors to reproduce published timetable times exactly.
+
+Evaluation and Applicability:
+
+- Purpose mismatch: Athan Earth calculates deterministic celestial prayer times from first
+  principles across arbitrary globe coordinates. Open Prayer Times solves a reverse-engineering
+  problem: finding parameters that reproduce a specific mosque calendar.
+- Ground truth limitations: The calibrated models in Open Prayer Times fit local administrative
+  adjustments, safety buffers, and manual table rounding. They reflect community consensus, not
+  celestial geometry.
+- Implementation dependencies: Open Prayer Times is a desktop GUI and CLI tool written in Python.
+  It lacks a public HTTP API, an npm package, or an in-browser runtime.
+- Recommendation: We do not recommend benchmarking Athan Earth against Open Prayer Times for
+  astronomical accuracy. Its raw PyEphem engine duplicates Meeus comparisons, while its calibrated
+  engine measures mosque timetable deviations rather than celestial precision. Its reference
+  dataset remains a valuable source for studying local community timetable variance.
+
 ## Primary Sources and Technical Citations
 
 1. AlAdhan API Documentation. Islamic Network, 2026.
@@ -356,3 +385,6 @@ Tier 2: External REST Parity Suite (AlAdhan API)
     https://www.e-solat.gov.my
 11. London Prayer Times and Unified Timetable. Islamic Cultural Centre / London Central Mosque.
     https://londonprayertimes.com
+12. Kalimat Open Prayer Times Repository. Kalimat-ai, 2026.
+    https://github.com/Kalimat-ai/open-prayer-times
+
